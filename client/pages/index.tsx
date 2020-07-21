@@ -1,6 +1,12 @@
+import React from 'react';
 import axios from 'axios';
+import { NextPage } from 'next';
 
-const Home = ({ message }) => {
+interface HomeProps {
+	message: string;
+}
+
+const Home: NextPage<HomeProps> = ({ message }) => {
 	return <div>{message}</div>;
 };
 
@@ -9,8 +15,7 @@ Home.getInitialProps = async () => {
 		method: 'GET',
 		url: 'http://localhost:8000/api',
 	});
-	const data = res.data;
-	const message = data.message;
+	const { message } = res.data;
 
 	return { message };
 };
