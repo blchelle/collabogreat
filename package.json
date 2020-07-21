@@ -2,9 +2,9 @@
 	"name": "collabogreat",
 	"version": "1.0.0",
 	"description": "CollaboGreat is a highly configurable team collaboration software built to increase the productivity for teams of all kinds",
-	"main": "index.js",
+	"main": "server/src/server.ts",
 	"scripts": {
-		"server:dev": "ts-node-dev --respawn server/src/server.ts",
+		"server:dev": "set TS_NODE_PROJECT=./server/tsconfig.json&&ts-node-dev --respawn ./server/src/server.ts",
 		"server:lint": "eslint server --ext .ts",
 		"client:dev": "next ./client",
 		"client:lint": "eslint client --ext .ts",
@@ -28,6 +28,7 @@
 	"homepage": "https://github.com/blchelle/collabogreat#readme",
 	"dependencies": {
 		"axios": "^0.19.2",
+		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"morgan": "^1.10.0",
 		"next": "^9.4.4",
@@ -52,6 +53,7 @@
 		"nodemon": "^2.0.4",
 		"npm-run-all": "^4.1.5",
 		"prettier": "^2.0.5",
+		"ts-node": "^8.10.2",
 		"ts-node-dev": "^1.0.0-pre.52",
 		"typescript": "^3.9.7"
 	}
