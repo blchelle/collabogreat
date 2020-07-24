@@ -13,6 +13,8 @@ class ProjectController extends Controller {
 	}
 
 	protected initRoutes() {
+		this.verifyAuthentication();
+
 		this.router.route('/').get(this.getAll(ProjectModel)).post(this.createOne(ProjectModel));
 	}
 

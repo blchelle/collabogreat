@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 import { Document, Model } from 'mongoose';
 import StatusCode from 'status-code-enum';
 import catchAsync from '../utils/catchAsync';
+import checkJwt from '../middlewares/authenticationMiddleware';
 
 abstract class Controller {
 	abstract path: string;
@@ -32,6 +33,10 @@ abstract class Controller {
 	}
 
 	protected abstract initRoutes(): void;
+
+	protected verifyAuthentication() {
+		this.router.use(checkJwt);
+	}
 }
 
 export default Controller;
