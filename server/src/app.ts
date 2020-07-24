@@ -28,7 +28,10 @@ class App {
 	}
 
 	private initMiddlewares() {
+		// Morgan Middleware
 		if (process.env.NODE_ENV === 'development') this.app.use(morgan('dev'));
+
+		// Body Parser Middleware
 		this.app.use(bodyParser.json());
 	}
 
