@@ -1,0 +1,16 @@
+[
+	{
+		"title": "CollaboGreat",
+		"description": "This is a team collaboration software for projects",
+		"members": [],
+		"board": "",
+		"ticketTypes": []
+	},
+	{
+		"title": "KeepIt",
+		"description": "This is an iOS app that will help you find your lost items",
+		"members": [],
+		"board": "",
+		"ticketTypes": []
+	}
+]
