@@ -2,21 +2,20 @@
 	"name": "collabogreat",
 	"version": "1.0.0",
 	"description": "CollaboGreat is a highly configurable team collaboration software built to increase the productivity for teams of all kinds",
-	"main": "server/src/server.ts",
 	"scripts": {
-		"server:dev": "set TS_NODE_PROJECT=./server/tsconfig.json&&ts-node-dev --respawn ./server/src/server.ts",
-		"server:lint": "eslint server --ext .ts",
-		"server:compile": "tsc -p server/tsconfig.json",
-		"client:dev": "next ./client",
-		"client:lint": "eslint client --ext .ts",
-		"all:dev": "run-p server:dev client:dev"
+		"client:dev": "npm run dev --prefix client",
+		"server:dev": "npm run dev --prefix server",
+		"server:compile": "tsc -p server",
+		"all:dev": "run-p client:dev server:dev"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/blchelle/collabogreat.git"
 	},
 	"keywords": [
+		"CollaboGreat",
 		"Collaborate",
+		"Great",
 		"Team",
 		"Project",
 		"Work"
@@ -27,33 +26,14 @@
 		"url": "https://github.com/blchelle/collabogreat/issues"
 	},
 	"homepage": "https://github.com/blchelle/collabogreat#readme",
-	"dependencies": {
-		"axios": "^0.19.2",
-		"body-parser": "^1.19.0",
-		"dotenv": "^8.2.0",
-		"express": "^4.17.1",
-		"express-jwt": "^6.0.0",
-		"jwks-rsa": "^1.8.1",
-		"mongoose": "^5.9.25",
-		"morgan": "^1.10.0",
-		"next": "^9.4.4",
-		"react": "^16.13.1",
-		"react-dom": "^16.13.1",
-		"status-code-enum": "^1.0.0"
-	},
 	"devDependencies": {
-		"@types/express": "^4.17.7",
-		"@types/express-jwt": "0.0.42",
-		"@types/mongoose": "^5.7.32",
-		"@types/morgan": "^1.9.1",
-		"@types/node": "^14.0.23",
-		"@types/react": "^16.9.43",
 		"@typescript-eslint/eslint-plugin": "^3.7.0",
 		"@typescript-eslint/parser": "^3.7.0",
-		"eslint": "^7.5.0",
+		"eslint": "^6.6.0",
 		"eslint-config-airbnb": "^18.2.0",
 		"eslint-config-airbnb-base": "^14.2.0",
 		"eslint-config-prettier": "^6.11.0",
+		"eslint-import-resolver-typescript": "^2.0.0",
 		"eslint-plugin-import": "^2.22.0",
 		"eslint-plugin-jsx-a11y": "^6.3.1",
 		"eslint-plugin-prettier": "^3.1.4",
@@ -61,8 +41,6 @@
 		"eslint-plugin-react-hooks": "^4.0.8",
 		"npm-run-all": "^4.1.5",
 		"prettier": "^2.0.5",
-		"ts-node": "^8.10.2",
-		"ts-node-dev": "^1.0.0-pre.52",
 		"typescript": "^3.9.7"
 	}
 }
