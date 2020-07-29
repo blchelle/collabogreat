@@ -11,9 +11,6 @@ class ProjectController extends Controller {
 	}
 
 	protected initRoutes() {
-		// Verify the users authentication status
-		this.verifyAuthentication();
-
 		this.router.route('/').get(this.getAll(ProjectModel)).post(this.createOne(ProjectModel));
 	}
 }
