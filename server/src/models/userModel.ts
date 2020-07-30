@@ -1,5 +1,5 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
-import isEmail from 'validator/es/lib/isEmail';
+import validator from 'validator';
 
 interface IUser extends Document {
 	displayName: String;
@@ -25,7 +25,7 @@ const UserSchema = new Schema({
 		unique: true,
 		trim: true,
 		lowercase: true,
-		validate: [isEmail, 'The provided email address is invalid'],
+		validate: [validator.isEmail, 'The provided email address is invalid'],
 	},
 	image: {
 		type: String,

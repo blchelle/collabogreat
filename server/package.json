@@ -3,7 +3,7 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"dev": "ts-node-dev --respawn src/server.ts",
+		"dev": "concurrently \"tsc --watch\" \"nodemon dist/server.js\"",
 		"lint": "eslint --ext .ts",
 		"compile": "tsc"
 	},
@@ -23,7 +23,6 @@
 		"passport-facebook": "^3.0.0",
 		"passport-github2": "^0.1.12",
 		"passport-google-oauth20": "^2.0.0",
-		"passport-oauth2": "^1.5.0",
 		"status-code-enum": "^1.0.0",
 		"validator": "^13.1.1"
 	},
@@ -41,6 +40,8 @@
 		"@types/passport-github2": "^1.2.4",
 		"@types/passport-google-oauth20": "^2.0.3",
 		"@types/validator": "^13.1.0",
-		"ts-node-dev": "^1.0.0-pre.52"
+		"concurrently": "^5.2.0",
+		"nodemon": "^2.0.4",
+		"typescript": "^3.9.7"
 	}
 }

@@ -9,15 +9,15 @@ import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
 import Controller from './controllers/Controller';
 import keys from './config/keys';
+import environment from './config/environment.config';
 
 class App {
 	public app: Application;
 
-	public port: number;
+	public port = environment.port;
 
-	constructor(controllers: Controller[], port: number) {
+	constructor(controllers: Controller[]) {
 		this.app = express();
-		this.port = port;
 		this.app.use(express.json());
 
 		// Note: It is important that the middlewares are initialized before
@@ -28,7 +28,7 @@ class App {
 
 	private initControllers(controllers: Controller[]) {
 		controllers.forEach((controller) => {
-			this.app.use(`/api/${process.env.VERSION || 'v0'}/${controller.path}`, controller.router);
+			this.app.use(`/api/v${environment.version}/${controller.path}`, controller.router);
 		});
 	}
 
