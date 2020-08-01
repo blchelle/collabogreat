@@ -2,8 +2,7 @@
 import express, { Request, Response } from 'express';
 import { Document, Model } from 'mongoose';
 import StatusCode from 'status-code-enum';
-import catchAsync from '../utils/catchAsync';
-import checkJwt from '../middlewares/authenticationMiddleware';
+import catchAsync from '../utils/catchAsync.utils';
 
 abstract class Controller {
 	abstract path: string;
@@ -15,7 +14,7 @@ abstract class Controller {
 			const docs = await model.find();
 
 			res.status(StatusCode.SuccessOK).json({
-				status: 'success',
+				success: true,
 				[`${model.modelName}s`]: docs,
 			});
 		});
@@ -26,17 +25,13 @@ abstract class Controller {
 			const doc = await model.create(req.body);
 
 			res.status(StatusCode.SuccessCreated).json({
-				status: 'success',
+				success: true,
 				[model.modelName]: doc,
 			});
 		});
 	}
 
 	protected abstract initRoutes(): void;
-
-	protected verifyAuthentication() {
-		this.router.use(checkJwt);
-	}
 }
 
 export default Controller;

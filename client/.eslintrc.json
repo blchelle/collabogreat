@@ -1,7 +1,7 @@
 {
 	"env": {
 		"browser": true,
-		"es2020": true
+		"es6": true
 	},
 	"extends": [
 		"plugin:react/recommended",
@@ -13,7 +13,7 @@
 		"ecmaFeatures": {
 			"jsx": true
 		},
-		"ecmaVersion": 11,
+		"ecmaVersion": 2018,
 		"sourceType": "module"
 	},
 	"plugins": [
@@ -21,12 +21,27 @@
 		"@typescript-eslint",
 		"prettier"
 	],
+	"settings": {
+			"import/resolver": {
+				"node": {
+					"extensions": [".js", ".jsx", ".ts", ".tsx"]
+				}
+			}
+	},
 	"rules": {
+		"import/extensions": "off",
 		"prettier/prettier": "error",
 		"react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+		"react/jsx-indent": [2, "tab"],
+		"react/jsx-indent-props": [2, "tab"],
 		"react/react-in-jsx-scope": "off",
 		"react/prop-types": "off",
 		"no-unused-vars": "off",
-		"@typescript-eslint/no-unused-vars": "warn"
-	}	
+		"@typescript-eslint/no-unused-vars": "warn",
+		"jsx-a11y/anchor-is-valid": [ "error", {
+			"components": [ "Link" ],
+			"specialLink": [ "hrefLeft", "hrefRight" ],
+			"aspects": [ "invalidHref", "preferButton" ]
+		}]
+	}
 }
