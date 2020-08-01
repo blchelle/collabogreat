@@ -14,7 +14,7 @@ abstract class Controller {
 			const docs = await model.find();
 
 			res.status(StatusCode.SuccessOK).json({
-				status: 'success',
+				success: true,
 				[`${model.modelName}s`]: docs,
 			});
 		});
@@ -25,7 +25,7 @@ abstract class Controller {
 			const doc = await model.create(req.body);
 
 			res.status(StatusCode.SuccessCreated).json({
-				status: 'success',
+				success: true,
 				[model.modelName]: doc,
 			});
 		});

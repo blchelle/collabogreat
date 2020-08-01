@@ -1,6 +1,8 @@
 /* eslint-disable class-methods-use-this */
 import { Request, Response } from 'express';
 import passport, { AuthenticateOptions } from 'passport';
+import { StatusCode } from 'status-code-enum';
+import environment from '../config/environment.config';
 import Controller from './Controller';
 
 class AuthController extends Controller {
@@ -12,27 +14,18 @@ class AuthController extends Controller {
 	}
 
 	protected initRoutes() {
-		this.router.route('/google').get(this.loginWithProvider('google', { scope: ['profile'] }));
-		this.router.route('/facebook').get(this.loginWithProvider('facebook', {}));
-		this.router.route('/github').get(this.loginWithProvider('github', { scope: 'user:email' }));
-		this.router.route('/google/redirect').get(
-			passport.authenticate('google', {
-				successRedirect: 'http://localhost:3000/dashboard',
-				failureRedirect: 'api/v0/login/failed',
-			})
-		);
-		this.router.route('/facebook/redirect').get(
-			passport.authenticate('facebook', {
-				successRedirect: 'http://localhost:3000/dashboard',
-				failureRedirect: 'api/v0/login/failed',
-			})
-		);
-		this.router.route('/github/redirect').get(
-			passport.authenticate('github', {
-				successRedirect: 'http://localhost:3000/dashboard',
-				failureRedirect: 'api/v0/login/failed',
-			})
-		);
+		this.router
+			.route('/google')
+			.get(this.loginWithProvider('google', { scope: ['profile', 'email'] }));
+		this.router
+			.route('/facebook')
+			.get(this.loginWithProvider('facebook', { scope: ['email', 'user_photos'] }));
+		this.router.route('/github').get(this.loginWithProvider('github', { scope: ['user:email'] }));
+
+		this.router.route('/google/redirect').get(this.redirectProvider('google'));
+		this.router.route('/facebook/redirect').get(this.redirectProvider('facebook'));
+		this.router.route('/github/redirect').get(this.redirectProvider('github'));
+
 		this.router.route('/login/success').get(this.loginSuccess);
 		this.router.route('/login/failed').get(this.loginFailed);
 		this.router.route('/logout').get(this.logout);
@@ -40,6 +33,13 @@ class AuthController extends Controller {
 
 	private loginWithProvider(providerName: string, options: AuthenticateOptions) {
 		return passport.authenticate(providerName, options);
+	}
+
+	private redirectProvider(providerName: string) {
+		return passport.authenticate(providerName, {
+			successRedirect: environment.development.oauth.successRoute,
+			failureRedirect: environment.development.oauth.failureRoute,
+		});
 	}
 
 	private logout(req: Request, res: Response) {
@@ -51,7 +51,7 @@ class AuthController extends Controller {
 		if (req.user) {
 			res.json({
 				success: true,
-				message: 'user has successfully authenticated',
+				message: 'User has successfully authenticated',
 				user: req.user,
 				cookies: req.cookies,
 			});
@@ -59,9 +59,9 @@ class AuthController extends Controller {
 	}
 
 	private loginFailed(_: Request, res: Response) {
-		res.status(401).json({
+		res.status(StatusCode.ClientErrorUnauthorized).json({
 			success: false,
-			message: 'user failed to authenticate.',
+			message: 'User failed to authenticate.',
 		});
 	}
 }

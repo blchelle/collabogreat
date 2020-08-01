@@ -12,6 +12,7 @@ const AuthCard: React.FC = () => {
 	const facebookButtonClasses = `${useStyles().facebookButton} ${providerButtonClasses}`;
 	const googleButtonClasses = `${useStyles().googleButton} ${providerButtonClasses}`;
 	const githubButtonClasses = `${useStyles().githubButton} ${providerButtonClasses}`;
+	const buttonIconClasses = useStyles().buttonIcon;
 
 	return (
 		<Card raised className={authCardClasses}>
@@ -22,7 +23,7 @@ const AuthCard: React.FC = () => {
 				className={facebookButtonClasses}
 				variant='outlined'
 				fullWidth
-				startIcon={<FacebookLogo style={{ fontSize: 30 }} />}
+				startIcon={<FacebookLogo className={buttonIconClasses} />}
 				onClick={() => window.open('http://localhost:8000/api/v0/auth/facebook', '_self')}
 			>
 				Facebook
@@ -31,16 +32,16 @@ const AuthCard: React.FC = () => {
 				className={googleButtonClasses}
 				variant='outlined'
 				fullWidth
-				startIcon={<SvgIcon component={GoogleLogo} style={{ fontSize: 30 }} />}
+				startIcon={<SvgIcon component={GoogleLogo} className={buttonIconClasses} />}
 				onClick={() => window.open('http://localhost:8000/api/v0/auth/google', '_self')}
-				>
+			>
 				Google
 			</Button>
 			<Button
 				className={githubButtonClasses}
 				variant='outlined'
 				fullWidth
-				startIcon={<GitHubLogo style={{ fontSize: 30 }} />}
+				startIcon={<GitHubLogo className={buttonIconClasses} />}
 				onClick={() => window.open('http://localhost:8000/api/v0/auth/github', '_self')}
 			>
 				Github

@@ -8,13 +8,13 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
 import Controller from './controllers/Controller';
-import keys from './config/keys';
+import keys from './config/keys.config';
 import environment from './config/environment.config';
 
 class App {
 	public app: Application;
 
-	public port = environment.port;
+	public port = environment.development.port;
 
 	constructor(controllers: Controller[]) {
 		this.app = express();
@@ -28,7 +28,10 @@ class App {
 
 	private initControllers(controllers: Controller[]) {
 		controllers.forEach((controller) => {
-			this.app.use(`/api/v${environment.version}/${controller.path}`, controller.router);
+			this.app.use(
+				`/api/v${environment.development.version}/${controller.path}`,
+				controller.router
+			);
 		});
 	}
 
@@ -42,9 +45,9 @@ class App {
 		// CORS Middleware
 		this.app.use(
 			cors({
-				origin: 'http://localhost:3000', // allow to server to accept request from different origin
+				origin: environment.development.devClientBaseURL,
 				methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-				credentials: true, // allow session cookie from browser to pass through
+				credentials: true, // Allow a session cookie from browser to pass through
 			})
 		);
 

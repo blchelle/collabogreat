@@ -1,7 +1,7 @@
 import App from './app';
 import ProjectController from './controllers/projectController';
 import AuthController from './controllers/authController';
-import keys from './config/keys';
+import keys from './config/keys.config';
 import './config/passport.config';
 
 const app = new App([new ProjectController(), new AuthController()]);
@@ -14,4 +14,3 @@ App.connectToMongoDB(db);
 
 // Start the Server
 app.listen();
-module.exports = app;

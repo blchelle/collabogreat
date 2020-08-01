@@ -13,31 +13,36 @@ export default makeStyles({
 		backgroundColor: '#4667b2',
 		color: '#fff',
 		'&:hover': {
-			backgroundColor: '#003d82',
+			backgroundColor: '#3f5ca2',
 		},
 	},
 	googleButton: {
 		backgroundColor: '#e6e6e6',
 		'&:hover': {
-			backgroundColor: '#b4b4b4',
+			backgroundColor: '#d6d6d6',
 		},
 	},
 	githubButton: {
 		backgroundColor: '#333',
 		color: '#fff',
 		'&:hover': {
-			backgroundColor: '#0c0c0c',
+			backgroundColor: '#1f1f1f',
 		},
 	},
 	providerButton: {
 		height: '3.125rem',
 		display: 'flex',
 		justifyContent: 'start',
+		transition: 'all 0.1s ease-in-out',
 		'&:not(:last-child)': {
 			marginBottom: '0.625rem',
 		},
+		'&:hover': {
+			transform: 'translateY(-2px)',
+		},
 	},
 	buttonIcon: {
-		fontSize: '3rem',
+		height: '2rem',
+		width: 'auto',
 	},
 });

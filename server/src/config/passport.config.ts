@@ -1,16 +1,25 @@
-import passport, { Profile } from 'passport';
-import { Strategy as GoogleStrategy, VerifyCallback } from 'passport-google-oauth20';
+import passport, { Profile, Strategy } from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { Strategy as GitHubStrategy } from 'passport-github2';
-import keys from './keys';
-import UserModel from '../models/userModel';
+import keys from './keys.config';
+import environment from './environment.config';
+import User, { IUser } from '../models/userModel';
 
-passport.serializeUser<any, any>((user, done) => {
+type VerifyCallback = (err: string | Error | undefined, user?: any, info?: any) => void;
+
+enum RegisteredOAuthProvider {
+	GOOGLE = 'google',
+	FACEBOOK = 'facebook',
+	GITHUB = 'github',
+}
+
+passport.serializeUser<IUser, string>((user, done) => {
 	done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
-	UserModel.findById(id)
+	User.findById(id)
 		.then((user) => {
 			done(null, user);
 		})
@@ -19,101 +28,56 @@ passport.deserializeUser((id, done) => {
 		});
 });
 
-passport.use(
-	new GoogleStrategy(
-		{
-			clientID: keys.google.clientId,
-			clientSecret: keys.google.clientSecret,
-			callbackURL: '/api/v0/auth/google/redirect',
-		},
-		(_: string, __: string, profile: Profile, done: VerifyCallback) => {
-			// passport callback function
-			// check if user already exists in our db with the given profile ID
-			UserModel.findOne({ googleId: profile.id }).then((currentUser) => {
-				if (currentUser) {
-					// if we already have a record with the given profile ID
-					done(undefined, currentUser);
-				} else {
-					// if not, create a new user
-					new UserModel({
-						displayName: profile.displayName,
-						googleId: profile.id,
-					})
-						.save()
-						.then((newUser) => {
-							done(undefined, newUser);
-						})
-						.catch((err) => {
-							console.log(err);
-						});
-				}
-			});
-		}
-	)
-);
+function configureProviderStrategy(provider: RegisteredOAuthProvider) {
+	const config = {
+		clientID: keys[provider].clientId,
+		clientSecret: keys[provider].clientSecret,
+		callbackURL: `/api/v${environment.development.version}/auth/${provider}/redirect`,
+	};
 
-passport.use(
-	new FacebookStrategy(
-		{
-			clientID: keys.facebook.clientId,
-			clientSecret: keys.facebook.clientSecret,
-			callbackURL: '/api/v0/auth/facebook/redirect',
-		},
-		(_: string, __: string, profile: Profile, done: VerifyCallback) => {
-			// passport callback function
-			// check if user already exists in our db with the given profile ID
-			UserModel.findOne({ facebookId: profile.id }).then((currentUser) => {
-				if (currentUser) {
-					// if we already have a record with the given profile ID
-					done(undefined, currentUser);
-				} else {
-					// if not, create a new user
-					new UserModel({
-						displayName: profile.displayName,
-						facebookId: profile.id,
+	const callbackFn = (_: string, __: string, profile: Profile, done: VerifyCallback) => {
+		// passport callback function
+		// check if user already exists in our db with the given profile ID
+		User.findOne({ [`${provider}Id`]: profile.id }).then((currentUser) => {
+			if (currentUser) {
+				// if we already have a record with the given profile ID
+				done(undefined, currentUser);
+			} else {
+				new User({
+					displayName: profile.displayName,
+					[`${provider}Id`]: profile.id,
+					email: profile.emails ? profile.emails[0].value : null,
+					image: profile.photos ? profile.photos[0].value : null,
+				})
+					.save()
+					.then((newUser) => {
+						done(undefined, newUser);
 					})
-						.save()
-						.then((newUser) => {
-							done(undefined, newUser);
-						})
-						.catch((err) => {
-							console.log(err);
-						});
-				}
-			});
-		}
-	)
-);
+					.catch((err) => {
+						console.log(err);
+					});
+			}
+		});
+	};
 
-passport.use(
-	new GitHubStrategy(
-		{
-			clientID: keys.github.clientId,
-			clientSecret: keys.github.clientSecret,
-			callbackURL: '/api/v0/auth/github/redirect',
-		},
-		(_: string, __: string, profile: Profile, done: VerifyCallback) => {
-			// passport callback function
-			// check if user already exists in our db with the given profile ID
-			UserModel.findOne({ githubId: profile.id }).then((currentUser) => {
-				if (currentUser) {
-					// if we already have a record with the given profile ID
-					done(undefined, currentUser);
-				} else {
-					// if not, create a new user
-					new UserModel({
-						displayName: profile.displayName,
-						githubId: profile.id,
-					})
-						.save()
-						.then((newUser) => {
-							done(undefined, newUser);
-						})
-						.catch((err) => {
-							console.log(err);
-						});
-				}
-			});
-		}
-	)
-);
+	let strategy: Strategy;
+
+	switch (provider) {
+		case RegisteredOAuthProvider.FACEBOOK:
+			strategy = new FacebookStrategy(config, callbackFn);
+			break;
+		case RegisteredOAuthProvider.GOOGLE:
+			strategy = new GoogleStrategy(config, callbackFn);
+			break;
+		case RegisteredOAuthProvider.GITHUB:
+			strategy = new GitHubStrategy(config, callbackFn);
+			break;
+		default:
+			throw new Error(`An unauthorized OAuth provider '${provider}' was provided`);
+	}
+	passport.use(strategy);
+}
+
+configureProviderStrategy(RegisteredOAuthProvider.FACEBOOK);
+configureProviderStrategy(RegisteredOAuthProvider.GOOGLE);
+configureProviderStrategy(RegisteredOAuthProvider.GITHUB);

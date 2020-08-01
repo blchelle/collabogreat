@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
+import { Button } from '@material-ui/core';
 
 interface User {
 	displayName: string;
@@ -8,12 +9,9 @@ interface User {
 
 const Dashboard = () => {
 	const [user, setUser] = useState<User | null>(null);
-
-	console.log('I am inside the dashboard');
+	const userId = user?.id;
 
 	useEffect(() => {
-		console.log('Inside the use effect hook');
-
 		axios('api/v0/auth/login/success', {
 			method: 'GET',
 			withCredentials: true,
@@ -24,8 +22,6 @@ const Dashboard = () => {
 			},
 		})
 			.then((res: AxiosResponse) => {
-				console.log(res);
-
 				if (res.status === 200) return res.data;
 				throw new Error('failed to authenticate user');
 			})
@@ -35,9 +31,31 @@ const Dashboard = () => {
 			.catch((err) => {
 				setUser(null);
 			});
-	}, [user?.id]);
+	}, [userId]);
 
-	return <div>{user?.displayName}</div>;
+	const logout = async () => {
+		try {
+			const res = await axios('/api/v0/auth/logout', {
+				method: 'GET',
+				headers: {
+					Accecpt: 'application/json',
+					'Content-Type': 'application/json',
+					'Access-Control-Allow-Credentials': true,
+				},
+			});
+
+			setUser(null);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	return (
+		<>
+			<div>{user?.displayName}</div>
+			<Button onClick={() => logout()}>Log Out</Button>
+		</>
+	);
 };
 
 export default Dashboard;

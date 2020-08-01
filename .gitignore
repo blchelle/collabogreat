@@ -9,8 +9,9 @@ lerna-debug.log*
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
-# Secret keys
+# Secret keys & environment
 keys.ts
+environment.config.ts
 
 # Runtime data
 pids
@@ -74,8 +75,6 @@ typings/
 # dotenv environment variables file
 .env
 .env.test
-server.env
-client.env
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
