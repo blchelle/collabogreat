@@ -10,7 +10,7 @@ lerna-debug.log*
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Secret keys & environment
-keys.ts
+keys.config.ts
 environment.config.ts
 
 # Runtime data
