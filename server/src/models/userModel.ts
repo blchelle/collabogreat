@@ -1,6 +1,9 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 import validator from 'validator';
 
+/**
+ * The structure of a User Document
+ */
 export interface IUser extends Document {
 	displayName: String;
 	email: String;
@@ -11,8 +14,14 @@ export interface IUser extends Document {
 	createdAt: Date;
 }
 
+/**
+ * The structure of a User Model
+ */
 interface IUserModel extends Model<IUser> {}
 
+/**
+ * The mongoose schema for Users
+ */
 const UserSchema = new Schema({
 	displayName: {
 		type: String,
@@ -40,5 +49,8 @@ const UserSchema = new Schema({
 	},
 });
 
+/**
+ * The Project Model which will be used to perform CRUD operations on the Projects collection
+ */
 const UserModel = mongoose.model<IUser, IUserModel>('User', UserSchema);
 export default UserModel;
