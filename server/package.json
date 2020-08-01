@@ -1,11 +1,12 @@
 {
-	"name": "server",
+	"name": "collabogreat-server",
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
 		"dev": "concurrently \"tsc --watch\" \"nodemon dist/server.js\"",
 		"lint": "eslint --ext .ts",
-		"compile": "tsc"
+		"compile": "tsc",
+		"docs": "typedoc --out docs src"
 	},
 	"dependencies": {
 		"body-parser": "^1.19.0",
@@ -44,6 +45,7 @@
 		"@types/validator": "^13.1.0",
 		"concurrently": "^5.2.0",
 		"nodemon": "^2.0.4",
+		"typedoc": "^0.17.8",
 		"typescript": "^3.9.7"
 	}
 }

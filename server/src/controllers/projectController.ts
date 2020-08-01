@@ -1,7 +1,9 @@
-/* eslint-disable class-methods-use-this */
 import Controller from './Controller';
-import ProjectModel from '../models/projectModel';
+import Project from '../models/projectModel';
 
+/**
+ * A controller used to perform operations relating to the Project Model
+ */
 class ProjectController extends Controller {
 	public path = 'projects';
 
@@ -11,7 +13,7 @@ class ProjectController extends Controller {
 	}
 
 	protected initRoutes() {
-		this.router.route('/').get(this.getAll(ProjectModel)).post(this.createOne(ProjectModel));
+		this.router.route('/').get(this.getAll(Project)).post(this.createOne(Project));
 	}
 }
 
