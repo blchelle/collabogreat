@@ -12,6 +12,7 @@ import environment from './configs/environment.config';
 import keys from './configs/keys.config';
 import { configureProviderStrategy, RegisteredOAuthProvider } from './configs/passport.config';
 import errorMiddleware from './middleware/error.middleware';
+import logger from './utils/logger.utils';
 
 /**
  * Initializes middleware and controllers for the application
@@ -105,21 +106,24 @@ class App {
 	/**
 	 * Connects the application to the MongoDB database
 	 */
-	private connectToMongoDB() {
+	private async connectToMongoDB() {
 		// Connect to MongoDB
 		const { database } = keys.mongoDB;
 		const { databasePassword } = keys.mongoDB;
 		const db = database.replace('<PASSWORD>', databasePassword);
 
-		mongoose
-			.connect(db, {
+		try {
+			await mongoose.connect(db, {
 				useNewUrlParser: true,
 				useCreateIndex: true,
 				useFindAndModify: false,
 				useUnifiedTopology: true,
-			})
-			.then(() => console.log('Connected to DB'))
-			.catch(() => console.error('Failed to connect to DB'));
+			});
+
+			logger('APP', 'Successfully connected to MongoDB');
+		} catch (err) {
+			logger('APP', 'Failed to connect to MongoDB');
+		}
 	}
 
 	/**
@@ -128,7 +132,7 @@ class App {
 	 */
 	public listen() {
 		return this.app.listen(this.port, () => {
-			console.log(`Server running on port ${this.port}`);
+			logger('APP', `Server running on port ${this.port}`);
 		});
 	}
 }
