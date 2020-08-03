@@ -2,8 +2,11 @@ import passport, { Profile, Strategy } from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { Strategy as GitHubStrategy } from 'passport-github2';
+import StatusCode from 'status-code-enum';
+
 import environment from './environment.config';
 import keys from './keys.config';
+import APIError from '../errors/api.error';
 import User, { IUser } from '../models/user.model';
 
 /**
@@ -51,12 +54,13 @@ async function StrategyCallback(
 	profile: Profile,
 	done: VerifyCallback
 ) {
+	// Attempt to find a user with the provider Id from the provider
 	const currentUser = await User.findOne({ [`${profile.provider}Id`]: profile.id });
 
 	if (currentUser) {
-		// if we already have a record with the given profile ID
 		done(undefined, currentUser);
 	} else {
+		// Attempt to create a new user
 		try {
 			const newUser = await new User({
 				displayName: profile.displayName,
@@ -77,14 +81,15 @@ async function StrategyCallback(
  * @param provider The provider who's Passport Strategy should be setup
  */
 export function configureProviderStrategy(provider: RegisteredOAuthProvider) {
+	// Specify the keys needed to connect to the OAuth provider
 	const config = {
 		clientID: keys[provider].clientId,
 		clientSecret: keys[provider].clientSecret,
 		callbackURL: `/api/v${environment.development.version}/auth/${provider}/redirect`,
 	};
 
+	// Create a new stategy corresponding for the provider that was passed in
 	let strategy: Strategy;
-
 	switch (provider) {
 		case RegisteredOAuthProvider.FACEBOOK:
 			strategy = new FacebookStrategy(config, StrategyCallback);
@@ -96,7 +101,10 @@ export function configureProviderStrategy(provider: RegisteredOAuthProvider) {
 			strategy = new GitHubStrategy(config, StrategyCallback);
 			break;
 		default:
-			throw new Error(`An unauthorized OAuth provider '${provider}' was provided`);
+			throw new APIError(
+				StatusCode.ServerErrorInternal,
+				`An unauthorized OAuth provider '${provider}' was provided`
+			);
 	}
 	passport.use(strategy);
 }

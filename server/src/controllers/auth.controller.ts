@@ -1,7 +1,7 @@
-/* eslint-disable class-methods-use-this */
 import { Request, Response } from 'express';
 import passport, { AuthenticateOptions } from 'passport';
 import { StatusCode } from 'status-code-enum';
+
 import Controller from './base.controller';
 import environment from '../configs/environment.config';
 import { RegisteredOAuthProvider } from '../configs/passport.config';

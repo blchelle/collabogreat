@@ -3,7 +3,7 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"dev": "concurrently \"tsc --watch\" \"nodemon dist/server.js\"",
+		"dev": "set NODE_ENV=development&&concurrently \"tsc --watch\" \"nodemon dist/server.js\"",
 		"lint": "eslint --ext .ts",
 		"compile": "tsc",
 		"docs": "typedoc --out docs src"

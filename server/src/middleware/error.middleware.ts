@@ -1,8 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import { Error as MongooseError } from 'mongoose';
 import { StatusCode } from 'status-code-enum';
-import APIError from '../errors/API.error';
 
+import APIError from '../errors/api.error';
+
+/**
+ * The format of the error in the http response
+ * It can either be a simple message or an array of messages for multiple errors
+ */
 type ErrorResponse = string | { [prop: string]: string }[];
 
 /**

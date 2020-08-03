@@ -1,8 +1,9 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { Document, Model } from 'mongoose';
 import StatusCode from 'status-code-enum';
+
+import DocumentNotFoundError from '../errors/documentNotFound.error';
 import catchAsync from '../utils/catchAsync.util';
-import DocumentNotFoundError from '../errors/DocumentNotFound.error';
 
 /**
  * An abstract base controller class which provides implentation of common methods that

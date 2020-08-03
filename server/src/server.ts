@@ -1,11 +1,12 @@
 import App from './app';
-import ProjectController from './controllers/project.controller';
 import AuthController from './controllers/auth.controller';
+import ProjectController from './controllers/project.controller';
 
-process.on('uncaughtException', (error) => {
+// Listen for uncaught exceptions and end the process when they occure
+process.on('uncaughtException', (err: Error) => {
 	console.error('UNCAUGHT EXCEPTION');
-	console.log(error.name, error.message);
-	console.log(error.stack);
+	console.log(err.name, err.message);
+	console.log(err.stack);
 
 	process.exit(1);
 });
@@ -16,6 +17,7 @@ const app = new App([new ProjectController(), new AuthController()]);
 // Start the Server
 const server = app.listen();
 
+// Listen for unhandled rejections and close the server when they occur
 process.on('unhandledRejection', (err: Error) => {
 	console.error('UNHANDLED REJECTION');
 	console.log(err.name, err.message);

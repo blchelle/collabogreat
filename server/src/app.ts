@@ -6,11 +6,12 @@ import cookieSession from 'cookie-session';
 import cors from 'cors';
 import morgan from 'morgan';
 import passport from 'passport';
+
 import Controller from './controllers/base.controller';
-import errorMiddleware from './middleware/error.middleware';
 import environment from './configs/environment.config';
-import { configureProviderStrategy, RegisteredOAuthProvider } from './configs/passport.config';
 import keys from './configs/keys.config';
+import { configureProviderStrategy, RegisteredOAuthProvider } from './configs/passport.config';
+import errorMiddleware from './middleware/error.middleware';
 
 /**
  * Initializes middleware and controllers for the application
