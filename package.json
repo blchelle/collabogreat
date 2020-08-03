@@ -6,7 +6,7 @@
 		"client:dev": "npm run dev --prefix client",
 		"server:dev": "npm run dev --prefix server",
 		"server:compile": "tsc -p server",
-		"all:dev": "run-p client:dev server:dev"
+		"both:dev": "run-p client:dev server:dev"
 	},
 	"repository": {
 		"type": "git",
