@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import express, { Application } from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
@@ -7,10 +6,11 @@ import cookieSession from 'cookie-session';
 import cors from 'cors';
 import morgan from 'morgan';
 import passport from 'passport';
-import Controller from './controllers/Controller';
-import environment from './config/environment.config';
-import { configureProviderStrategy, RegisteredOAuthProvider } from './config/passport.config';
-import keys from './config/keys.config';
+import Controller from './controllers/base.controller';
+import errorMiddleware from './middleware/error.middleware';
+import environment from './configs/environment.config';
+import { configureProviderStrategy, RegisteredOAuthProvider } from './configs/passport.config';
+import keys from './configs/keys.config';
 
 /**
  * Initializes middleware and controllers for the application
@@ -30,10 +30,14 @@ class App {
 		this.app = express();
 		this.app.use(express.json());
 
+		// Connect to the MongoDB database
+		this.connectToMongoDB();
+
 		// Note: It is important that the middlewares are initialized before
 		// the controllers so that they appear first in the middleware stack
 		this.initMiddlewares();
 		this.initControllers(controllers);
+		this.initErrorHandling();
 	}
 
 	/**
@@ -89,10 +93,23 @@ class App {
 	}
 
 	/**
-	 * Connects the application to the MongoDB database
-	 * @param db The database string used to connect to the database
+	 * Initializes the middleware that will be used to handle http errors
+	 * This middleware has to be placed at the end of the middleware stack,
+	 * which is why it is called after all other middlewares
 	 */
-	static connectToMongoDB(db: string) {
+	private initErrorHandling() {
+		this.app.use(errorMiddleware);
+	}
+
+	/**
+	 * Connects the application to the MongoDB database
+	 */
+	private connectToMongoDB() {
+		// Connect to MongoDB
+		const { database } = keys.mongoDB;
+		const { databasePassword } = keys.mongoDB;
+		const db = database.replace('<PASSWORD>', databasePassword);
+
 		mongoose
 			.connect(db, {
 				useNewUrlParser: true,
@@ -106,10 +123,11 @@ class App {
 
 	/**
 	 * Starts the server and begins listening for requests on the servers port
+	 * @returns The server which was started
 	 */
 	public listen() {
-		this.app.listen(this.port, () => {
-			console.log(`Server running on port ${this.port}...`);
+		return this.app.listen(this.port, () => {
+			console.log(`Server running on port ${this.port}`);
 		});
 	}
 }

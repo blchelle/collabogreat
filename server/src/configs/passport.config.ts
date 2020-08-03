@@ -4,7 +4,7 @@ import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import environment from './environment.config';
 import keys from './keys.config';
-import User, { IUser } from '../models/userModel';
+import User, { IUser } from '../models/user.model';
 
 /**
  * This type is used to emulate a similar function used by the Google, Facebook, and
@@ -37,35 +37,39 @@ passport.deserializeUser((id, done) => {
 });
 
 /**
- * Checks if the user contained within {@link profile} already exists.
+ * Checks if the user contained within 'profile' already exists.
  * If so, then their information will be retrieved
  * Otherwise, they will be added to the database
- * @param _ The access token for the provider, this is an unused parameter
- * @param __ The refresh token for the provider, this is an unused parameter
+ * @param _accessToken The access token for the provider (UNUSED)
+ * @param _refreshToken The refresh token for the provider (UNUSED)
  * @param profile The users profile from the provider they selected
  * @param done A method used to verify the users authentication
  */
-function StrategyCallback(_: string, __: string, profile: Profile, done: VerifyCallback) {
-	User.findOne({ [`${profile.provider}Id`]: profile.id }).then((currentUser) => {
-		if (currentUser) {
-			// if we already have a record with the given profile ID
-			done(undefined, currentUser);
-		} else {
-			new User({
+async function StrategyCallback(
+	_accessToken: string,
+	_refreshToken: string,
+	profile: Profile,
+	done: VerifyCallback
+) {
+	const currentUser = await User.findOne({ [`${profile.provider}Id`]: profile.id });
+
+	if (currentUser) {
+		// if we already have a record with the given profile ID
+		done(undefined, currentUser);
+	} else {
+		try {
+			const newUser = await new User({
 				displayName: profile.displayName,
 				[`${profile.provider}Id`]: profile.id,
 				email: profile.emails ? profile.emails[0].value : null,
 				image: profile.photos ? profile.photos[0].value : null,
-			})
-				.save()
-				.then((newUser) => {
-					done(undefined, newUser);
-				})
-				.catch((err) => {
-					console.log(err);
-				});
+			}).save();
+
+			done(undefined, newUser);
+		} catch (err) {
+			done(err, null);
 		}
-	});
+	}
 }
 
 /**
