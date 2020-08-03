@@ -1,12 +1,12 @@
 import App from './app';
 import AuthController from './controllers/auth.controller';
 import ProjectController from './controllers/project.controller';
+import logger from './utils/logger.utils';
 
 // Listen for uncaught exceptions and end the process when they occure
 process.on('uncaughtException', (err: Error) => {
-	console.error('UNCAUGHT EXCEPTION');
-	console.log(err.name, err.message);
-	console.log(err.stack);
+	logger('SERVER', 'UNCAUGHT EXCEPTION');
+	logger('SERVER', err.message);
 
 	process.exit(1);
 });
@@ -19,7 +19,7 @@ const server = app.listen();
 
 // Listen for unhandled rejections and close the server when they occur
 process.on('unhandledRejection', (err: Error) => {
-	console.error('UNHANDLED REJECTION');
-	console.log(err.name, err.message);
-	server.close(() => console.log('Server closed gracefully'));
+	logger('SERVER', 'UNHANDLED REJECTION');
+	logger('SERVER', err.message);
+	server.close(() => logger('SERVER', 'Server closed gracefully'));
 });
