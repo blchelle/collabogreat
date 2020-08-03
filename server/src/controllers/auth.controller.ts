@@ -1,10 +1,11 @@
-/* eslint-disable class-methods-use-this */
 import { Request, Response } from 'express';
 import passport, { AuthenticateOptions } from 'passport';
 import { StatusCode } from 'status-code-enum';
-import Controller from './Controller';
-import environment from '../config/environment.config';
-import { RegisteredOAuthProvider } from '../config/passport.config';
+
+import Controller from './base.controller';
+import environment from '../configs/environment.config';
+import { RegisteredOAuthProvider } from '../configs/passport.config';
+import User from '../models/user.model';
 
 /**
  * A controller used to handle various authentication tasks such as logging in and signing up with
@@ -12,6 +13,8 @@ import { RegisteredOAuthProvider } from '../config/passport.config';
  */
 class AuthController extends Controller {
 	public path = 'auth';
+
+	public model = User;
 
 	constructor() {
 		super();
@@ -99,10 +102,10 @@ class AuthController extends Controller {
 
 	/**
 	 * Sends a failure message back to the user who failed to login with a provider
-	 * @param _ Incoming request, UNUSED
+	 * @param _req Incoming request, UNUSED
 	 * @param res Outgoing response
 	 */
-	private loginFailed(_: Request, res: Response) {
+	private loginFailed(_req: Request, res: Response) {
 		res.status(StatusCode.ClientErrorUnauthorized).json({
 			success: false,
 			message: 'User failed to authenticate.',

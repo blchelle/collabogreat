@@ -1,5 +1,6 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 import validator from 'validator';
+import uniqueValidator from 'mongoose-unique-validator';
 
 /**
  * The structure of a User Document
@@ -25,13 +26,15 @@ interface IUserModel extends Model<IUser> {}
 const UserSchema = new Schema({
 	displayName: {
 		type: String,
-		required: [true, 'Please provide your name'],
+		required: [true, 'Please provide your Name'],
 		trim: true,
 	},
 	email: {
 		type: String,
-		required: [true, 'Please provide your email address'],
-		unique: true,
+		required: [true, 'Please provide your Email Address'],
+		index: {
+			unique: true,
+		},
 		trim: true,
 		lowercase: true,
 		validate: [validator.isEmail, 'The provided email address is invalid'],
@@ -48,6 +51,8 @@ const UserSchema = new Schema({
 		default: Date.now,
 	},
 });
+
+UserSchema.plugin(uniqueValidator, { message: 'User with {PATH} {VALUE} already exists' });
 
 /**
  * The Project Model which will be used to perform CRUD operations on the Projects collection
