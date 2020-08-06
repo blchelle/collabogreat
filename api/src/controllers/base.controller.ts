@@ -3,7 +3,10 @@ import { Document, Model } from 'mongoose';
 import StatusCode from 'status-code-enum';
 
 import DocumentNotFoundError from '../errors/documentNotFound.error';
+import APIError from '../errors/api.error';
+import User from '../models/user.model';
 import catchAsync from '../utils/catchAsync.util';
+import { validateJwt } from '../utils/jwt.util';
 
 /**
  * An abstract base controller class which provides implentation of common methods that
@@ -92,6 +95,27 @@ abstract class Controller {
 				status: 'success',
 				[this.model.modelName]: doc,
 			});
+		});
+	}
+
+	protected protectRoute() {
+		return catchAsync(async (req: Request, _res: Response, next: NextFunction) => {
+			const [idInJWT, err] = validateJwt(req.headers.authorization);
+			if (err || !idInJWT) return next(err);
+
+			// Get the user from the database and attach it to the request
+			const user = await User.findById(idInJWT);
+			if (!user) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorUnauthorized,
+						'The User embedded in the JWT does not exist'
+					)
+				);
+			}
+
+			req.user = user;
+			next();
 		});
 	}
 

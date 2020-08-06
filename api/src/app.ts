@@ -2,17 +2,17 @@ import express, { Application } from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import cookieSession from 'cookie-session';
 import cors from 'cors';
 import morgan from 'morgan';
 import passport from 'passport';
 
+import StatusCode from 'status-code-enum';
 import Controller from './controllers/base.controller';
 import environment from './configs/environment.config';
 import keys from './configs/keys.config';
-import { configureProviderStrategy, RegisteredOAuthProvider } from './configs/passport.config';
 import errorMiddleware from './middleware/error.middleware';
 import logger from './utils/logger.utils';
+import APIError from './errors/api.error';
 
 /**
  * Initializes middleware and controllers for the application
@@ -63,7 +63,10 @@ class App {
 		if (process.env.NODE_ENV === 'development') this.app.use(morgan('dev'));
 
 		// Body Parser Middleware
-		this.app.use(bodyParser.json());
+		this.app.use(bodyParser.urlencoded({ extended: false }));
+
+		// Cookie Parser Middleware
+		this.app.use(cookieParser());
 
 		// CORS Middleware
 		this.app.use(
@@ -74,24 +77,8 @@ class App {
 			})
 		);
 
-		this.app.use(
-			cookieSession({
-				keys: [keys.session.cookieKey],
-				maxAge: 24 * 60 * 60 * 100,
-			})
-		);
-
-		// Cookie Parsing Middleware
-		this.app.use(cookieParser());
-
 		// Passport Middleware
 		this.app.use(passport.initialize());
-		this.app.use(passport.session());
-
-		// Passport Provider Setup
-		configureProviderStrategy(RegisteredOAuthProvider.FACEBOOK);
-		configureProviderStrategy(RegisteredOAuthProvider.GOOGLE);
-		configureProviderStrategy(RegisteredOAuthProvider.GITHUB);
 	}
 
 	/**
@@ -100,6 +87,17 @@ class App {
 	 * which is why it is called after all other middlewares
 	 */
 	private initErrorHandling() {
+		// Handle the case where the route is not found
+		this.app.all('*', (req, _res, next) =>
+			next(
+				new APIError(
+					StatusCode.ClientErrorNotFound,
+					`URL ${req.originalUrl} does not exist on this server`
+				)
+			)
+		);
+
+		// Handle errors thrown from other middlewares
 		this.app.use(errorMiddleware);
 	}
 
@@ -120,9 +118,9 @@ class App {
 				useUnifiedTopology: true,
 			});
 
-			logger('APP', 'Successfully connected to MongoDB');
+			logger('APP', 'Successfully connected to MongoDB ✅');
 		} catch (err) {
-			logger('APP', 'Failed to connect to MongoDB');
+			logger('APP', 'Failed to connect to MongoDB ❌');
 		}
 	}
 
@@ -132,7 +130,7 @@ class App {
 	 */
 	public listen() {
 		return this.app.listen(this.port, () => {
-			logger('APP', `Server running on port ${this.port}`);
+			logger('APP', `Server running on port ${this.port} ✅`);
 		});
 	}
 }
