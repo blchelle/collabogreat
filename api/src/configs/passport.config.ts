@@ -14,7 +14,7 @@ import User, { IUser } from '../models/user.model';
  * github strategies.
  * It can be used by all 3 Strategies to increase DRYness
  */
-export type VerifyCallback = (err: string | Error | undefined, user?: any, info?: any) => void;
+type VerifyCallback = (err: string | Error | undefined, user?: any, info?: any) => void;
 
 /**
  * All the currently registered OAuth Providers for CollaboGreat

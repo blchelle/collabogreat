@@ -3,8 +3,6 @@ import uniqueValidator from 'mongoose-unique-validator';
 import { Profile } from 'passport';
 import validator from 'validator';
 
-import { VerifyCallback } from '../configs/passport.config';
-
 /**
  * The structure of a User Document
  */
@@ -22,14 +20,7 @@ export interface IUser extends Document {
 /**
  * The structure of a User Model
  */
-interface IUserModel extends Model<IUser> {
-	findOrCreate: (
-		_accessToken: string,
-		_refreshToken: string,
-		profile: Profile,
-		done: VerifyCallback
-	) => void;
-}
+interface IUserModel extends Model<IUser> {}
 
 /**
  * The mongoose schema for Users

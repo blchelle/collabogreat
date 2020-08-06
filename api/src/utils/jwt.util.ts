@@ -24,6 +24,7 @@ export function validateJwt(authorizationHeader: string | undefined) {
 	}
 
 	// Verify that the authorization header used a Bearer token
+	// Splitting the header on a space will give us an array like this -> [TokenType, Token]
 	const [tokenType, token] = authorizationHeader.split(' ');
 	if (tokenType !== 'Bearer') {
 		return [
@@ -35,7 +36,7 @@ export function validateJwt(authorizationHeader: string | undefined) {
 		];
 	}
 
-	// Verify that the token is valid (no tampering) and thath the decoded token has an id property
+	// Verify that the token is valid (no tampering) and that the decoded token has an id property
 	type DecodedToken = { id: string; iat: number; exp: number };
 	const decodedToken = jwt.verify(token, keys.jwt.secret) as DecodedToken;
 	if (
@@ -46,7 +47,7 @@ export function validateJwt(authorizationHeader: string | undefined) {
 			null,
 			new APIError(
 				StatusCode.ClientErrorUnauthorized,
-				"The Decoded JWT doesn't have an user to get information from id"
+				"The Decoded JWT doesn't have a user to get information from id"
 			),
 		];
 	}
