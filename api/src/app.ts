@@ -1,18 +1,18 @@
-import express, { Application } from 'express';
-import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import express, { Application } from 'express';
+import mongoose from 'mongoose';
 import morgan from 'morgan';
 import passport from 'passport';
-
 import StatusCode from 'status-code-enum';
-import Controller from './controllers/base.controller';
+
 import environment from './configs/environment.config';
 import keys from './configs/keys.config';
+import Controller from './controllers/base.controller';
+import APIError from './errors/api.error';
 import errorMiddleware from './middleware/error.middleware';
 import logger from './utils/logger.utils';
-import APIError from './errors/api.error';
 
 /**
  * Initializes middleware and controllers for the application

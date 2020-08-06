@@ -1,14 +1,13 @@
 import passport, { Profile, Strategy } from 'passport';
+import { Strategy as GitHubStrategy } from 'passport-github2';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
-import { Strategy as GitHubStrategy } from 'passport-github2';
 import StatusCode from 'status-code-enum';
 
 import environment from './environment.config';
 import keys from './keys.config';
-import APIError from '../errors/api.error';
-import User, { IUser } from '../models/user.model';
 import UnregisteredProviderError from '../errors/unregisteredProvider.error';
+import User, { IUser } from '../models/user.model';
 
 /**
  * This type is used to emulate a similar function used by the Google, Facebook, and
@@ -26,14 +25,11 @@ export enum RegisteredOAuthProvider {
 	GITHUB = 'github',
 }
 
-// These functions are required for getting data To/from JSON returned from Providers
 passport.serializeUser<IUser, string>(function (user, done) {
-	console.log('Serializing the user');
 	done(null, user.id);
 });
 
 passport.deserializeUser<IUser, string>(function (id, done) {
-	console.log('Deserializing the user');
 	User.findById(id, function (err, user) {
 		done(err, user ?? undefined);
 	});
@@ -54,13 +50,14 @@ async function StrategyCallback(
 	profile: Profile,
 	done: VerifyCallback
 ) {
+	// Check if the user associated with the profile already exists
 	const { provider } = profile;
 	const currentUser = await User.findOne({ [`${provider}Id`]: profile.id });
 	if (currentUser) {
 		return done(undefined, currentUser);
 	}
 
-	// Otherwise, we need to create a new user
+	// Otherwise, Attempts to creates a new user
 	try {
 		const newUser = await new User({
 			displayName: profile.displayName,

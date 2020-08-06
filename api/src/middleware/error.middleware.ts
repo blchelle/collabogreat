@@ -24,6 +24,7 @@ function handleError(err: Error, _req: Request, res: Response, _next: NextFuncti
 	let statusCode;
 	let responseError: ErrorResponse;
 
+	// Handle the error based on what kind of error is received
 	if (err instanceof APIError) {
 		statusCode = err.statusCode;
 		responseError = err.message;

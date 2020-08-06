@@ -1,10 +1,9 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
-import validator from 'validator';
 import { Profile } from 'passport';
-// import StatusCode from 'status-code-enum';
+import validator from 'validator';
+
 import { VerifyCallback } from '../configs/passport.config';
-// import APIError from '../errors/api.error';
 
 /**
  * The structure of a User Document
@@ -64,28 +63,7 @@ const UserSchema = new Schema({
 	},
 });
 
-// UserSchema.statics.findOrCreate = async function (profile: Profile, done: VerifyCallback) {
-// 	// Attempt to find a user with the provider Id from the provider
-// 	const currentUser = await this.findOne({ [`${profile.provider}Id`]: profile.id });
-
-// 	if (currentUser) {
-// 		return currentUser;
-// 	}
-// 	// Attempt to create a new user
-// 	try {
-// 		const newUser = this.create({
-// 			displayName: profile.displayName,
-// 			[`${profile.provider}Id`]: profile.id,
-// 			email: profile.emails ? profile.emails[0].value : null,
-// 			image: profile.photos ? profile.photos[0].value : null,
-// 		});
-
-// 		return newUser;
-// 	} catch (err) {
-// 		return new APIError(StatusCode.ClientErrorBadRequest, 'Unable to create User');
-// 	}
-// };
-
+// Converts MongoDB code 11000 errors to a Mongoose Validation error with a clean message
 UserSchema.plugin(uniqueValidator, { message: 'User with {PATH} {VALUE} already exists' });
 
 /**

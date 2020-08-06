@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, CookieOptions } from 'express';
+import { Request, Response, CookieOptions } from 'express';
 import jwt from 'jsonwebtoken';
 import passport, { AuthenticateOptions } from 'passport';
 
@@ -40,6 +40,8 @@ class AuthController extends Controller {
 
 	/**
 	 * Redirects the user to the authentication page for the given provider
+	 * @param provider The provider to login with
+	 * @param options Options for the provider (Is it session based? What permissions?)
 	 */
 	private loginWithProvider(provider: RegisteredOAuthProvider, options: AuthenticateOptions) {
 		return passport.authenticate(provider, options);
@@ -53,10 +55,16 @@ class AuthController extends Controller {
 		return passport.authenticate(provider);
 	}
 
-	private createAndSendToken(req: Request, res: Response, _next: NextFunction) {
+	/**
+	 * Creates a JWT that will have the the users id signed into it
+	 * Then the JWT will be sent in the form of a HTTP-Only secure cookie
+	 * @param req The http request
+	 * @param res The http response
+	 */
+	private createAndSendToken(req: Request, res: Response) {
 		const user = req.user as IUser;
 
-		// Sign a jwt with the users id
+		// Signs a jwt with the users id
 		const token = jwt.sign({ id: user.id }, keys.jwt.secret, {
 			expiresIn: keys.jwt.tokenLifeSpan,
 		});
@@ -68,6 +76,7 @@ class AuthController extends Controller {
 			sameSite: 'strict',
 		};
 
+		// Sends the cookie and redirects the client to the dashboard
 		res.cookie('jwt', token, cookieOptions);
 		res.redirect(environment.development.oauth.successRoute);
 	}
