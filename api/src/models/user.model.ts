@@ -1,6 +1,5 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
-import { Profile } from 'passport';
 import validator from 'validator';
 
 /**
