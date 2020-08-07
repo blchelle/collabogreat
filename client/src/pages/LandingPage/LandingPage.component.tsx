@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner.component';
 import AuthCard from '../../components/AuthCard/AuthCard.component';
 
 const LandingPage = () => {
@@ -16,6 +17,7 @@ const LandingPage = () => {
 					</Button>
 				</Toolbar>
 			</AppBar>
+			<LoadingSpinner />
 		</div>
 	);
 };

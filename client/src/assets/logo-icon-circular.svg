@@ -1,0 +1,16 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="logo-icon-circular">
+<g id="logo-icon">
+<ellipse id="red-head" cx="91.4275" cy="27.8898" rx="19.2513" ry="19.2513" fill="#E81410"/>
+<ellipse id="yellow-head" cx="227.543" cy="91.416" rx="19.2513" ry="19.2513" fill="#FFD11F"/>
+<ellipse id="blue-head" cx="27.8898" cy="164.017" rx="19.2513" ry="19.2513" fill="#373FBF"/>
+<ellipse id="green-head" cx="164.017" cy="227.543" rx="19.2513" ry="19.2513" fill="#21BF54"/>
+<g id="bodies">
+<rect id="red-body" x="100.491" y="64.1905" width="38.5027" height="77.0054" rx="19.2513" transform="rotate(-45 100.491 64.1905)" fill="#E81410"/>
+<rect id="yellow-body" x="191.243" y="100.491" width="38.5027" height="77.0054" rx="19.2513" transform="rotate(45 191.243 100.491)" fill="#FFD11F"/>
+<rect id="blue-body" x="64.1905" y="154.942" width="38.5027" height="77.0054" rx="19.2513" transform="rotate(-135 64.1905 154.942)" fill="#373FBF"/>
+<rect id="green-body" x="154.942" y="191.243" width="38.5027" height="77.0054" rx="19.2513" transform="rotate(135 154.942 191.243)" fill="#21BF54"/>
+</g>
+</g>
+</g>
+</svg>
