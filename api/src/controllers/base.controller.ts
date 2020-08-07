@@ -9,7 +9,7 @@ import catchAsync from '../utils/catchAsync.util';
 import { validateJwt } from '../utils/jwt.util';
 
 /**
- * An abstract base controller class which provides implentation of common methods that
+ * An abstract base controller class which provides implementation of common methods that
  * controllers can inherit and use without having to provide their own implementation
  */
 abstract class Controller {
@@ -29,7 +29,7 @@ abstract class Controller {
 	public router = express.Router();
 
 	/**
-	 * Get all the documents from a collection in the database and send it as a response
+	 * Gets all the documents from a collection in the database and send it in the response
 	 */
 	protected getAll() {
 		return catchAsync(async (_: Request, res: Response) => {
@@ -43,7 +43,7 @@ abstract class Controller {
 	}
 
 	/**
-	 * Create a new document in a collection in the database and send it a a response
+	 * Creates a new document in a collection in the database and send it in the response
 	 */
 	protected createOne() {
 		return catchAsync(async (req: Request, res: Response) => {
@@ -82,7 +82,7 @@ abstract class Controller {
 	}
 
 	/**
-	 * Finds a single document from a collection by the documents id
+	 * Finds a single document from a collection by the documents id.
 	 * Then the document is sent in the response
 	 */
 	protected getOneById() {
@@ -109,7 +109,7 @@ abstract class Controller {
 	}
 
 	/**
-	 * Protects a route from being accessed by an unauthenticated user
+	 * Protects a route from being accessed by an unauthenticated user.
 	 * An unauthenticated user is someone who makes a request with an invalid
 	 * or non-existent JWT
 	 */

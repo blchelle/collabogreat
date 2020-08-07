@@ -9,7 +9,7 @@ import Controller from './base.controller';
 import User, { IUser } from '../models/user.model';
 
 /**
- * A controller used to handle various authentication tasks such as logging in and signing up with
+ * Used to handle various authentication tasks such as logging in and signing up with
  * OAuth Provider, and logging out
  */
 class AuthController extends Controller {
@@ -23,7 +23,7 @@ class AuthController extends Controller {
 	}
 
 	protected initRoutes() {
-		// Setup Login and Redirect Handlers for the available providers
+		// Initializes Login and Redirect Handlers for the available providers
 		Object.values(RegisteredOAuthProvider).forEach((provider) => {
 			this.router
 				.route(`/${provider}`)
@@ -34,7 +34,6 @@ class AuthController extends Controller {
 				.get(this.redirectProvider(provider), this.createAndSendToken);
 		});
 
-		// Setup a logout route
 		this.router.route('/logout').get(this.logout);
 	}
 
@@ -82,8 +81,8 @@ class AuthController extends Controller {
 	}
 
 	/**
-	 * Logsout the user and sends their blank information as a response
-	 * @param req Incoming reqYeauest
+	 * Logs the user out and sends their blank information as a response
+	 * @param req Incoming request
 	 * @param res Outgoing response
 	 */
 	private logout(req: Request, res: Response) {

@@ -32,10 +32,10 @@ class App {
 		this.app = express();
 		this.app.use(express.json());
 
-		// Connect to the MongoDB database
+		// Connects to the MongoDB database
 		this.connectToMongoDB();
 
-		// Note: It is important that the middlewares are initialized before
+		// It is important that the middlewares are initialized before
 		// the controllers so that they appear first in the middleware stack
 		this.initMiddlewares();
 		this.initControllers(controllers);
@@ -87,7 +87,7 @@ class App {
 	 * which is why it is called after all other middlewares
 	 */
 	private initErrorHandling() {
-		// Handle the case where the route is not found
+		// Handles the case where the route is not found
 		this.app.all('*', (req, _res, next) =>
 			next(
 				new APIError(
@@ -97,7 +97,7 @@ class App {
 			)
 		);
 
-		// Handle errors thrown from other middlewares
+		// Handles errors thrown from other middlewares
 		this.app.use(errorMiddleware);
 	}
 
@@ -105,7 +105,7 @@ class App {
 	 * Connects the application to the MongoDB database
 	 */
 	private async connectToMongoDB() {
-		// Connect to MongoDB
+		// Gets the credentials needed to access the database
 		const { database } = keys.mongoDB;
 		const { databasePassword } = keys.mongoDB;
 		const db = database.replace('<PASSWORD>', databasePassword);

@@ -3,8 +3,8 @@ import StatusCode from 'status-code-enum';
 import APIError from './api.error';
 
 /**
- * A class used to handle errors caused by the request querying for
- * an document in the database that does not exist
+ * Used to create errors caused by the request querying for
+ * a document in the database that does not exist
  */
 class DocumentNotFoundError extends APIError {
 	constructor(id: string, statusCode: StatusCode, modelName: string) {
