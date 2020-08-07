@@ -10,8 +10,7 @@ import UnregisteredProviderError from '../errors/unregisteredProvider.error';
 import User, { IUser } from '../models/user.model';
 
 /**
- * This type is used to emulate a similar function used by the Google, Facebook, and
- * github strategies.
+ * Used to emulate a similar function used by the Google, Facebook, and github strategies.
  * It can be used by all 3 Strategies to increase DRYness
  */
 type VerifyCallback = (err: string | Error | undefined, user?: any, info?: any) => void;
@@ -50,7 +49,7 @@ async function StrategyCallback(
 	profile: Profile,
 	done: VerifyCallback
 ) {
-	// Check if the user associated with the profile already exists
+	// Checks if the user associated with the profile already exists
 	const { provider } = profile;
 	const currentUser = await User.findOne({ [`${provider}Id`]: profile.id });
 	if (currentUser) {
@@ -77,14 +76,14 @@ async function StrategyCallback(
  * @param provider The provider who's Passport Strategy should be setup
  */
 function configureProviderStrategy(provider: RegisteredOAuthProvider) {
-	// Specify the keys needed to connect to the OAuth provider
+	// Specifies the keys needed to connect to the OAuth provider
 	const config = {
 		clientID: keys[provider].clientId,
 		clientSecret: keys[provider].clientSecret,
 		callbackURL: `/api/v${environment.development.version}/auth/${provider}/redirect`,
 	};
 
-	// Create a new stategy corresponding for the provider that was passed in
+	// Initializes a new stategy corresponding for the provider that was passed in
 	let strategy: Strategy;
 	switch (provider) {
 		case RegisteredOAuthProvider.FACEBOOK:

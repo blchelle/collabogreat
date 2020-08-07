@@ -3,8 +3,7 @@ import StatusCode from 'status-code-enum';
 import APIError from './api.error';
 
 /**
- * A class used to handle errors caused by trying to authenticate with a provider
- * not registered with CollaboGreat
+ * Used to create errors caused by trying to authenticate with an unregistered provider
  */
 class UnregisteredProviderError extends APIError {
 	constructor(statusCode: StatusCode, providerName: string) {

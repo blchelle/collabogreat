@@ -2,7 +2,7 @@ import Controller from './base.controller';
 import Project from '../models/project.model';
 
 /**
- * A controller used to perform operations relating to the Project Model
+ * Used to perform operations relating to the Project Model
  */
 class ProjectController extends Controller {
 	public path = 'projects';

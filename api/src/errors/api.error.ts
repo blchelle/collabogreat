@@ -1,8 +1,8 @@
 import { StatusCode } from 'status-code-enum';
 
 /**
- * A class used for handling API
- * These errors can be caused by a malformed request, an internal server error, failed database
+ * Used for creating API Errors.
+ * These errors can be caused by a malformed request, an internal server error, a failed database
  * operation, the client trying to access a resource which they do not have the authorization for,
  * the client trying to access a resource which does not exist, etc...
  */
@@ -18,7 +18,7 @@ class APIError extends Error {
 		this.statusCode = statusCode;
 		this.message = message;
 
-		// This prevents APIError objects from being implicitly casted to Error
+		// Prevents APIError objects from being implicitly casted to Error
 		Object.setPrototypeOf(this, new.target.prototype);
 	}
 }
