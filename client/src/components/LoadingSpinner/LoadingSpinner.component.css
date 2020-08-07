@@ -9,12 +9,12 @@
 #green-head,
 #red-head,
 #yellow-head {
-	animation: spinner-animation 6s ease-in-out 0.7s infinite forwards;
+	animation: spinner-animation 6s ease-in-out 0.75s infinite;
 	transform-origin: center;
 }
 
 #bodies {
-	animation: spinner-animation 6s ease-in-out 0s infinite forwards;
+	animation: spinner-animation 6s ease-in-out 0s infinite;
 	transform-origin: center;
 }
 
@@ -22,56 +22,25 @@
 	0% {
 		transform: rotateZ(0deg)
 	}
-	10% {
+	12.5% {
 		transform: rotateZ(90deg);
 	}
 	25% {
 		transform: rotateZ(90deg);
 	}
-	35% {
+	37.5% {
 		transform: rotateZ(180deg);
 	}
 	50% {
 		transform: rotateZ(180deg);
 	}
-	60% {
+	62.5% {
 		transform: rotateZ(270deg);
 	}
 	75% {
 		transform: rotateZ(270deg);
 	}
-	85% {
-		transform: rotateZ(360deg);
-	}
-	100% {
-		transform: rotateZ(360deg);
-	}
-
-}
-
-@keyframes body-rotation {
-	0% {
-		transform: rotateZ(0deg)
-	}
-	10% {
-		transform: rotateZ(90deg);
-	}
-	25% {
-		transform: rotateZ(90deg);
-	}
-	35% {
-		transform: rotateZ(180deg);
-	}
-	50% {
-		transform: rotateZ(180deg);
-	}
-	60% {
-		transform: rotateZ(270deg);
-	}
-	75% {
-		transform: rotateZ(270deg);
-	}
-	85% {
+	87.5% {
 		transform: rotateZ(360deg);
 	}
 	100% {
