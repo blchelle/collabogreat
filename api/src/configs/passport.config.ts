@@ -1,12 +1,12 @@
 import passport, { Profile, Strategy } from 'passport';
+import { Strategy as GitHubStrategy } from 'passport-github2';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
-import { Strategy as GitHubStrategy } from 'passport-github2';
 import StatusCode from 'status-code-enum';
 
 import environment from './environment.config';
 import keys from './keys.config';
-import APIError from '../errors/api.error';
+import UnregisteredProviderError from '../errors/unregisteredProvider.error';
 import User, { IUser } from '../models/user.model';
 
 /**
@@ -25,18 +25,14 @@ export enum RegisteredOAuthProvider {
 	GITHUB = 'github',
 }
 
-passport.serializeUser<IUser, string>((user, done) => {
+passport.serializeUser<IUser, string>(function (user, done) {
 	done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-	User.findById(id)
-		.then((user) => {
-			done(null, user);
-		})
-		.catch((err) => {
-			done(err, false);
-		});
+passport.deserializeUser<IUser, string>(function (id, done) {
+	User.findById(id, function (err, user) {
+		done(err, user ?? undefined);
+	});
 });
 
 /**
@@ -54,25 +50,25 @@ async function StrategyCallback(
 	profile: Profile,
 	done: VerifyCallback
 ) {
-	// Attempt to find a user with the provider Id from the provider
-	const currentUser = await User.findOne({ [`${profile.provider}Id`]: profile.id });
-
+	// Check if the user associated with the profile already exists
+	const { provider } = profile;
+	const currentUser = await User.findOne({ [`${provider}Id`]: profile.id });
 	if (currentUser) {
-		done(undefined, currentUser);
-	} else {
-		// Attempt to create a new user
-		try {
-			const newUser = await new User({
-				displayName: profile.displayName,
-				[`${profile.provider}Id`]: profile.id,
-				email: profile.emails ? profile.emails[0].value : null,
-				image: profile.photos ? profile.photos[0].value : null,
-			}).save();
+		return done(undefined, currentUser);
+	}
 
-			done(undefined, newUser);
-		} catch (err) {
-			done(err, null);
-		}
+	// Otherwise, Attempts to creates a new user
+	try {
+		const newUser = await new User({
+			displayName: profile.displayName,
+			email: profile.emails ? profile.emails[0].value : null,
+			image: profile.photos ? profile.photos[0].value : null,
+			[`${provider}Id`]: profile.id,
+		}).save();
+
+		done(undefined, newUser);
+	} catch (err) {
+		done(err);
 	}
 }
 
@@ -80,7 +76,7 @@ async function StrategyCallback(
  * Sets up a strategy for any of the registered OAuth providers
  * @param provider The provider who's Passport Strategy should be setup
  */
-export function configureProviderStrategy(provider: RegisteredOAuthProvider) {
+function configureProviderStrategy(provider: RegisteredOAuthProvider) {
 	// Specify the keys needed to connect to the OAuth provider
 	const config = {
 		clientID: keys[provider].clientId,
@@ -101,10 +97,12 @@ export function configureProviderStrategy(provider: RegisteredOAuthProvider) {
 			strategy = new GitHubStrategy(config, StrategyCallback);
 			break;
 		default:
-			throw new APIError(
-				StatusCode.ServerErrorInternal,
-				`An unauthorized OAuth provider '${provider}' was provided`
-			);
+			throw new UnregisteredProviderError(StatusCode.ServerErrorInternal, provider);
 	}
 	passport.use(strategy);
 }
+
+// Passport Provider Setup
+Object.values(RegisteredOAuthProvider).forEach((provider) => configureProviderStrategy(provider));
+
+export default RegisteredOAuthProvider;

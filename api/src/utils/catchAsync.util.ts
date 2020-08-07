@@ -6,8 +6,12 @@ import { NextFunction, Request, RequestHandler, Response } from 'express';
  * @param fn The function to wrap
  */
 const catchAsync = (fn: RequestHandler) => {
-	return (req: Request, res: Response, next: NextFunction) => {
-		fn(req, res, next).catch((err: Error) => next(err));
+	return async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			await fn(req, res, next);
+		} catch (err) {
+			next(err);
+		}
 	};
 };
 

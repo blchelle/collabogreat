@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
-import validator from 'validator';
 import uniqueValidator from 'mongoose-unique-validator';
+import validator from 'validator';
 
 /**
  * The structure of a User Document
@@ -8,11 +8,12 @@ import uniqueValidator from 'mongoose-unique-validator';
 export interface IUser extends Document {
 	displayName: String;
 	email: String;
+	createdAt: Date;
+
 	image?: String;
 	googleId?: String;
 	githubId?: String;
 	facebookId?: String;
-	createdAt: Date;
 }
 
 /**
@@ -52,6 +53,7 @@ const UserSchema = new Schema({
 	},
 });
 
+// Converts MongoDB code 11000 errors to a Mongoose Validation error with a clean message
 UserSchema.plugin(uniqueValidator, { message: 'User with {PATH} {VALUE} already exists' });
 
 /**

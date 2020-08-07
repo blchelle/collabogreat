@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { Error as MongooseError } from 'mongoose';
+import { JsonWebTokenError } from 'jsonwebtoken';
 import { StatusCode } from 'status-code-enum';
 
 import APIError from '../errors/api.error';
@@ -23,6 +24,7 @@ function handleError(err: Error, _req: Request, res: Response, _next: NextFuncti
 	let statusCode;
 	let responseError: ErrorResponse;
 
+	// Handle the error based on what kind of error is received
 	if (err instanceof APIError) {
 		statusCode = err.statusCode;
 		responseError = err.message;
@@ -31,6 +33,9 @@ function handleError(err: Error, _req: Request, res: Response, _next: NextFuncti
 		responseError = Object.values(err.errors).map(({ path, message }) => {
 			return { [path]: message };
 		});
+	} else if (err instanceof JsonWebTokenError) {
+		statusCode = StatusCode.ClientErrorUnauthorized;
+		responseError = err.message;
 	} else {
 		statusCode = StatusCode.ServerErrorInternal;
 		responseError = 'Unknown Error';
