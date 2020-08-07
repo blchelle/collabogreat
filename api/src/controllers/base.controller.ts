@@ -29,7 +29,7 @@ abstract class Controller {
 	public router = express.Router();
 
 	/**
-	 * Gets all the documents from a collection in the database and send it in the response
+	 * Gets all the documents from a collection in the database and sends it in the response
 	 */
 	protected getAll() {
 		return catchAsync(async (_: Request, res: Response) => {
@@ -43,7 +43,7 @@ abstract class Controller {
 	}
 
 	/**
-	 * Creates a new document in a collection in the database and send it in the response
+	 * Creates a new document in a collection in the database and sends it in the response
 	 */
 	protected createOne() {
 		return catchAsync(async (req: Request, res: Response) => {
