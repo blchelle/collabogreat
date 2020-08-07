@@ -1,0 +1,50 @@
+.loading-spinner {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#blue-head,
+#green-head,
+#red-head,
+#yellow-head {
+	animation: spinner-animation 6s ease-in-out 0.75s infinite;
+	transform-origin: center;
+}
+
+#bodies {
+	animation: spinner-animation 6s ease-in-out 0s infinite;
+	transform-origin: center;
+}
+
+@keyframes spinner-animation {
+	0% {
+		transform: rotateZ(0deg)
+	}
+	12.5% {
+		transform: rotateZ(90deg);
+	}
+	25% {
+		transform: rotateZ(90deg);
+	}
+	37.5% {
+		transform: rotateZ(180deg);
+	}
+	50% {
+		transform: rotateZ(180deg);
+	}
+	62.5% {
+		transform: rotateZ(270deg);
+	}
+	75% {
+		transform: rotateZ(270deg);
+	}
+	87.5% {
+		transform: rotateZ(360deg);
+	}
+	100% {
+		transform: rotateZ(360deg);
+	}
+
+}
