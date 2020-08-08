@@ -4,8 +4,10 @@ import mongoose, { Document, Schema } from 'mongoose';
  * The structure of a Project Document
  */
 interface IProject extends Document {
-	title: string;
-	description: string;
+	title: String;
+	description: String;
+	members: String[];
+	createdAt: Date;
 }
 
 /**
@@ -21,6 +23,17 @@ const ProjectSchema = new Schema({
 		type: String,
 		required: false,
 		unique: false,
+	},
+	members: [
+		{
+			type: Schema.Types.ObjectId,
+			required: [true, 'A Project must have at least one member'],
+			default: undefined,
+		},
+	],
+	createdAt: {
+		type: Date,
+		default: Date.now,
 	},
 });
 
