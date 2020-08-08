@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import mongoose from 'mongoose';
 import StatusCode from 'status-code-enum';
 
 import Controller from './base.controller';
@@ -59,9 +60,17 @@ class ProjectController extends Controller {
 			reqUser.projects.push(reqProject.id);
 			reqProject.members.push(reqUser.id);
 
-			const [user, project] = await Promise.all([reqUser.save(), reqProject.save()]);
+			// Uses a transaction to ensure that both operations are successful
+			const session = await mongoose.startSession();
+			session.startTransaction();
 
-			res.status(StatusCode.SuccessCreated).json({ user, project });
+			await reqUser.save({ session });
+			await reqProject.save({ session });
+
+			session.commitTransaction();
+			session.endSession();
+
+			res.status(StatusCode.SuccessCreated).json({ status: 'success' });
 		});
 	}
 }

@@ -3,7 +3,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 /**
  * The structure of a Project Document
  */
-interface IProject extends Document {
+export interface IProject extends Document {
 	title: String;
 	description: String;
 	members: String[];
@@ -16,7 +16,7 @@ interface IProject extends Document {
 const ProjectSchema = new Schema({
 	title: {
 		type: String,
-		required: true,
+		required: [true, 'Please give your Project a name'],
 		unique: false,
 	},
 	description: {
@@ -27,7 +27,7 @@ const ProjectSchema = new Schema({
 	members: [
 		{
 			type: Schema.Types.ObjectId,
-			required: [true, 'A Project must have at least one member'],
+			required: [true, 'Please add a team member to your Project'],
 			default: undefined,
 		},
 	],
