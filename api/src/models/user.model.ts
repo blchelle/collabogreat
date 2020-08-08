@@ -8,6 +8,7 @@ import validator from 'validator';
 export interface IUser extends Document {
 	displayName: String;
 	email: String;
+	projects: String[];
 	createdAt: Date;
 
 	image?: String;
@@ -40,6 +41,12 @@ const UserSchema = new Schema({
 		lowercase: true,
 		validate: [validator.isEmail, 'The provided email address is invalid'],
 	},
+	projects: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: 'Project',
+		},
+	],
 	image: {
 		type: String,
 		required: false,
