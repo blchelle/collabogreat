@@ -1,14 +1,33 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
+interface IProjectUser {
+	id: String;
+	joined: Boolean;
+}
+
 /**
  * The structure of a Project Document
  */
 export interface IProject extends Document {
 	title: String;
 	description: String;
-	members: String[];
+	members: IProjectUser[];
 	createdAt: Date;
 }
+
+const ProjectMemberSchema = new Schema(
+	{
+		id: {
+			type: Schema.Types.ObjectId,
+			required: [true, 'Project Members must have an ID'],
+		},
+		joined: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	{ _id: false }
+);
 
 /**
  * The mongoose schema for Projects
@@ -24,13 +43,7 @@ const ProjectSchema = new Schema({
 		required: false,
 		unique: false,
 	},
-	members: [
-		{
-			type: Schema.Types.ObjectId,
-			required: [true, 'Please add a team member to your Project'],
-			default: undefined,
-		},
-	],
+	members: [ProjectMemberSchema],
 	createdAt: {
 		type: Date,
 		default: Date.now,
