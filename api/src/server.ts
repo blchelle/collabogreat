@@ -1,6 +1,7 @@
 import App from './app';
 import AuthController from './controllers/auth.controller';
 import ProjectController from './controllers/project.controller';
+import UserController from './controllers/user.controller';
 import logger from './utils/logger.utils';
 
 // Initializes the OAuth strategies for each of the registered providers
@@ -17,7 +18,7 @@ process.on('uncaughtException', (err: Error) => {
 });
 
 // Creates an app instance
-const app = new App([new ProjectController(), new AuthController()]);
+const app = new App([new ProjectController(), new UserController(), new AuthController()]);
 
 // Starts the Server
 const server = app.listen();
