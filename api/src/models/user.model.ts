@@ -60,6 +60,18 @@ const UserSchema = new Schema({
 	},
 });
 
+/**
+ * Populates the projects property of the user so that it also includes the titles
+ */
+UserSchema.pre('findOne', function (next) {
+	this.populate({
+		path: 'projects',
+		select: 'title',
+	});
+
+	next();
+});
+
 // Converts MongoDB code 11000 errors to a Mongoose Validation error with a clean message
 UserSchema.plugin(uniqueValidator, { message: 'User with {PATH} {VALUE} already exists' });
 
