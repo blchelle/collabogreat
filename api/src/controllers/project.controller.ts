@@ -33,10 +33,6 @@ class ProjectController extends Controller {
 	/**
 	 * Creates a project.
 	 * The user attached to the request object will be automatically added to this project
-	 *
-	 * // TODO: When a user invites other users to the project during its creation...
-	 * The invited user will still be added to the project, but they will have a status of 'invited'
-	 * Joined users will have a status of 'joined'
 	 */
 	protected createProject() {
 		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
