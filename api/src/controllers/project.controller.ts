@@ -58,19 +58,19 @@ class ProjectController extends Controller {
 			// User document references the project document
 			// Project document references the user document
 			reqUser.projects.push(reqProject.id);
-			reqProject.members.push(reqUser.id);
+			reqProject.members.push({ id: reqUser.id, joined: true });
 
 			// Uses a transaction to ensure that both operations are successful
 			const session = await mongoose.startSession();
 			session.startTransaction();
 
-			await reqUser.save({ session });
-			await reqProject.save({ session });
+			// Attempts to save the new project and the updated user
+			await Promise.all([reqUser.save({ session }), reqProject.save({ session })]);
 
-			session.commitTransaction();
+			await session.commitTransaction();
 			session.endSession();
 
-			res.status(StatusCode.SuccessCreated).json({ status: 'success' });
+			res.status(StatusCode.SuccessCreated).json({ user: reqUser, project: reqProject });
 		});
 	}
 }
