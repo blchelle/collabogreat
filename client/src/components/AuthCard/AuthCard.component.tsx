@@ -24,7 +24,7 @@ const AuthCard: React.FC = () => {
 				variant='outlined'
 				fullWidth
 				startIcon={<FacebookLogo className={buttonIconClasses} />}
-				onClick={() => window.open('http://localhost:8000/api/v0/auth/facebook', '_self')}
+				href='http://localhost:8000/api/v0/auth/facebook'
 			>
 				Facebook
 			</Button>
@@ -33,7 +33,7 @@ const AuthCard: React.FC = () => {
 				variant='outlined'
 				fullWidth
 				startIcon={<SvgIcon component={GoogleLogo} className={buttonIconClasses} />}
-				onClick={() => window.open('http://localhost:8000/api/v0/auth/google', '_self')}
+				href='http://localhost:8000/api/v0/auth/google'
 			>
 				Google
 			</Button>
@@ -42,7 +42,7 @@ const AuthCard: React.FC = () => {
 				variant='outlined'
 				fullWidth
 				startIcon={<GitHubLogo className={buttonIconClasses} />}
-				onClick={() => window.open('http://localhost:8000/api/v0/auth/github', '_self')}
+				href='http://localhost:8000/api/v0/auth/github'
 			>
 				Github
 			</Button>

@@ -1,33 +1,14 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-interface IProjectUser {
-	id: String;
-	joined: Boolean;
-}
-
 /**
  * The structure of a Project Document
  */
 export interface IProject extends Document {
 	title: String;
 	description: String;
-	members: IProjectUser[];
+	members: String[];
 	createdAt: Date;
 }
-
-const ProjectMemberSchema = new Schema(
-	{
-		id: {
-			type: Schema.Types.ObjectId,
-			required: [true, 'Project Members must have an ID'],
-		},
-		joined: {
-			type: Boolean,
-			default: false,
-		},
-	},
-	{ _id: false }
-);
 
 /**
  * The mongoose schema for Projects
@@ -43,11 +24,24 @@ const ProjectSchema = new Schema({
 		required: false,
 		unique: false,
 	},
-	members: [ProjectMemberSchema],
-	createdAt: {
-		type: Date,
-		default: Date.now,
-	},
+	members: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: 'User',
+		},
+	],
+});
+
+/**
+ * Populates the projects property of the user so that it also includes the titles
+ */
+ProjectSchema.pre('findOne', function (next) {
+	this.populate({
+		path: 'members',
+		select: ['displayName', 'image'],
+	});
+
+	next();
 });
 
 /**

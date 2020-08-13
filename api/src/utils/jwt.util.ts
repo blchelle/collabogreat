@@ -25,7 +25,7 @@ export function validateJwt(authorizationHeader: string | undefined) {
 
 	// Verify that the authorization header used a Bearer token
 	// Splitting the header on a space will give us an array like this -> [TokenType, Token]
-	const [tokenType, token] = authorizationHeader.split(' ');
+	const [tokenType, token] = authorizationHeader.split('=');
 	if (tokenType !== 'Bearer') {
 		return [
 			null,
