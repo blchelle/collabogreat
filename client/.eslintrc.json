@@ -42,6 +42,7 @@
 			"components": [ "Link" ],
 			"specialLink": [ "hrefLeft", "hrefRight" ],
 			"aspects": [ "invalidHref", "preferButton" ]
-		}]
+		}],
+		"no-underscore-dangle": "off"
 	}
 }

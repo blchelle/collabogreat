@@ -103,7 +103,7 @@ abstract class Controller {
 			// Sends the response with the document embedded
 			res.status(StatusCode.SuccessOK).json({
 				status: 'success',
-				[this.model.modelName]: doc,
+				[this.model.modelName.toLowerCase()]: doc,
 			});
 		});
 	}
@@ -116,7 +116,8 @@ abstract class Controller {
 	protected protectRoute() {
 		return catchAsync(async (req: Request, _res: Response, next: NextFunction) => {
 			// Attempts to extract the user Id from the JWT
-			const [idInJWT, err] = validateJwt(req.headers.authorization);
+			const [idInJWT, err] = validateJwt(req.headers.cookie);
+
 			if (err || !idInJWT) return next(err);
 
 			// Gets the user from the database and attach it to the request

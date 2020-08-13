@@ -4,6 +4,7 @@ import { JsonWebTokenError } from 'jsonwebtoken';
 import { StatusCode } from 'status-code-enum';
 
 import APIError from '../errors/api.error';
+import logger from '../utils/logger.utils';
 
 /**
  * The format of the error in the http response
@@ -23,6 +24,8 @@ type ErrorResponse = string | { [prop: string]: string }[];
 function handleError(err: Error, _req: Request, res: Response, _next: NextFunction) {
 	let statusCode;
 	let responseError: ErrorResponse;
+
+	logger('ErrorHandler', `${err.message} ❌`);
 
 	// Handles the error based on what kind of error is received
 	if (err instanceof APIError) {

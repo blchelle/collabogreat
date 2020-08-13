@@ -9,7 +9,7 @@ export interface IUser extends Document {
 	displayName: String;
 	email: String;
 	projects: String[];
-	createdAt: Date;
+	projectInvitations: String[];
 
 	image?: String;
 	googleId?: String;
@@ -47,6 +47,12 @@ const UserSchema = new Schema({
 			ref: 'Project',
 		},
 	],
+	projectInvitations: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: 'Project',
+		},
+	],
 	image: {
 		type: String,
 		required: false,
@@ -54,21 +60,13 @@ const UserSchema = new Schema({
 	googleId: String,
 	githubId: String,
 	facebookId: String,
-	createdAt: {
-		type: Date,
-		default: Date.now,
-	},
 });
 
 /**
  * Populates the projects property of the user so that it also includes the titles
  */
 UserSchema.pre('findOne', function (next) {
-	this.populate({
-		path: 'projects',
-		select: 'title',
-	});
-
+	this.populate({ path: 'projects', select: 'title' });
 	next();
 });
 

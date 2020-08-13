@@ -63,7 +63,8 @@ class App {
 		if (process.env.NODE_ENV === 'development') this.app.use(morgan('dev'));
 
 		// Body Parser Middleware
-		this.app.use(bodyParser.urlencoded({ extended: false }));
+		this.app.use(bodyParser.json());
+		this.app.use(bodyParser.urlencoded({ extended: true }));
 
 		// Cookie Parser Middleware
 		this.app.use(cookieParser());
@@ -71,9 +72,8 @@ class App {
 		// CORS Middleware
 		this.app.use(
 			cors({
+				credentials: true,
 				origin: environment.development.devClientBaseURL,
-				methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-				credentials: true, // Allow a session cookie from browser to pass through
 			})
 		);
 

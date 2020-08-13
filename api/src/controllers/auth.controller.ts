@@ -69,14 +69,13 @@ class AuthController extends Controller {
 		});
 
 		const cookieOptions: CookieOptions = {
-			expires: new Date(Date.now() + keys.jwt.cookieLifespan * 24 * 60 * 60 * 1000),
+			maxAge: keys.jwt.cookieLifespan * 24 * 60 * 60 * 1000,
 			httpOnly: true,
 			secure: process.env.NODE_ENV === 'production',
-			sameSite: 'strict',
 		};
 
 		// Sends the cookie and redirects the client to the dashboard
-		res.cookie('jwt', token, cookieOptions);
+		res.cookie('Bearer', token, cookieOptions);
 		res.redirect(environment.development.oauth.successRoute);
 	}
 

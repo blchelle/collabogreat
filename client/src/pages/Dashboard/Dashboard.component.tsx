@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios, { AxiosResponse } from 'axios';
-import { Button } from '@material-ui/core';
+import axios from 'axios';
+import { List, ListItem } from '@material-ui/core';
 
 interface User {
 	displayName: string;
+	projects: { title: string; _id: string }[];
 	id: string;
 }
 
@@ -11,50 +12,35 @@ const Dashboard = () => {
 	const [user, setUser] = useState<User | null>(null);
 	const userId = user?.id;
 
-	useEffect(() => {
-		axios('api/v0/auth/login/success', {
+	const fetchUser = async () => {
+		const res = await axios('api/v0/user/me', {
 			method: 'GET',
 			withCredentials: true,
 			headers: {
-				Accecpt: 'application/json',
 				'Content-Type': 'application/json',
 				'Access-Control-Allow-Credentials': true,
 			},
-		})
-			.then((res: AxiosResponse) => {
-				if (res.status === 200) return res.data;
-				throw new Error('failed to authenticate user');
-			})
-			.then((responseJson) => {
-				setUser(responseJson.user);
-			})
-			.catch((err) => {
-				setUser(null);
-			});
-	}, [userId]);
+		});
 
-	const logout = async () => {
-		try {
-			const res = await axios('/api/v0/auth/logout', {
-				method: 'GET',
-				headers: {
-					Accecpt: 'application/json',
-					'Content-Type': 'application/json',
-					'Access-Control-Allow-Credentials': true,
-				},
-			});
-
-			setUser(null);
-		} catch (err) {
-			console.log(err);
-		}
+		if (res.status !== 200) throw new Error('failed to authenticate user');
+		setUser(res.data.user);
 	};
 
+	useEffect(() => {
+		fetchUser();
+	}, [userId]);
+
 	return (
-		<>
+		<div>
 			<div>{user?.displayName}</div>
-			<Button onClick={() => logout()}>Log Out</Button>
-		</>
+			<List>
+				{user?.projects?.map((project) => (
+					<ListItem button component='a' href={`projects/${project._id}`}>
+						{project.title}
+					</ListItem>
+				))}
+			</List>
+		</div>
 	);
 };
 
