@@ -1,34 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { List, ListItem } from '@material-ui/core';
-
-interface User {
-	displayName: string;
-	projects: { title: string; _id: string }[];
-	id: string;
-}
+import { fetchCurrentUser } from '../../redux/user/user.actions';
+import { RootState } from '../../redux/root.reducer';
 
 const Dashboard = () => {
-	const [user, setUser] = useState<User | null>(null);
-	const userId = user?.id;
-
-	const fetchUser = async () => {
-		const res = await axios('api/v0/user/me', {
-			method: 'GET',
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
-		});
-
-		if (res.status !== 200) throw new Error('failed to authenticate user');
-		setUser(res.data.user);
-	};
+	const dispatch = useDispatch();
+	const user = useSelector((state: RootState) => state.user);
 
 	useEffect(() => {
-		fetchUser();
-	}, [userId]);
+		dispatch(fetchCurrentUser());
+	}, []);
 
 	return (
 		<div>

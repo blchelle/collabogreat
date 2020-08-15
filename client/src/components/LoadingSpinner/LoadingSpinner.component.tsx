@@ -4,9 +4,9 @@ import './LoadingSpinner.component.css';
 
 const LoadingSpinner = () => {
 	return (
-		<div className='loading-spinner'>
-			<CollaboGreatLogo />
-		</div>
+		<>
+			<CollaboGreatLogo className='loading-spinner' />
+		</>
 	);
 };
 
