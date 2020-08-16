@@ -1,4 +1,4 @@
-import { User, FETCH_CURRENT_USER, SET_CURRENT_USER, UserActionTypes } from './user.types';
+import { User, UserActionTypes, FETCH_CURRENT_USER, SET_CURRENT_USER } from './user.types';
 
 export function fetchCurrentUser(): UserActionTypes {
 	return {

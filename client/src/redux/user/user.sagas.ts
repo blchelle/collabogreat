@@ -1,12 +1,14 @@
 import axios from 'axios';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
+
+import { setAllProjects } from '../project/project.actions';
 import { Project } from '../project/project.types';
 import { setCurrentUser } from './user.actions';
-import { setAllProjects } from '../project/project.actions';
 import { FETCH_CURRENT_USER } from './user.types';
 
 export function* getUserInformation() {
 	try {
+		// Attempts to fetch an authenticated users information
 		const res = yield axios('api/v0/user/me', {
 			method: 'GET',
 			withCredentials: true,
@@ -16,6 +18,7 @@ export function* getUserInformation() {
 			},
 		});
 
+		// Throws if the fetch was unsuccesful
 		if (res.status !== 200) throw new Error('Failed to authenticate user');
 
 		// The actual response is going to have all the project information embedded in it

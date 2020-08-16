@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { List, ListItem } from '@material-ui/core';
+
 import { fetchCurrentUser } from '../../redux/user/user.actions';
 import { RootState } from '../../redux/root.reducer';
 

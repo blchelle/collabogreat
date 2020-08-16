@@ -1,4 +1,4 @@
-import { Project, CREATE_PROJECT, SET_ALL_PROJECTS, ProjectActionTypes } from './project.types';
+import { Project, ProjectActionTypes, CREATE_PROJECT, SET_ALL_PROJECTS } from './project.types';
 
 export function createProject(newProject: Project): ProjectActionTypes {
 	return {
