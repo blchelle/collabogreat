@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import AuthCard from '../../components/AuthCard/AuthCard.component';
-import { RootState } from '../../redux/root.reducer';
+// import { RootState } from '../../redux/root.reducer';
 
 const LandingPage: React.FC = () => {
 	const [showAuthPopup, setShowAuthPopup] = useState(false);
 
 	// Determines if there is an authenticated user, redirects if so
-	const isAuthenticated = useSelector((state: RootState) => {
-		console.log(state);
-		return state.user !== null;
-	});
-	console.log(isAuthenticated);
+	// const isAuthenticated = useSelector((state: RootState) => {
+	// 	console.log(state);
+	// 	return state.user !== null;
+	// });
+	// console.log(isAuthenticated);
 
-	if (isAuthenticated) return <Redirect to='/dashboard' />;
+	// if (isAuthenticated) return <Redirect to='/dashboard' />;
 
 	return (
 		<div>

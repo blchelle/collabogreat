@@ -7,6 +7,7 @@ import { RootState } from '../../redux/root.reducer';
 const Dashboard = () => {
 	const dispatch = useDispatch();
 	const user = useSelector((state: RootState) => state.user);
+	const projects = useSelector((state: RootState) => state.projects);
 
 	useEffect(() => {
 		dispatch(fetchCurrentUser());
@@ -16,8 +17,8 @@ const Dashboard = () => {
 		<div>
 			<div>{user?.displayName}</div>
 			<List>
-				{user?.projects?.map((project) => (
-					<ListItem button component='a' href={`projects/${project._id}`}>
+				{projects.map((project) => (
+					<ListItem button component='a' href={`projects/${project._id}`} key={project._id}>
 						{project.title}
 					</ListItem>
 				))}

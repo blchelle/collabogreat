@@ -13,7 +13,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
 	user: userReducer,
-	project: projectReducer,
+	projects: projectReducer,
 });
 
 export const persistedRootReducer = persistReducer(persistConfig, rootReducer);

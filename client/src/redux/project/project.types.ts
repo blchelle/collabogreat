@@ -4,6 +4,7 @@ export interface Project {
 	image: string;
 }
 
+export const SET_ALL_PROJECTS = 'SET_ALL_PROJECTS';
 export const CREATE_PROJECT = 'CREATE_PROJECT';
 
 interface CreateProjectAction {
@@ -11,4 +12,9 @@ interface CreateProjectAction {
 	payload: Project;
 }
 
-export type ProjectActionTypes = CreateProjectAction;
+interface SetAllProjectsAction {
+	type: typeof SET_ALL_PROJECTS;
+	payload: Project[];
+}
+
+export type ProjectActionTypes = CreateProjectAction | SetAllProjectsAction;

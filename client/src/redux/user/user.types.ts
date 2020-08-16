@@ -1,9 +1,9 @@
-import { Project } from '../project/project.types';
-
 export type User = {
+	_id: string;
 	displayName: string;
 	image: string;
-	projects: Project[];
+	projects: string[];
+	projectInvitations: string[];
 } | null;
 
 export const FETCH_CURRENT_USER = 'FETCH_CURRENT_USER';
