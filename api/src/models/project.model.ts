@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Query, Schema } from 'mongoose';
 
 /**
  * The structure of a Project Document
@@ -35,7 +35,7 @@ const ProjectSchema = new Schema({
 /**
  * Populates the projects property of the user so that it also includes the titles
  */
-ProjectSchema.pre('findOne', function (next) {
+ProjectSchema.pre<Query<IProject>>(/^find/, function (next) {
 	this.populate({
 		path: 'members',
 		select: ['displayName', 'image'],

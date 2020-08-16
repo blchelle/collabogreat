@@ -1,4 +1,4 @@
-import mongoose, { Document, Model, Schema } from 'mongoose';
+import mongoose, { Document, Model, Query, Schema } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 import validator from 'validator';
 
@@ -65,8 +65,8 @@ const UserSchema = new Schema({
 /**
  * Populates the projects property of the user so that it also includes the titles
  */
-UserSchema.pre('findOne', function (next) {
-	this.populate({ path: 'projects', select: 'title' });
+UserSchema.pre<Query<IUser>>('findOne', function (next) {
+	this.populate({ path: 'projects' });
 	next();
 });
 

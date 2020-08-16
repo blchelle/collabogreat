@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
 import AuthCard from '../../components/AuthCard/AuthCard.component';
 
-const LandingPage = () => {
+const LandingPage: React.FC = () => {
 	const [showAuthPopup, setShowAuthPopup] = useState(false);
 
 	return (
