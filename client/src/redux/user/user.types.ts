@@ -1,6 +1,7 @@
 export type User = {
 	_id: string;
 	displayName: string;
+	email: string;
 	image: string;
 	projects: string[];
 	projectInvitations: string[];

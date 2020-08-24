@@ -1,13 +1,12 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles({
-	authCard: {
-		width: '18.75rem',
-		position: 'fixed',
-		left: '50%',
-		top: '50%',
-		transform: 'translateX(-50%) translateY(-50%)',
-		padding: '1.5625rem',
+	widthXS: {
+		width: '20rem',
+	},
+	dialogTitle: {
+		textAlign: 'center',
+		fontSize: '1.5rem',
 	},
 	facebookButton: {
 		backgroundColor: '#4667b2',
@@ -34,12 +33,6 @@ export default makeStyles({
 		display: 'flex',
 		justifyContent: 'start',
 		transition: 'all 0.1s ease-in-out',
-		'&:not(:last-child)': {
-			marginBottom: '0.625rem',
-		},
-		'&:hover': {
-			transform: 'translateY(-2px)',
-		},
 	},
 	buttonIcon: {
 		height: '2rem',

@@ -3,9 +3,10 @@
 	"version": "1.0.0",
 	"description": "CollaboGreat is a highly configurable team collaboration software built to increase the productivity for teams of all kinds",
 	"scripts": {
-		"client:dev": "npm run dev --prefix client",
 		"api:dev": "npm run dev --prefix api",
-		"api:compile": "tsc -p api",
+		"client:dev": "npm run dev --prefix client",
+		"api:compile": "npm run compile --prefix api",
+		"client:compile": "npm run compile --prefix client",
 		"both:dev": "run-p client:dev api:dev"
 	},
 	"repository": {

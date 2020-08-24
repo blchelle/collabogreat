@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as CollaboGreatLogo } from '../../assets/logo-icon-circular.svg';
+import { ReactComponent as CollaboGreatLogo } from '../../assets/logo-animated.svg';
 import './LoadingSpinner.component.css';
 
 const LoadingSpinner = () => {
