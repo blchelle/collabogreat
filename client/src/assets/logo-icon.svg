@@ -1,0 +1,17 @@
+<svg width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0)">
+<ellipse cx="14.0878" cy="3.31497" rx="3.25085" ry="3.20856" fill="#E81410"/>
+<ellipse cx="37.0729" cy="13.9027" rx="3.25084" ry="3.20856" fill="#FFD11F"/>
+<ellipse cx="3.35866" cy="26.0029" rx="3.25085" ry="3.20856" fill="#373FBF"/>
+<ellipse cx="26.3456" cy="36.5906" rx="3.25085" ry="3.20855" fill="#21BF54"/>
+<rect width="6.45954" height="12.9191" rx="3.22977" transform="matrix(0.711721 -0.702462 0.711721 0.702462 15.6184 9.36508)" fill="#E81410"/>
+<rect width="6.45954" height="12.9191" rx="3.22977" transform="matrix(0.711721 0.702462 -0.711721 0.702462 30.943 15.4152)" fill="#FFD11F"/>
+<rect width="6.45954" height="12.9191" rx="3.22977" transform="matrix(-0.711721 -0.702462 0.711721 -0.702462 9.48852 24.4904)" fill="#373FBF"/>
+<rect width="6.45954" height="12.9191" rx="3.22977" transform="matrix(-0.711721 0.702462 -0.711721 -0.702462 24.8132 30.5405)" fill="#21BF54"/>
+</g>
+<defs>
+<clipPath id="clip0">
+<rect width="40.5272" height="40" fill="white"/>
+</clipPath>
+</defs>
+</svg>
