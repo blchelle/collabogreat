@@ -110,7 +110,7 @@ const CGAppBar = () => {
 							open={dropdowns.create.open}
 							placement={dropdowns.create.placement}
 							anchorEl={dropdowns.create.anchorEl}
-							closeDropdown={() => closeDropdown('create')}
+							clickOutsideHandler={() => closeDropdown('create')}
 						>
 							{dropdowns.create.children}
 						</Dropdown>
@@ -124,7 +124,7 @@ const CGAppBar = () => {
 							open={dropdowns.notifications.open}
 							placement={dropdowns.notifications.placement}
 							anchorEl={dropdowns.notifications.anchorEl}
-							closeDropdown={() => closeDropdown('notifications')}
+							clickOutsideHandler={() => closeDropdown('notifications')}
 						>
 							{dropdowns.notifications.children}
 						</Dropdown>
@@ -135,7 +135,7 @@ const CGAppBar = () => {
 							open={dropdowns.user.open}
 							placement={dropdowns.user.placement}
 							anchorEl={dropdowns.user.anchorEl}
-							closeDropdown={() => closeDropdown('user')}
+							clickOutsideHandler={() => closeDropdown('user')}
 						>
 							{dropdowns.user.children}
 						</Dropdown>

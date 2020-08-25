@@ -13,9 +13,13 @@ const Dashboard = () => {
 	}, []);
 
 	return (
-		<>
-			<ProjectsContainer />
-		</>
+		<Grid container>
+			<Grid item xs={1} xl={2} />
+			<Grid item xs>
+				<ProjectsContainer />
+			</Grid>
+			<Grid item xs={1} xl={2} />
+		</Grid>
 	);
 };
 
