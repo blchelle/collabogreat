@@ -4,7 +4,7 @@ import { ClickAwayListener, Grow, Paper, Popper, PopperProps } from '@material-u
 import useStyles from './Dropdown.mui';
 
 interface DropdownProps extends PopperProps {
-	closeDropdown: () => void;
+	clickOutsideHandler: () => void;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -12,7 +12,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 	children,
 	open,
 	placement,
-	closeDropdown,
+	clickOutsideHandler,
 }) => {
 	// MUI Styles
 	const classes = useStyles();
@@ -50,7 +50,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 
 	return (
 		<Popper open={open} anchorEl={anchorEl} placement={placement} transition>
-			<ClickAwayListener onClickAway={closeDropdown}>
+			<ClickAwayListener onClickAway={clickOutsideHandler}>
 				<Grow in={open} style={{ transformOrigin: getTransformOrigin() }}>
 					<Paper className={classes.paper}>{children}</Paper>
 				</Grow>
