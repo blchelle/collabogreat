@@ -2,7 +2,7 @@
 CollaboGreat is team collaboration software designed and configurable for projects of any any scale.
 
 ## 🚧🚧🚧 Currently Under Construction 🚧🚧🚧
-Estimated Release Date is Early October 2020
+Estimated Release Date is November 2020
 
 ## Technology Stack 💻
 Both the Front and Back End heavily use TypeScript (Because I love TypeScript, Thanks Microsoft) https://www.typescriptlang.org/
