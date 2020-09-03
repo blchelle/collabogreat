@@ -1,8 +1,21 @@
-import { Project, ProjectActionTypes, CREATE_PROJECT, SET_ALL_PROJECTS } from './project.types';
+import {
+	Project,
+	ProjectActionTypes,
+	CREATE_PROJECT_START,
+	CREATE_PROJECT_SUCCESS,
+	SET_ALL_PROJECTS,
+} from './project.types';
 
-export function createProject(newProject: Project): ProjectActionTypes {
+export function createProjectStart(newProject: Project): ProjectActionTypes {
 	return {
-		type: CREATE_PROJECT,
+		type: CREATE_PROJECT_START,
+		payload: newProject,
+	};
+}
+
+export function createProjectSuccess(newProject: Project): ProjectActionTypes {
+	return {
+		type: CREATE_PROJECT_SUCCESS,
 		payload: newProject,
 	};
 }

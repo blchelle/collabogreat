@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { ReactElement } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
 	AppBar,
 	Avatar,
@@ -9,7 +9,6 @@ import {
 	InputBase,
 	Link,
 	Toolbar,
-	PopperProps,
 	useMediaQuery,
 } from '@material-ui/core';
 import {
@@ -24,125 +23,81 @@ import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdow
 import UserMenuDropdown from '../UserMenuDropdown/UserMenuDropdown.component';
 import { ReactComponent as LogoText } from '../../assets/logo-text.svg';
 import { ReactComponent as LogoIcon } from '../../assets/logo-icon.svg';
+import { openModal } from '../../redux/modals/modals.actions';
+import { ModalNames } from '../../redux/modals/modals.reducer';
 import { RootState } from '../../redux/root.reducer';
 import useStyles from './CGAppBar.mui';
 import theme from '../../theme';
-
-export type AllDropdownStates = {
-	user: PopperProps;
-	notifications: PopperProps;
-	create: PopperProps;
-};
 
 const CGAppBar = () => {
 	// MUI Classes
 	const classes = useStyles();
 
-	const initialDropdownState: PopperProps = {
-		anchorEl: null,
-		open: false,
-		placement: undefined,
-		children: null,
-	};
-
-	const [dropdowns, setDropdowns] = useState<AllDropdownStates>({
-		user: { ...initialDropdownState, children: <UserMenuDropdown /> },
-		notifications: { ...initialDropdownState, children: <NotificationsDropdown /> },
-		create: { ...initialDropdownState, children: <CreateDropdown /> },
-	});
-
-	const invertDropdownState = (dropdownType: keyof AllDropdownStates) => (
-		event: React.MouseEvent<HTMLButtonElement>
-	) => {
-		// Check if the dropdown is currently opened or closed
-		const { open } = dropdowns[dropdownType];
-
-		const invertedDropdownState: PopperProps = {
-			open: !open,
-			anchorEl: open ? null : event.currentTarget,
-			placement: open ? undefined : 'bottom-end',
-			children: dropdowns[dropdownType].children,
-		};
-
-		setDropdowns({ ...dropdowns, [dropdownType]: invertedDropdownState });
-	};
-
-	const closeDropdown = (dropdownType: keyof AllDropdownStates) => {
-		const closedDropdownState: PopperProps = {
-			anchorEl: null,
-			open: false,
-			placement: undefined,
-			children: dropdowns[dropdownType].children,
-		};
-
-		setDropdowns({ ...dropdowns, [dropdownType]: closedDropdownState });
-	};
-
 	// Redux
 	const user = useSelector((state: RootState) => state.user);
+	const dispatch = useDispatch();
+
+	// Handlers
+	const openDropdown = (dropdownName: ModalNames, children: ReactElement) => (
+		event: React.SyntheticEvent
+	) => {
+		dispatch(
+			openModal(dropdownName, {
+				open: true,
+				placement: 'bottom-end',
+				anchorEl: event.currentTarget as HTMLElement,
+				children,
+			})
+		);
+	};
 
 	return (
-		<AppBar className={classes.appBar} color='transparent' position='static'>
-			<Toolbar className={classes.toolBar}>
-				<Grid container alignItems='center' justify='space-between'>
-					<Grid item>
-						<Link href='/dashboard'>
-							{useMediaQuery(theme.breakpoints.up('lg')) ? <LogoText /> : <LogoIcon />}
-						</Link>
+		<>
+			<AppBar className={classes.appBar} color='transparent' position='static'>
+				<Toolbar className={classes.toolBar}>
+					<Grid container alignItems='center' justify='space-between'>
+						<Grid item>
+							<Link href='/dashboard'>
+								{useMediaQuery(theme.breakpoints.up('lg')) ? <LogoText /> : <LogoIcon />}
+							</Link>
+						</Grid>
+						<Grid item lg={5} className={classes.searchBar}>
+							<SearchIcon className={classes.searchIcon} />
+							<InputBase
+								placeholder='Search for your projects, teams, tasks'
+								inputProps={{ 'aria-label': 'search' }}
+								fullWidth
+							/>
+						</Grid>
+						<Grid item alignItems='center'>
+							<Button
+								className={classes.createButton}
+								endIcon={<AddIcon />}
+								onClick={openDropdown(ModalNames.CREATE_DROPDOWN, <CreateDropdown />)}
+							>
+								Create
+							</Button>
+							<IconButton
+								className={classes.notificationButton}
+								onClick={openDropdown(ModalNames.NOTIFICATIONS_DROPDOWN, <NotificationsDropdown />)}
+							>
+								<NotificationsIcon />
+							</IconButton>
+							<IconButton
+								onClick={openDropdown(ModalNames.USER_DROPDOWN, <UserMenuDropdown />)}
+								size='small'
+								disableRipple
+							>
+								<Avatar src={user?.image} />
+							</IconButton>
+						</Grid>
 					</Grid>
-					<Grid item lg={5} className={classes.searchBar}>
-						<SearchIcon className={classes.searchIcon} />
-						<InputBase
-							placeholder='Search for your projects, teams, tasks'
-							inputProps={{ 'aria-label': 'search' }}
-							fullWidth
-						/>
-					</Grid>
-					<Grid item alignItems='center'>
-						<Button
-							className={classes.createButton}
-							endIcon={<AddIcon />}
-							onClick={invertDropdownState('create')}
-						>
-							Create
-						</Button>
-						<Dropdown
-							open={dropdowns.create.open}
-							placement={dropdowns.create.placement}
-							anchorEl={dropdowns.create.anchorEl}
-							clickOutsideHandler={() => closeDropdown('create')}
-						>
-							{dropdowns.create.children}
-						</Dropdown>
-						<IconButton
-							className={classes.notificationButton}
-							onClick={invertDropdownState('notifications')}
-						>
-							<NotificationsIcon />
-						</IconButton>
-						<Dropdown
-							open={dropdowns.notifications.open}
-							placement={dropdowns.notifications.placement}
-							anchorEl={dropdowns.notifications.anchorEl}
-							clickOutsideHandler={() => closeDropdown('notifications')}
-						>
-							{dropdowns.notifications.children}
-						</Dropdown>
-						<IconButton onClick={invertDropdownState('user')} size='small' disableRipple>
-							<Avatar src={user?.image} />
-						</IconButton>
-						<Dropdown
-							open={dropdowns.user.open}
-							placement={dropdowns.user.placement}
-							anchorEl={dropdowns.user.anchorEl}
-							clickOutsideHandler={() => closeDropdown('user')}
-						>
-							{dropdowns.user.children}
-						</Dropdown>
-					</Grid>
-				</Grid>
-			</Toolbar>
-		</AppBar>
+				</Toolbar>
+			</AppBar>
+			<Dropdown modalName={ModalNames.CREATE_DROPDOWN} />
+			<Dropdown modalName={ModalNames.NOTIFICATIONS_DROPDOWN} />
+			<Dropdown modalName={ModalNames.USER_DROPDOWN} />
+		</>
 	);
 };
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 
+import CreateProjectDialog from './components/CreateProjectDialog/CreateProjectDialog.component';
 import CGAppBar from './components/CGAppBar/CGAppBar.component';
 import Dashboard from './pages/Dashboard/Dashboard.component';
 import LandingPage from './pages/LandingPage/LandingPage.component';
@@ -15,7 +16,12 @@ const App: React.FC = () => {
 
 	return (
 		<div className='App'>
-			{isAuthenticated ? <CGAppBar /> : null}
+			{isAuthenticated ? (
+				<>
+					<CGAppBar />
+					<CreateProjectDialog />
+				</>
+			) : null}
 			<Switch>
 				<Route exact path='/' component={LandingPage} />
 				<Route exact path='/dashboard' component={Dashboard} />
