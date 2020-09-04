@@ -1,4 +1,10 @@
-import { User, UserActionTypes, FETCH_CURRENT_USER, SET_CURRENT_USER } from './user.types';
+import {
+	User,
+	UserActionTypes,
+	FETCH_CURRENT_USER,
+	SET_CURRENT_USER,
+	ADD_PROJECT_TO_USER,
+} from './user.types';
 
 export function fetchCurrentUser(): UserActionTypes {
 	return {
@@ -6,9 +12,18 @@ export function fetchCurrentUser(): UserActionTypes {
 	};
 }
 
-export function setCurrentUser(user: User) {
+export function setCurrentUser(user: User): UserActionTypes {
 	return {
 		type: SET_CURRENT_USER,
 		payload: user,
+	};
+}
+
+// TODO: I'm trying to accomplish a more modular action for this that can
+// modify any user attribute instead of only specific ones
+export function addProjectToUser(projectId: string): UserActionTypes {
+	return {
+		type: ADD_PROJECT_TO_USER,
+		payload: projectId,
 	};
 }

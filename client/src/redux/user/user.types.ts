@@ -9,6 +9,7 @@ export type User = {
 
 export const FETCH_CURRENT_USER = 'FETCH_CURRENT_USER';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+export const ADD_PROJECT_TO_USER = 'ADD_PROJECT_TO_USER';
 
 interface FetchCurrentUserAction {
 	type: typeof FETCH_CURRENT_USER;
@@ -19,4 +20,12 @@ interface SetCurrentUserAction {
 	payload: User;
 }
 
-export type UserActionTypes = FetchCurrentUserAction | SetCurrentUserAction;
+interface AddProjectToUserAction {
+	type: typeof ADD_PROJECT_TO_USER;
+	payload: string;
+}
+
+export type UserActionTypes =
+	| FetchCurrentUserAction
+	| SetCurrentUserAction
+	| AddProjectToUserAction;

@@ -1,21 +1,25 @@
 import React from 'react';
-import { ClickAwayListener, Grow, Paper, Popper, PopperProps } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { ClickAwayListener, Grow, Paper, Popper } from '@material-ui/core';
 
+import { closeModal } from '../../redux/modals/modals.actions';
+import { ModalNames } from '../../redux/modals/modals.reducer';
+import { RootState } from '../../redux/root.reducer';
 import useStyles from './Dropdown.mui';
 
-interface DropdownProps extends PopperProps {
-	clickOutsideHandler: () => void;
+interface DropdownProps {
+	modalName: ModalNames;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({
-	anchorEl,
-	children,
-	open,
-	placement,
-	clickOutsideHandler,
-}) => {
+const Dropdown: React.FC<DropdownProps> = ({ modalName }) => {
 	// MUI Styles
 	const classes = useStyles();
+
+	// Redux
+	const { open, anchorEl, placement, children } = useSelector(
+		(state: RootState) => state.modals[modalName]
+	);
+	const dispatch = useDispatch();
 
 	const getTransformOrigin = () => {
 		switch (placement) {
@@ -50,7 +54,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 
 	return (
 		<Popper open={open} anchorEl={anchorEl} placement={placement} transition>
-			<ClickAwayListener onClickAway={clickOutsideHandler}>
+			<ClickAwayListener onClickAway={() => dispatch(closeModal(modalName))}>
 				<Grow in={open} style={{ transformOrigin: getTransformOrigin() }}>
 					<Paper className={classes.paper}>{children}</Paper>
 				</Grow>

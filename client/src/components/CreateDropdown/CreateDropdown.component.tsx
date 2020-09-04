@@ -1,14 +1,20 @@
 import React from 'react';
-
+import { useDispatch } from 'react-redux';
 import { Divider, Grid, MenuList, MenuItem, Typography } from '@material-ui/core';
+
 import { ReactComponent as NewTaskSVG } from '../../assets/new-task.svg';
 import { ReactComponent as NewProjectSVG } from '../../assets/new-project.svg';
 import { ReactComponent as NewTeamSVG } from '../../assets/new-team.svg';
+import { closeModal, openModal } from '../../redux/modals/modals.actions';
+import { ModalNames } from '../../redux/modals/modals.reducer';
 import useStyles from './CreateDropdown.mui';
 
 const CreateDropdown: React.FC = () => {
 	// MUI Styles
 	const classes = useStyles();
+
+	// Redux
+	const dispatch = useDispatch();
 
 	return (
 		<MenuList>
@@ -30,7 +36,12 @@ const CreateDropdown: React.FC = () => {
 				</Grid>
 			</MenuItem>
 			<Divider />
-			<MenuItem>
+			<MenuItem
+				onClick={() => {
+					dispatch(closeModal(ModalNames.CREATE_DROPDOWN));
+					dispatch(openModal(ModalNames.CREATE_PROJECT_DIALOG, { open: true, children: null }));
+				}}
+			>
 				<Grid container spacing={4} alignItems='center'>
 					<Grid item>
 						<NewProjectSVG className={classes.listItemImage} />
