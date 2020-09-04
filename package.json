@@ -7,6 +7,7 @@
 		"client:dev": "npm run dev --prefix client",
 		"api:compile": "npm run compile --prefix api",
 		"client:compile": "npm run compile --prefix client",
+		"client:build": "npm run build --prefix client",
 		"both:dev": "run-p client:dev api:dev"
 	},
 	"repository": {
