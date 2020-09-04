@@ -6,8 +6,8 @@ import { ReactComponent as NewTaskSVG } from '../../assets/new-task.svg';
 import { ReactComponent as NewProjectSVG } from '../../assets/new-project.svg';
 import { ReactComponent as NewTeamSVG } from '../../assets/new-team.svg';
 import { closeModal, openModal } from '../../redux/modals/modals.actions';
-import useStyles from './CreateDropdown.mui';
 import { ModalNames } from '../../redux/modals/modals.reducer';
+import useStyles from './CreateDropdown.mui';
 
 const CreateDropdown: React.FC = () => {
 	// MUI Styles

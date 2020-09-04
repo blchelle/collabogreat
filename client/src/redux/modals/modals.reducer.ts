@@ -10,12 +10,7 @@ export enum ModalNames {
 	NOTIFICATIONS_DROPDOWN = 'NOTIFICATIONS_DROPDOWN',
 }
 
-export interface ModalState {
-	[ModalNames.CREATE_PROJECT_DIALOG]: PopperProps;
-	[ModalNames.CREATE_DROPDOWN]: PopperProps;
-	[ModalNames.USER_DROPDOWN]: PopperProps;
-	[ModalNames.NOTIFICATIONS_DROPDOWN]: PopperProps;
-}
+export type ModalState = { [key in ModalNames]: PopperProps };
 
 const initialModalState: PopperProps = {
 	open: false,

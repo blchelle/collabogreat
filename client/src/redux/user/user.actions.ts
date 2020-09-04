@@ -19,6 +19,8 @@ export function setCurrentUser(user: User): UserActionTypes {
 	};
 }
 
+// TODO: I'm trying to accomplish a more modular action for this that can
+// modify any user attribute instead of only specific ones
 export function addProjectToUser(projectId: string): UserActionTypes {
 	return {
 		type: ADD_PROJECT_TO_USER,

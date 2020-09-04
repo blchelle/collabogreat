@@ -7,7 +7,7 @@ import { Project, ProjectActionTypes, CREATE_PROJECT_START } from './project.typ
 
 function* attemptCreateProject({ payload }: ProjectActionTypes) {
 	try {
-		// Attempts to fetch an authenticated users information
+		// Attempts to create a new project with the information provided
 		const res = yield axios('api/v0/projects', {
 			method: 'POST',
 			data: payload,
@@ -18,7 +18,9 @@ function* attemptCreateProject({ payload }: ProjectActionTypes) {
 			},
 		});
 
-		// Throws if the fetch was unsuccesful
+		// Throws if the action was unsuccessful
+		// TODO Make this a user visible error
+		// FIXME 201 Doesn't nessecarily mean that the user failed to authentcate, it could be othrer things too
 		if (res.status !== 201) throw new Error('Failed to authenticate user');
 
 		const project = res.data.project as Project;

@@ -25,6 +25,8 @@ interface FormInputState {
 	value: string;
 }
 
+// TODO Add a field to the form for selecting a project image, either from a library or the users computer
+// TODO Add a field for inviting new members to a project
 const CreateProjectDialog: React.FC = () => {
 	// MUI Styles
 	const classes = useStyles();
@@ -56,6 +58,7 @@ const CreateProjectDialog: React.FC = () => {
 		dispatch(closeModal(ModalNames.CREATE_PROJECT_DIALOG));
 	};
 
+	// Media Queries
 	const isScreenSmall = useMediaQuery(theme.breakpoints.down('md'));
 
 	return (
