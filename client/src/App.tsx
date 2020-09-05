@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 
-import CreateProjectDialog from './components/CreateProjectDialog/CreateProjectDialog.component';
-import CGAppBar from './components/CGAppBar/CGAppBar.component';
-import Dashboard from './pages/Dashboard/Dashboard.component';
-import LandingPage from './pages/LandingPage/LandingPage.component';
-import NotFound from './pages/NotFound/NotFound.page';
-import ProjectHub from './pages/ProjectHub/ProjectHub.page';
+import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner.component';
 import { RootState } from './redux/root.reducer';
 import './App.css';
+
+const NotFound = React.lazy(() => import('./pages/NotFound/NotFound.page'));
+const CGAppBar = React.lazy(() => import('./components/CGAppBar/CGAppBar.component'));
+const CreateProjectDialog = React.lazy(() =>
+	import('./components/CreateProjectDialog/CreateProjectDialog.component')
+);
+const LandingPage = React.lazy(() => import('./pages/LandingPage/LandingPage.component'));
+
+const ProjectHub = React.lazy(() => import('./pages/ProjectHub/ProjectHub.page'));
+const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard.component'));
 
 const App: React.FC = () => {
 	const isAuthenticated = useSelector((state: RootState) => state.user !== null);
@@ -17,17 +22,19 @@ const App: React.FC = () => {
 	return (
 		<div className='App'>
 			{isAuthenticated ? (
-				<>
+				<Suspense fallback={<LoadingSpinner />}>
 					<CGAppBar />
 					<CreateProjectDialog />
-				</>
+				</Suspense>
 			) : null}
-			<Switch>
-				<Route exact path='/' component={LandingPage} />
-				<Route exact path='/dashboard' component={Dashboard} />
-				<Route path='/projects/:id' component={ProjectHub} />
-				<Route path='*' component={NotFound} />
-			</Switch>
+			<Suspense fallback={<LoadingSpinner />}>
+				<Switch>
+					<Route exact path='/' component={LandingPage} />
+					<Route exact path='/dashboard' component={Dashboard} />
+					<Route path='/projects/:id' component={ProjectHub} />
+					<Route path='*' component={NotFound} />
+				</Switch>
+			</Suspense>
 		</div>
 	);
 };
