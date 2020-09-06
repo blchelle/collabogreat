@@ -1,4 +1,4 @@
-import React, { ReactElement, Suspense } from 'react';
+import React, { ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	AppBar,
@@ -17,7 +17,10 @@ import {
 	Search as SearchIcon,
 } from '@material-ui/icons';
 
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner.component';
+import Dropdown from '../Dropdown/Dropdown.component';
+import UserMenuDropdown from '../UserMenuDropdown/UserMenuDropdown.component';
+import CreateDropdown from '../CreateDropdown/CreateDropdown.component';
+import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdown.component';
 import { ReactComponent as LogoText } from '../../assets/logo-text.svg';
 import { ReactComponent as LogoIcon } from '../../assets/logo-icon.svg';
 import { openModal } from '../../redux/modals/modals.actions';
@@ -25,13 +28,6 @@ import { ModalNames } from '../../redux/modals/modals.reducer';
 import { RootState } from '../../redux/root.reducer';
 import useStyles from './CGAppBar.mui';
 import theme from '../../theme';
-
-const UserMenuDropdown = React.lazy(() => import('../UserMenuDropdown/UserMenuDropdown.component'));
-const CreateDropdown = React.lazy(() => import('../CreateDropdown/CreateDropdown.component'));
-const Dropdown = React.lazy(() => import('../Dropdown/Dropdown.component'));
-const NotificationsDropdown = React.lazy(() =>
-	import('../NotificationsDropdown/NotificationsDropdown.component')
-);
 
 const CGAppBar = () => {
 	// MUI Classes
@@ -61,7 +57,7 @@ const CGAppBar = () => {
 				<Toolbar className={classes.toolBar}>
 					<Grid container alignItems='center' justify='space-between'>
 						<Grid item>
-							<Link href='/dashboard'>
+							<Link href='/me'>
 								{useMediaQuery(theme.breakpoints.up('lg')) ? <LogoText /> : <LogoIcon />}
 							</Link>
 						</Grid>
@@ -98,11 +94,9 @@ const CGAppBar = () => {
 					</Grid>
 				</Toolbar>
 			</AppBar>
-			<Suspense fallback={<LoadingSpinner />}>
-				<Dropdown modalName={ModalNames.CREATE_DROPDOWN} />
-				<Dropdown modalName={ModalNames.NOTIFICATIONS_DROPDOWN} />
-				<Dropdown modalName={ModalNames.USER_DROPDOWN} />
-			</Suspense>
+			<Dropdown modalName={ModalNames.CREATE_DROPDOWN} />
+			<Dropdown modalName={ModalNames.NOTIFICATIONS_DROPDOWN} />
+			<Dropdown modalName={ModalNames.USER_DROPDOWN} />
 		</>
 	);
 };

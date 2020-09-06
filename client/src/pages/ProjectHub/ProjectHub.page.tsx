@@ -42,7 +42,7 @@ const ProjectHub: React.FC<ProjectHubProps> = () => {
 			<Typography variant='h4'>{project?.title}</Typography>
 			<List>
 				{project?.members.map((member) => (
-					<ListItem button component='a' href='/dashboard'>
+					<ListItem button component='a' href='/me'>
 						<Avatar src={member.image} alt={member.displayName} />
 						<Typography variant='h6'>{member.displayName}</Typography>
 					</ListItem>
