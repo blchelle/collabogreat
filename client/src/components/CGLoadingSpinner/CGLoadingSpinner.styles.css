@@ -1,12 +1,3 @@
-.loading-spinner {
-	position: fixed;
-	width: 8rem;
-	height: 8rem;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-}
-
 #blue-head,
 #green-head,
 #red-head,

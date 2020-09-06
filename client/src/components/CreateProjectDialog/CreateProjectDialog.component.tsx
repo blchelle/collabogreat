@@ -2,6 +2,7 @@ import React, { useState, SetStateAction, SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	Button,
+	CircularProgress,
 	Dialog,
 	DialogContent,
 	Grid,
@@ -10,7 +11,6 @@ import {
 	useMediaQuery,
 } from '@material-ui/core';
 
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner.component';
 import { ReactComponent as UDScrumBoard } from '../../assets/scrum-board.undraw.svg';
 import { closeModal } from '../../redux/modals/modals.actions';
 import { Project } from '../../redux/project/project.types';
@@ -133,7 +133,7 @@ const CreateProjectDialog: React.FC = () => {
 					</Grid>
 				</Grid>
 			</Dialog>
-			{isWaiting ? <LoadingSpinner /> : null}
+			{isWaiting ? <CircularProgress /> : null}
 		</>
 	);
 };

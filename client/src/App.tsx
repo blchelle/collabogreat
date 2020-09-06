@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 
-import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner.component';
+import Loading from './pages/Loading/Loading.page';
 import { RootState } from './redux/root.reducer';
 import './App.css';
 
@@ -21,16 +21,18 @@ const App: React.FC = () => {
 
 	return (
 		<div className='App'>
-			{isAuthenticated ? (
-				<Suspense fallback={<LoadingSpinner />}>
-					<CGAppBar />
-					<CreateProjectDialog />
-				</Suspense>
-			) : null}
-			<Suspense fallback={<LoadingSpinner />}>
+			<Suspense fallback={<Loading />}>
+				{isAuthenticated ? (
+					<>
+						<CGAppBar />
+						<CreateProjectDialog />
+					</>
+				) : null}
+
 				<Switch>
 					<Route exact path='/' component={LandingPage} />
-					<Route exact path='/dashboard' component={Dashboard} />
+					<Route exact path='/me' component={Dashboard} />
+					<Route exact path='/loading' component={Loading} />
 					<Route path='/projects/:id' component={ProjectHub} />
 					<Route path='*' component={NotFound} />
 				</Switch>
