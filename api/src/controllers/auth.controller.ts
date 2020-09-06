@@ -2,6 +2,7 @@ import { Request, Response, CookieOptions } from 'express';
 import jwt from 'jsonwebtoken';
 import passport, { AuthenticateOptions } from 'passport';
 
+import StatusCode from 'status-code-enum';
 import environment from '../configs/environment.config';
 import keys from '../configs/keys.config';
 import RegisteredOAuthProvider from '../configs/passport.config';
@@ -34,6 +35,7 @@ class AuthController extends Controller {
 				.get(this.redirectProvider(provider), this.createAndSendToken);
 		});
 
+		this.router.use(this.protectRoute());
 		this.router.route('/logout').get(this.logout);
 	}
 
@@ -80,13 +82,17 @@ class AuthController extends Controller {
 	}
 
 	/**
-	 * Logs the user out and sends their blank information as a response
+	 * Sends the user a blank http only cookie with a short life
 	 * @param req Incoming request
 	 * @param res Outgoing response
 	 */
-	private logout(req: Request, res: Response) {
-		req.logout();
-		res.send(req.user);
+	private logout(_req: Request, res: Response) {
+		res.cookie('Bearer', 'loggedout', {
+			maxAge: 10 * 1000, // 10 Seconds
+			httpOnly: true,
+		});
+
+		res.status(StatusCode.SuccessOK).json({ success: true });
 	}
 }
 

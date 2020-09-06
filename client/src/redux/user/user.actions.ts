@@ -3,6 +3,7 @@ import {
 	UserActionTypes,
 	FETCH_CURRENT_USER,
 	SET_CURRENT_USER,
+	LOGOUT_START,
 	ADD_PROJECT_TO_USER,
 } from './user.types';
 
@@ -16,6 +17,12 @@ export function setCurrentUser(user: User): UserActionTypes {
 	return {
 		type: SET_CURRENT_USER,
 		payload: user,
+	};
+}
+
+export function logoutStart(): UserActionTypes {
+	return {
+		type: LOGOUT_START,
 	};
 }
 
