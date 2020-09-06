@@ -1,9 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Divider, Grid, MenuItem, MenuList, Typography } from '@material-ui/core';
 import { Settings as SettingsIcon, ExitToApp as LogOutIcon } from '@material-ui/icons';
 
 import useStyles from './UserMenuDropdown.mui';
+import { logoutStart } from '../../redux/user/user.actions';
 import { RootState } from '../../redux/root.reducer';
 
 const UserMenuDropdown = () => {
@@ -12,6 +13,7 @@ const UserMenuDropdown = () => {
 
 	// Redux
 	const user = useSelector((state: RootState) => state.user);
+	const dispatch = useDispatch();
 
 	return (
 		<>
@@ -30,7 +32,7 @@ const UserMenuDropdown = () => {
 					<SettingsIcon className={classes.marginRight} />
 					<Typography>Settings</Typography>
 				</MenuItem>
-				<MenuItem className={classes.menuItem}>
+				<MenuItem className={classes.menuItem} onClick={() => dispatch(logoutStart())}>
 					<LogOutIcon className={classes.marginRight} />
 					Log Out
 				</MenuItem>

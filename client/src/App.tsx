@@ -1,8 +1,9 @@
-import React, { Suspense } from 'react';
-import { useSelector } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import React, { Suspense, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import Loading from './pages/Loading/Loading.page';
+import { fetchCurrentUser } from './redux/user/user.actions';
 import { RootState } from './redux/root.reducer';
 import './App.css';
 
@@ -19,6 +20,12 @@ const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard.component
 const App: React.FC = () => {
 	const isAuthenticated = useSelector((state: RootState) => state.user !== null);
 
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(fetchCurrentUser());
+	}, []);
+
 	return (
 		<div className='App'>
 			<Suspense fallback={<Loading />}>
@@ -27,10 +34,14 @@ const App: React.FC = () => {
 						<CGAppBar />
 						<CreateProjectDialog />
 					</>
-				) : null}
+				) : (
+					<Redirect to='/' />
+				)}
 
 				<Switch>
-					<Route exact path='/' component={LandingPage} />
+					<Route exact path='/'>
+						{isAuthenticated ? <Redirect to='/me' /> : <LandingPage />}
+					</Route>
 					<Route exact path='/me' component={Dashboard} />
 					<Route exact path='/loading' component={Loading} />
 					<Route path='/projects/:id' component={ProjectHub} />
