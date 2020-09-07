@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import CGAppBar from './components/CGAppBar/CGAppBar.component';
 import CreateProjectDialog from './components/CreateProjectDialog/CreateProjectDialog.component';
 import Loading from './pages/Loading/Loading.page';
 
+const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard.component'));
 const NotFound = React.lazy(() => import('./pages/NotFound/NotFound.page'));
 const ProjectHub = React.lazy(() => import('./pages/ProjectHub/ProjectHub.page'));
-const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard.component'));
 
 const Authenticated = () => {
 	return (
-		<>
+		<Suspense fallback={Loading}>
 			<CGAppBar />
 			<Switch>
 				<Route exact path='/'>
@@ -23,7 +23,7 @@ const Authenticated = () => {
 				<Route path='*' component={NotFound} />
 			</Switch>
 			<CreateProjectDialog />
-		</>
+		</Suspense>
 	);
 };
 

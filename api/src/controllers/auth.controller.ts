@@ -35,7 +35,6 @@ class AuthController extends Controller {
 				.get(this.redirectProvider(provider), this.createAndSendToken);
 		});
 
-		this.router.use(this.protectRoute());
 		this.router.route('/logout').get(this.logout);
 	}
 
