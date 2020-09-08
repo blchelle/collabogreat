@@ -8,7 +8,7 @@ export default makeStyles({
 		transform: 'translate(-50%, -50%)',
 	},
 	svgImage: {
-		width: '80%',
+		width: '100%',
 		height: 'auto',
 	},
 });

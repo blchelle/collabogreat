@@ -19,8 +19,12 @@ const NotFound = () => {
 				<Grid item xs={12} container justify='center'>
 					<Typography variant={isTablet ? 'h4' : 'h6'}>Hmmm...Something is Wrong Here.</Typography>
 				</Grid>
-				<Grid item container justify='center'>
-					<UDNotFound className={classes.svgImage} />
+				<Grid item xs={12} container>
+					<Grid item xs={2} />
+					<Grid item xs>
+						<UDNotFound className={classes.svgImage} />
+					</Grid>
+					<Grid item xs={2} />
 				</Grid>
 				<Grid item xs={12} container justify='center'>
 					<Typography variant={isTablet ? 'h6' : 'body1'}>
@@ -43,7 +47,7 @@ const NotFound = () => {
 					<Typography variant='h2'>Hmmm...Something is Wrong Here.</Typography>
 				</Grid>
 				<Grid item xs={12} container>
-					<Grid item xs={4} container direction='column' justify='space-around'>
+					<Grid item xs={5} container direction='column' justify='space-around'>
 						<Typography variant='h5'>
 							Uh oh! It looks like you’ve lost your way. Let us take you back to safety
 						</Typography>
@@ -53,7 +57,7 @@ const NotFound = () => {
 							</Button>
 						</Grid>
 					</Grid>
-					<Grid item xs={8} container justify='center'>
+					<Grid item xs={7} container justify='center'>
 						<UDNotFound className={classes.svgImage} />
 					</Grid>
 				</Grid>
