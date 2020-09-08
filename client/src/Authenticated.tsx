@@ -6,7 +6,7 @@ import CGAppBar from './components/CGAppBar/CGAppBar.component';
 import CreateProjectDialog from './components/CreateProjectDialog/CreateProjectDialog.component';
 import Loading from './pages/Loading/Loading.page';
 
-const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard.component'));
+const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard.page'));
 const NotFound = React.lazy(() => import('./pages/NotFound/NotFound.page'));
 const ProjectHub = React.lazy(() => import('./pages/ProjectHub/ProjectHub.page'));
 

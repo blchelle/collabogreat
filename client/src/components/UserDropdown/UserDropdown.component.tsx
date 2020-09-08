@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Divider, Grid, MenuItem, MenuList, Typography } from '@material-ui/core';
 import { Settings as SettingsIcon, ExitToApp as LogOutIcon } from '@material-ui/icons';
 
-import useStyles from './UserMenuDropdown.mui';
+import useStyles from './UserDropdown.mui';
 import { logoutStart } from '../../redux/user/user.actions';
 import { RootState } from '../../redux/root.reducer';
 
-const UserMenuDropdown = () => {
+const UserDropdown: React.FC = () => {
 	// Styles
 	const classes = useStyles();
 
@@ -41,4 +41,4 @@ const UserMenuDropdown = () => {
 	);
 };
 
-export default UserMenuDropdown;
+export default UserDropdown;

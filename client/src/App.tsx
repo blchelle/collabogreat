@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import Loading from './pages/Loading/Loading.page';
-import LandingPage from './pages/LandingPage/LandingPage.component';
+import Landing from './pages/Landing/Landing.page';
 import { fetchCurrentUser } from './redux/user/user.actions';
 import { RootState } from './redux/root.reducer';
 import './App.css';
@@ -29,7 +29,7 @@ const App: React.FC = () => {
 				<>
 					<Redirect to='/' />
 					<Switch>
-						<Route exact path='/' component={LandingPage} />
+						<Route exact path='/' component={Landing} />
 					</Switch>
 				</>
 			)}
