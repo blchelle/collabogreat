@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
-import AuthDisplay from '../../components/AuthDisplay/AuthDisplay.component';
+import AuthDialog from '../../components/AuthDialog/AuthDialog.component';
 
-const LandingPage: React.FC = () => {
+const Landing: React.FC = () => {
 	const [showAuthPopup, setShowAuthPopup] = useState(false);
 
 	return (
 		<div>
-			<AuthDisplay open={showAuthPopup} onCloseHandler={() => setShowAuthPopup(false)} />
+			<AuthDialog open={showAuthPopup} onCloseHandler={() => setShowAuthPopup(false)} />
 			<AppBar color='primary' position='fixed'>
 				<Toolbar>
 					<Typography variant='h6'>CollaboGreat</Typography>
@@ -20,4 +20,4 @@ const LandingPage: React.FC = () => {
 	);
 };
 
-export default LandingPage;
+export default Landing;

@@ -13,15 +13,15 @@ import { Facebook as FacebookLogo, GitHub as GitHubLogo } from '@material-ui/ico
 
 import { ReactComponent as LogoText } from '../../assets/logo-text.svg';
 import { ReactComponent as GoogleLogo } from '../../assets/google-logo.svg';
-import useStyles from './AuthDisplay.mui';
+import useStyles from './AuthDialog.mui';
 import theme from '../../theme';
 
-interface AuthDisplayProps {
+interface AuthDialogProps {
 	open: boolean;
 	onCloseHandler: () => void;
 }
 
-const AuthDisplay: React.FC<AuthDisplayProps> = ({ open, onCloseHandler }) => {
+const AuthDialog: React.FC<AuthDialogProps> = ({ open, onCloseHandler }) => {
 	const classes = useStyles();
 	const providerButtonClasses = classes.providerButton;
 	const facebookButtonClasses = `${classes.facebookButton} ${providerButtonClasses}`;
@@ -91,4 +91,4 @@ const AuthDisplay: React.FC<AuthDisplayProps> = ({ open, onCloseHandler }) => {
 	);
 };
 
-export default AuthDisplay;
+export default AuthDialog;

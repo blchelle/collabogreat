@@ -5,7 +5,7 @@ import { ReactComponent as UDNotFound } from '../../assets/404.undraw.svg';
 import useStyles from './NotFound.mui';
 import theme from '../../theme';
 
-const NotFound = () => {
+const NotFound: React.FC = () => {
 	const classes = useStyles();
 
 	// Figure out the current screen size

@@ -18,7 +18,7 @@ import {
 } from '@material-ui/icons';
 
 import Dropdown from '../Dropdown/Dropdown.component';
-import UserMenuDropdown from '../UserMenuDropdown/UserMenuDropdown.component';
+import UserDropdown from '../UserDropdown/UserDropdown.component';
 import CreateDropdown from '../CreateDropdown/CreateDropdown.component';
 import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdown.component';
 import { ReactComponent as LogoText } from '../../assets/logo-text.svg';
@@ -29,7 +29,7 @@ import { RootState } from '../../redux/root.reducer';
 import useStyles from './CGAppBar.mui';
 import theme from '../../theme';
 
-const CGAppBar = () => {
+const CGAppBar: React.FC = () => {
 	// MUI Classes
 	const classes = useStyles();
 
@@ -84,7 +84,7 @@ const CGAppBar = () => {
 								<NotificationsIcon />
 							</IconButton>
 							<IconButton
-								onClick={openDropdown(ModalNames.USER_DROPDOWN, <UserMenuDropdown />)}
+								onClick={openDropdown(ModalNames.USER_DROPDOWN, <UserDropdown />)}
 								size='small'
 								disableRipple
 							>
