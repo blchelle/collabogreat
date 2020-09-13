@@ -17,7 +17,7 @@ const App: React.FC = () => {
 
 	useEffect(() => {
 		dispatch(fetchCurrentUser());
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<div className='App'>
