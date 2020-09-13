@@ -57,7 +57,7 @@ const CGAppBar: React.FC = () => {
 				<Toolbar className={classes.toolBar}>
 					<Grid container alignItems='center' justify='space-between'>
 						<Grid item>
-							<Link href='/me'>
+							<Link href='/dashboard'>
 								{useMediaQuery(theme.breakpoints.up('lg')) ? <LogoText /> : <LogoIcon />}
 							</Link>
 						</Grid>
@@ -69,7 +69,7 @@ const CGAppBar: React.FC = () => {
 								fullWidth
 							/>
 						</Grid>
-						<Grid item alignItems='center'>
+						<Grid item>
 							<Button
 								className={classes.createButton}
 								endIcon={<AddIcon />}
