@@ -5,10 +5,16 @@ export default makeStyles({
 	appBar: {
 		boxShadow: 'none',
 	},
+	toolBar: {
+		display: 'flex',
+		justifyContent: 'space-between',
+	},
 	searchBar: {
 		display: 'flex',
 		alignItems: 'center',
-		width: '30rem',
+		maxWidth: '45rem',
+		marginRight: theme.spacing(5),
+		marginLeft: theme.spacing(5),
 
 		borderRadius: theme.shape.borderRadius,
 		backgroundColor: fade(theme.palette.common.black, 0.05),
@@ -16,22 +22,18 @@ export default makeStyles({
 			backgroundColor: fade(theme.palette.common.black, 0.05),
 		},
 	},
+	searchBarMobile: {
+		order: 1,
+		margin: 0,
+	},
 	searchIcon: {
 		margin: theme.spacing(1),
 	},
-	toolBar: {
-		display: 'flex',
-		justifyContent: 'space-between',
-	},
-	notificationButton: {
-		marginRight: theme.spacing(2),
-	},
 	createButton: {
-		backgroundColor: theme.palette.primary.main,
-		color: theme.palette.primary.contrastText,
-		'&:hover': {
-			backgroundColor: theme.palette.primary.dark,
-		},
-		marginRight: theme.spacing(2),
+		boxShadow: 'none',
+	},
+	notificationsButton: {
+		marginLeft: theme.spacing(1),
+		marginRight: theme.spacing(1),
 	},
 });

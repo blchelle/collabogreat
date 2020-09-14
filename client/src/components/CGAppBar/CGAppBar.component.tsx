@@ -61,25 +61,44 @@ const CGAppBar: React.FC = () => {
 								{useMediaQuery(theme.breakpoints.up('lg')) ? <LogoText /> : <LogoIcon />}
 							</Link>
 						</Grid>
-						<Grid item lg={5} className={classes.searchBar}>
+
+						<Grid
+							item
+							md
+							xs={12}
+							className={`${classes.searchBar}
+								${useMediaQuery(theme.breakpoints.down('sm')) ? classes.searchBarMobile : null}`}
+						>
 							<SearchIcon className={classes.searchIcon} />
 							<InputBase
-								placeholder='Search for your projects, teams, tasks'
+								placeholder='Search for projects, teams, tasks'
 								inputProps={{ 'aria-label': 'search' }}
 								fullWidth
 							/>
 						</Grid>
+
 						<Grid item>
-							<Button
-								className={classes.createButton}
-								endIcon={<AddIcon />}
-								onClick={openDropdown(ModalNames.CREATE_DROPDOWN, <CreateDropdown />)}
-							>
-								Create
-							</Button>
+							{useMediaQuery(theme.breakpoints.up('sm')) ? (
+								<Button
+									className={classes.createButton}
+									endIcon={<AddIcon />}
+									onClick={openDropdown(ModalNames.CREATE_DROPDOWN, <CreateDropdown />)}
+									color='primary'
+									variant='contained'
+								>
+									Create
+								</Button>
+							) : (
+								<IconButton
+									onClick={openDropdown(ModalNames.CREATE_DROPDOWN, <CreateDropdown />)}
+									color='primary'
+								>
+									<AddIcon />
+								</IconButton>
+							)}
 							<IconButton
-								className={classes.notificationButton}
 								onClick={openDropdown(ModalNames.NOTIFICATIONS_DROPDOWN, <NotificationsDropdown />)}
+								className={classes.notificationsButton}
 							>
 								<NotificationsIcon />
 							</IconButton>
