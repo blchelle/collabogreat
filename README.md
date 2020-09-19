@@ -1,7 +1,7 @@
 # CollaboGreat
 CollaboGreat is team collaboration software designed and configurable for projects of any any scale.
 
-## 🚧🚧🚧 Currently Under Construction 🚧🚧🚧
+## 🚧 Currently Under Construction 🚧
 The estimated completion is November 2020
 Take a look at my [Trello Board](https://trello.com/b/Jq5809Jr/collabogreat-board) to see what I'm currently working on.
 
