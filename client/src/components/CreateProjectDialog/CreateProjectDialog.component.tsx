@@ -55,7 +55,6 @@ const CreateProjectDialog: React.FC = () => {
 		setIsWaiting(true);
 		await dispatch(createProjectStart(newProject));
 		setIsWaiting(false);
-		dispatch(closeModal(ModalNames.CREATE_PROJECT_DIALOG));
 	};
 
 	// Media Queries
