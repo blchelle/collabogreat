@@ -6,7 +6,7 @@ The estimated completion is November 2020
 Take a look at my [Trello Board](https://trello.com/b/Jq5809Jr/collabogreat-board) to see what I'm currently working on.
 
 ## Technology Stack 💻
-Both the Front and Back End heavily use TypeScript (Because I love [TypeScript](https://www.typescriptlang.org/))
+Both the Front and Back End use [TypeScript](https://www.typescriptlang.org/)
 
 Front End
 * [React](https://reactjs.org/)
