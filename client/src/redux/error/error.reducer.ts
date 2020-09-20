@@ -2,14 +2,14 @@ import { ErrorActionTypes, OPEN_ERROR, CLOSE_ERROR } from './error.types';
 
 interface ErrorState {
 	open: boolean;
-	description: String;
-	solution: String;
+	description: String | null;
+	solution: String | null;
 }
 
 const initialState: ErrorState = {
 	open: false,
-	description: '',
-	solution: '',
+	description: null,
+	solution: null,
 };
 
 export function errorReducer(state = initialState, action: ErrorActionTypes): ErrorState {
@@ -21,7 +21,7 @@ export function errorReducer(state = initialState, action: ErrorActionTypes): Er
 				solution: action.payload.solution,
 			};
 		case CLOSE_ERROR:
-			return { open: false, description: '', solution: '' };
+			return { ...state, open: false };
 		default:
 			return state;
 	}
