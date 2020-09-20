@@ -4,6 +4,7 @@ import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import Routes from './routes';
 import CGAppBar from './components/CGAppBar/CGAppBar.component';
 import CreateProjectDialog from './components/CreateProjectDialog/CreateProjectDialog.component';
+import Error from './components/Error/Error.component';
 import Loading from './pages/Loading/Loading.page';
 
 const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard.page'));
@@ -31,6 +32,7 @@ const Authenticated = () => {
 				<NotFound />
 			)}
 			<CreateProjectDialog />
+			<Error />
 		</Suspense>
 	);
 };
