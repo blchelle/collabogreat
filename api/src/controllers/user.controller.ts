@@ -38,7 +38,8 @@ class ProjectController extends Controller {
 				return next(
 					new APIError(
 						StatusCode.ClientErrorUnauthorized,
-						'Attempted to create a Project without a User'
+						'Unable to find your information',
+						'Try logging out and logging back in with the same provider'
 					)
 				);
 			}

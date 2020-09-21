@@ -5,6 +5,14 @@ import { StatusCode } from 'status-code-enum';
 import keys from '../configs/keys.config';
 import APIError from '../errors/api.error';
 
+function unauthorizedError() {
+	return new APIError(
+		StatusCode.ClientErrorUnauthorized,
+		"We're unable to confirm your identity",
+		'Try authenticating with one of our registered providers: Google, Facebook or Github'
+	);
+}
+
 /**
  * Checks to see if the user JWT given in the request is valid.
  * If valid, the user id embedded in the token will be returned
@@ -13,27 +21,13 @@ import APIError from '../errors/api.error';
  */
 export function validateJwt(authorizationHeader: string | undefined) {
 	// Verify that the req had an authorization header
-	if (!authorizationHeader) {
-		return [
-			null,
-			new APIError(
-				StatusCode.ClientErrorUnauthorized,
-				'No Authorization header was given in the request'
-			),
-		];
-	}
+	if (!authorizationHeader) return [null, unauthorizedError()];
 
 	// Verify that the authorization header used a Bearer token
 	// Splitting the header on a space will give us an array like this -> [TokenType, Token]
 	const [tokenType, token] = authorizationHeader.split('=');
 	if (tokenType !== 'Bearer') {
-		return [
-			null,
-			new APIError(
-				StatusCode.ClientErrorUnauthorized,
-				'The Authorization header given in the request must use a Bearer token'
-			),
-		];
+		return [null, unauthorizedError()];
 	}
 
 	// Verify that the token is valid (no tampering) and that the decoded token has an id property
@@ -43,13 +37,7 @@ export function validateJwt(authorizationHeader: string | undefined) {
 		typeof decodedToken !== 'object' ||
 		!Object.prototype.hasOwnProperty.call(decodedToken, 'id')
 	) {
-		return [
-			null,
-			new APIError(
-				StatusCode.ClientErrorUnauthorized,
-				"The Decoded JWT doesn't have a user to get information from id"
-			),
-		];
+		return [null, unauthorizedError()];
 	}
 
 	return [decodedToken.id, null];
