@@ -8,7 +8,11 @@ import APIError from './api.error';
  */
 class DocumentNotFoundError extends APIError {
 	constructor(id: string, statusCode: StatusCode, modelName: string) {
-		super(statusCode, `Unable to find a ${modelName} with the id ${id}`);
+		super(
+			statusCode,
+			`Unable to find a ${modelName} with the id ${id}`,
+			`Try searching for a different ${modelName}`
+		);
 	}
 }
 

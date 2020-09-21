@@ -24,6 +24,7 @@ type ErrorResponse = string | { [prop: string]: string }[];
 function handleError(err: Error, _req: Request, res: Response, _next: NextFunction) {
 	let statusCode;
 	let responseError: ErrorResponse;
+	let responseSolution: string | null = null;
 
 	logger('ErrorHandler', `${err.message} ❌`);
 
@@ -31,6 +32,7 @@ function handleError(err: Error, _req: Request, res: Response, _next: NextFuncti
 	if (err instanceof APIError) {
 		statusCode = err.statusCode;
 		responseError = err.message;
+		responseSolution = err.solution;
 	} else if (err instanceof MongooseError.ValidationError) {
 		statusCode = StatusCode.ServerErrorInternal;
 		responseError = Object.values(err.errors).map(({ path, message }) => {
@@ -39,12 +41,18 @@ function handleError(err: Error, _req: Request, res: Response, _next: NextFuncti
 	} else if (err instanceof JsonWebTokenError) {
 		statusCode = StatusCode.ClientErrorUnauthorized;
 		responseError = err.message;
+		responseSolution =
+			'Try reauthenticating with one of our registered providers: Google, Facebook, or GitHub';
 	} else {
 		statusCode = StatusCode.ServerErrorInternal;
 		responseError = 'Unknown Error';
+		responseSolution =
+			'This one looks like its on us... If the problem persists, contact us at collabogreat@brockchelle.com';
 	}
 
-	res.status(statusCode).send({ statusCode, data: responseError });
+	res
+		.status(statusCode)
+		.send({ statusCode, error: { description: responseError, solution: responseSolution } });
 }
 
 export default handleError;

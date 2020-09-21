@@ -12,11 +12,18 @@ class APIError extends Error {
 	 */
 	statusCode: StatusCode;
 
-	constructor(statusCode: StatusCode, message: string) {
+	/**
+	 * Useful information that will help the user resolve their error
+	 * Sometimes it may be null if a solution is unknown
+	 */
+	solution: string | null;
+
+	constructor(statusCode: StatusCode, message: string, solution: string | null = null) {
 		super(message);
 
 		this.statusCode = statusCode;
 		this.message = message;
+		this.solution = solution;
 
 		// Prevents APIError objects from being implicitly casted to Error
 		Object.setPrototypeOf(this, new.target.prototype);

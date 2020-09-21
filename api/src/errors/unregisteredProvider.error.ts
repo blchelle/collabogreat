@@ -7,7 +7,11 @@ import APIError from './api.error';
  */
 class UnregisteredProviderError extends APIError {
 	constructor(statusCode: StatusCode, providerName: string) {
-		super(statusCode, `Failed to authenticate with unregistered provider '${providerName}'`);
+		super(
+			statusCode,
+			`Failed to authenticate with unregistered provider '${providerName}'`,
+			'Try authenticating with one of our registered providers: Google, Facebook, or GitHub'
+		);
 	}
 }
 

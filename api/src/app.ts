@@ -92,7 +92,8 @@ class App {
 			next(
 				new APIError(
 					StatusCode.ClientErrorNotFound,
-					`URL ${req.originalUrl} does not exist on this server`
+					`URL ${req.originalUrl} does not exist on this server`,
+					'Try accessing one of our implemented routes'
 				)
 			)
 		);

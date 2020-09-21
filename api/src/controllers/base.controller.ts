@@ -2,7 +2,6 @@ import express, { Request, Response, NextFunction } from 'express';
 import { Document, Model } from 'mongoose';
 import StatusCode from 'status-code-enum';
 
-import APIError from '../errors/api.error';
 import DocumentNotFoundError from '../errors/documentNotFound.error';
 import User from '../models/user.model';
 import catchAsync from '../utils/catchAsync.util';
@@ -124,10 +123,7 @@ abstract class Controller {
 			const user = await User.findById(idInJWT);
 			if (!user) {
 				return next(
-					new APIError(
-						StatusCode.ClientErrorUnauthorized,
-						'The User embedded in the JWT does not exist'
-					)
+					new DocumentNotFoundError(idInJWT as string, StatusCode.ClientErrorNotFound, 'user')
 				);
 			}
 
