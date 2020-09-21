@@ -39,7 +39,7 @@ const CreateProjectDialog: React.FC = () => {
 	const initialInputState: FormInputState = { visited: false, value: '' };
 	const [title, setTitle] = useState<FormInputState>(initialInputState);
 	const [description, setDescription] = useState<FormInputState>(initialInputState);
-	const [isWaiting, setIsWaiting] = useState<Boolean>(false);
+	const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
 	const newProject: Project = { title: title.value, description: description.value };
 
