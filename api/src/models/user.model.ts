@@ -6,15 +6,15 @@ import validator from 'validator';
  * The structure of a User Document
  */
 export interface IUser extends Document {
-	displayName: String;
-	email: String;
-	projects: String[];
-	projectInvitations: String[];
+	displayName: string;
+	email: string;
+	projects: string[];
+	projectInvitations: string[];
 
-	image?: String;
-	googleId?: String;
-	githubId?: String;
-	facebookId?: String;
+	image?: string;
+	googleId?: string;
+	githubId?: string;
+	facebookId?: string;
 }
 
 /**

@@ -4,9 +4,9 @@ import mongoose, { Document, Query, Schema } from 'mongoose';
  * The structure of a Project Document
  */
 export interface IProject extends Document {
-	title: String;
-	description: String;
-	members: String[];
+	title: string;
+	description: string;
+	members: string[];
 	createdAt: Date;
 }
 

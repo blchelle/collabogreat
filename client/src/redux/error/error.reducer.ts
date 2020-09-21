@@ -2,8 +2,8 @@ import { ErrorActionTypes, OPEN_ERROR, CLOSE_ERROR } from './error.types';
 
 interface ErrorState {
 	open: boolean;
-	description: String | null;
-	solution: String | null;
+	description: string | null;
+	solution: string | null;
 }
 
 const initialState: ErrorState = {

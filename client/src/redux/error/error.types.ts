@@ -3,7 +3,7 @@ export const CLOSE_ERROR = 'CLOSE_ERROR';
 
 interface OpenErrorAction {
 	type: typeof OPEN_ERROR;
-	payload: { description: String; solution: String };
+	payload: { description: string; solution: string };
 }
 
 interface CloseErrorAction {
