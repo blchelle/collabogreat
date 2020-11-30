@@ -3,9 +3,11 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"dev": "set NODE_ENV=development&&concurrently \"tsc --watch\" \"nodemon dist/server.js\"",
+		"dev": "NODE_ENV=development&&run-p compile:watch run",
 		"lint": "eslint --ext .ts",
 		"compile": "tsc",
+		"compile:watch": "tsc --watch",
+		"run": "nodemon dist/server.js",
 		"docs": "typedoc --out docs src"
 	},
 	"dependencies": {
@@ -37,8 +39,8 @@
 		"@types/passport-github2": "^1.2.4",
 		"@types/passport-google-oauth20": "^2.0.3",
 		"@types/validator": "^13.1.0",
-		"concurrently": "^5.2.0",
 		"nodemon": "^2.0.4",
+		"npm-run-all": "^4.1.5",
 		"typedoc": "^0.17.8",
 		"typescript": "^3.9.7"
 	}
