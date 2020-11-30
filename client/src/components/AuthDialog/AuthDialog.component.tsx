@@ -4,12 +4,17 @@ import {
 	Dialog,
 	DialogContent,
 	Grid,
+	IconButton,
 	List,
 	ListItem,
 	SvgIcon,
 	Typography,
 } from '@material-ui/core';
-import { Facebook as FacebookLogo, GitHub as GitHubLogo } from '@material-ui/icons';
+import {
+	Facebook as FacebookLogo,
+	GitHub as GitHubLogo,
+	Close as CloseIcon,
+} from '@material-ui/icons';
 
 import { ReactComponent as LogoText } from '../../assets/logo-text.svg';
 import { ReactComponent as GoogleLogo } from '../../assets/google-logo.svg';
@@ -36,11 +41,21 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onCloseHandler }) => {
 			onClose={onCloseHandler}
 			classes={{ paperWidthXs: classes.widthXS }}
 		>
+			<IconButton
+				style={{
+					alignSelf: 'flex-end',
+					marginTop: theme.spacing(1),
+					marginRight: theme.spacing(1),
+				}}
+				onClick={onCloseHandler}
+			>
+				<CloseIcon />
+			</IconButton>
 			<Grid
 				container
 				direction='column'
 				alignItems='center'
-				style={{ marginBottom: theme.spacing(2), marginTop: theme.spacing(2) }}
+				style={{ marginBottom: theme.spacing(2), marginTop: theme.spacing(-2) }}
 			>
 				<Typography variant='h5' classes={{ root: classes.dialogTitle }}>
 					Sign in to
