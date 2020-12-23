@@ -26,11 +26,12 @@ class TaskController extends Controller {
 		// All routes below this are protected
 
 		this.router.route('/').post(this.createOne());
-		this.router.route('/me').get(this.getTasksForUser());
+		this.router.route('/me').get(this.getTasksForMe());
 		this.router.route('/project/:id').get(this.getTasksForProject());
+		this.router.route('/user/:id').get(this.getTasksForUser());
 	}
 
-	protected getTasksForUser() {
+	protected getTasksForMe() {
 		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 			// Ensures that the user is on the request object
 			if (!req.user) {
@@ -59,6 +60,19 @@ class TaskController extends Controller {
 			const reqProjectId = req.params.id;
 
 			const tasks = await this.model.find({ project: reqProjectId });
+
+			res.status(StatusCode.SuccessOK).json({
+				success: true,
+				tasks,
+			});
+		});
+	}
+
+	protected getTasksForUser() {
+		return catchAsync(async (req: Request, res: Response) => {
+			const reqUserId = req.params.id;
+
+			const tasks = await this.model.find({ user: reqUserId });
 
 			res.status(StatusCode.SuccessOK).json({
 				success: true,
