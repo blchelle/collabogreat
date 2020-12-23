@@ -2,12 +2,13 @@ import App from './app';
 import AuthController from './controllers/auth.controller';
 import ProjectController from './controllers/project.controller';
 import UserController from './controllers/user.controller';
+import TaskController from './controllers/task.controller';
 import logger from './utils/logger.utils';
 
 // Initializes the OAuth strategies for each of the registered providers
 import './configs/passport.config';
 
-// Listens for uncaught exceptions and end the process when they occure
+// Listens for uncaught exceptions and end the process when they occur
 process.on('uncaughtException', (err: Error) => {
 	logger('SERVER', 'UNCAUGHT EXCEPTION ❌');
 	logger('SERVER', err.message);
@@ -18,7 +19,12 @@ process.on('uncaughtException', (err: Error) => {
 });
 
 // Creates an app instance
-const app = new App([new ProjectController(), new UserController(), new AuthController()]);
+const app = new App([
+	new ProjectController(),
+	new UserController(),
+	new AuthController(),
+	new TaskController(),
+]);
 
 // Starts the Server
 const server = app.listen();

@@ -18,7 +18,7 @@ abstract class Controller {
 	abstract path: string;
 
 	/**
-	 * The mongoogse model corresponding to the controller
+	 * The mongoose model corresponding to the controller
 	 */
 	abstract model: Model<Document, {}>;
 
