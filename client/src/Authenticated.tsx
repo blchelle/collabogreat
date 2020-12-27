@@ -9,14 +9,16 @@ import Loading from './pages/Loading/Loading.page';
 
 const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard.page'));
 const NotFound = React.lazy(() => import('./pages/NotFound/NotFound.page'));
+const ProjectBoard = React.lazy(() => import('./pages/ProjectBoard/ProjectBoard.page'));
 // const ProjectHub = React.lazy(() => import('./pages/ProjectHub/ProjectHub.page'));
 
 const Authenticated = () => {
 	const { pathname } = useLocation();
+	console.log(Object.values(Routes));
 
 	return (
 		<Suspense fallback={<Loading />}>
-			{Object.values(Routes).includes(pathname) ? (
+			{Routes.some((regex) => regex.test(pathname)) ? (
 				<>
 					<CGAppBar />
 					<Switch>
@@ -26,6 +28,7 @@ const Authenticated = () => {
 						<Route exact path='/dashboard' component={Dashboard} />
 						<Route exact path='/loading' component={Loading} />
 						{/* <Route path='/projects/:id' component={ProjectHub} /> */}
+						<Route exact path='/projects/:id/board' component={ProjectBoard} />
 					</Switch>
 				</>
 			) : (
