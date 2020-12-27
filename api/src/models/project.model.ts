@@ -8,6 +8,7 @@ export interface IProject extends Document {
 	description: string;
 	members: string[];
 	createdAt: Date;
+	board: string[];
 }
 
 /**

@@ -3,6 +3,7 @@ export interface Project {
 	title: string;
 	description: string;
 	image?: string;
+	board: string[];
 }
 
 export const SET_ALL_PROJECTS = 'SET_ALL_PROJECTS';
