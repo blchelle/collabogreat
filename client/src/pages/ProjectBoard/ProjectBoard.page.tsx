@@ -1,15 +1,21 @@
-import { Card, CardContent, Grid, Typography } from '@material-ui/core';
-import React, { CSSProperties, useState } from 'react';
+import React, { CSSProperties } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
 	DragDropContext,
-	DraggableLocation,
+	// DraggableLocation,
 	DraggingStyle,
 	NotDraggingStyle,
 	DropResult,
 	Droppable,
 	Draggable,
 } from 'react-beautiful-dnd';
+import { Card, CardContent, Grid, Typography } from '@material-ui/core';
+
 import useStyles from './ProjectBoard.mui';
+import { reorderTasks } from '../../redux/tasks/tasks.actions';
+import { Task } from '../../redux/tasks/tasks.types';
+import { RootState } from '../../redux/root.reducer';
+import { useParams } from 'react-router';
 
 const grid = 8;
 
@@ -38,86 +44,101 @@ const getListStyle = (isDraggingOver: boolean) => ({
 const ProjectBoard: React.FC = () => {
 	const classes = useStyles();
 
-	type Stages = {
-		notStarted: Stage;
-		inProgress: Stage;
-		done: Stage;
-	};
+	// Gets the project Id from the route
+	const projectId = useParams<{ id: string }>().id;
 
-	type Stage = {
-		name: string;
-		items: Task[];
-	};
+	// Redux Things
+	const tasks = useSelector((state: RootState) =>
+		state.tasks.filter((task) => task.project === projectId)
+	);
 
-	const getItems = (count: number, offset = 0): Task[] =>
-		Array.from({ length: count }, (_, k) => k).map((k) => ({
-			id: `item-${k + offset}`,
-			content: `item ${k + offset}`,
-		}));
+	const dispatch = useDispatch();
 
-	const [stages, setStages] = useState<Stages>({
+	// type Stages = {
+	// 	notStarted: Stage;
+	// 	inProgress: Stage;
+	// 	done: Stage;
+	// };
+
+	// type Stage = {
+	// 	name: string;
+	// 	items: Task[];
+	// };
+
+	const stages = {
 		notStarted: {
 			name: 'Not Started',
-			items: getItems(10),
+			items: tasks
+				.filter(({ status }) => status === 'notStarted')
+				.sort((t1, t2) => t1.order - t2.order),
 		},
 		inProgress: {
 			name: 'In Progress',
-			items: getItems(10, 10),
+			items: tasks
+				.filter(({ status }) => status === 'inProgress')
+				.sort((t1, t2) => t1.order - t2.order),
 		},
 		done: {
 			name: 'Done',
-			items: getItems(5, 20),
+			items: tasks.filter(({ status }) => status === 'done').sort((t1, t2) => t1.order - t2.order),
 		},
-	});
-
-	// import useStyles from '../../components/BoardStage/BoardStage.mui';
-	type Task = {
-		id: string;
-		content: string;
 	};
 
-	// fake data generator
-
-	// a little function to help us with reordering the result
-	const reorder = (list: Task[], startIndex: number, endIndex: number) => {
-		const result = [...list];
-		const [removed] = result.splice(startIndex, 1);
-		result.splice(endIndex, 0, removed);
-
-		return result;
-	};
+	// useEffect(() => {
+	// 	console.log('Running the use effect hook');
+	// 	setStages({
+	// 		notStarted: {
+	// 			name: 'Not Started',
+	// 			items: tasks
+	// 				.filter(({ status }) => status === 'notStarted')
+	// 				.sort((t1, t2) => t1.order - t2.order),
+	// 		},
+	// 		inProgress: {
+	// 			name: 'In Progress',
+	// 			items: tasks
+	// 				.filter(({ status }) => status === 'inProgress')
+	// 				.sort((t1, t2) => t1.order - t2.order),
+	// 		},
+	// 		done: {
+	// 			name: 'Done',
+	// 			items: tasks
+	// 				.filter(({ status }) => status === 'done')
+	// 				.sort((t1, t2) => t1.order - t2.order),
+	// 		},
+	// 	});
+	// }, [...tasks]);
 
 	/**
 	 * Moves an item from one list to another list.
 	 */
-	const move = (
-		source: Stage,
-		destination: Stage,
-		droppableSource: DraggableLocation,
-		droppableDestination: DraggableLocation
-	) => {
-		const sourceClone = [...source.items];
-		const destClone = [...destination.items];
-		const [removed] = sourceClone.splice(droppableSource.index, 1);
+	// const move = (
+	// 	source: Stage,
+	// 	destination: Stage,
+	// 	droppableSource: DraggableLocation,
+	// 	droppableDestination: DraggableLocation
+	// ) => {
+	// 	const sourceClone = [...source.items];
+	// 	const destClone = [...destination.items];
+	// 	const [removed] = sourceClone.splice(droppableSource.index, 1);
 
-		destClone.splice(droppableDestination.index, 0, removed);
+	// 	destClone.splice(droppableDestination.index, 0, removed);
 
-		const result: Stages = {
-			...stages,
-			[droppableSource.droppableId]: {
-				...source,
-				items: sourceClone,
-			},
-			[droppableDestination.droppableId]: {
-				...destination,
-				items: destClone,
-			},
-		};
+	// 	const result: Stages = {
+	// 		...stages,
+	// 		[droppableSource.droppableId]: {
+	// 			...source,
+	// 			items: sourceClone,
+	// 		},
+	// 		[droppableDestination.droppableId]: {
+	// 			...destination,
+	// 			items: destClone,
+	// 		},
+	// 	};
 
-		return result;
-	};
+	// 	return result;
+	// };
 
-	const getList = (id: keyof Stages) => stages[id];
+	// const getList = (id: keyof Stages) => stages[id];
 
 	const onDragEnd = (result: DropResult) => {
 		const { source, destination } = result;
@@ -127,25 +148,29 @@ const ProjectBoard: React.FC = () => {
 			return;
 		}
 
+		console.log(source, destination);
+
 		if (source.droppableId === destination.droppableId) {
-			const stage = getList(source.droppableId as keyof Stages);
-
-			const items = reorder(stage.items, source.index, destination.index);
-
-			const updatedSource = { ...stage, items };
-
-			setStages({ ...stages, [source.droppableId]: updatedSource });
+			dispatch(
+				reorderTasks({
+					task: {
+						...tasks.filter(
+							({ order, status }) => status === source.droppableId && order === source.index
+						)[0],
+						order: destination.index,
+					},
+					oldOrder: source.index,
+				})
+			);
 		} else {
-			const sourceStage = getList(source.droppableId as keyof Stages);
-			const destStage = getList(destination.droppableId as keyof Stages);
-
-			const result = move(sourceStage, destStage, source, destination);
-
-			setStages({
-				notStarted: result.notStarted,
-				inProgress: result.inProgress,
-				done: result.done,
-			});
+			// const sourceStage = getList(source.droppableId as keyof Stages);
+			// const destStage = getList(destination.droppableId as keyof Stages);
+			// const result = move(sourceStage, destStage, source, destination);
+			// setStages({
+			// 	notStarted: result.notStarted,
+			// 	inProgress: result.inProgress,
+			// 	done: result.done,
+			// });
 		}
 	};
 
@@ -164,7 +189,7 @@ const ProjectBoard: React.FC = () => {
 											<Typography variant='subtitle1'>{name}</Typography>
 
 											{items.map((item: Task, index: number) => (
-												<Draggable key={item.id} draggableId={item.id} index={index}>
+												<Draggable key={item._id} draggableId={item._id} index={index}>
 													{(provided, snapshot) => (
 														<CardContent
 															ref={provided.innerRef}
@@ -175,7 +200,7 @@ const ProjectBoard: React.FC = () => {
 																provided.draggableProps.style
 															)}
 														>
-															{item.content}
+															{item.title}
 														</CardContent>
 													)}
 												</Draggable>
