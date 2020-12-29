@@ -12,7 +12,7 @@ import {
 import { Card, CardContent, Grid, Typography } from '@material-ui/core';
 
 import useStyles from './ProjectBoard.mui';
-import { reorderTasks } from '../../redux/tasks/tasks.actions';
+import { moveTask, reorderTasks } from '../../redux/tasks/tasks.actions';
 import { Task } from '../../redux/tasks/tasks.types';
 import { RootState } from '../../redux/root.reducer';
 import { useParams } from 'react-router';
@@ -84,30 +84,6 @@ const ProjectBoard: React.FC = () => {
 		},
 	};
 
-	// useEffect(() => {
-	// 	console.log('Running the use effect hook');
-	// 	setStages({
-	// 		notStarted: {
-	// 			name: 'Not Started',
-	// 			items: tasks
-	// 				.filter(({ status }) => status === 'notStarted')
-	// 				.sort((t1, t2) => t1.order - t2.order),
-	// 		},
-	// 		inProgress: {
-	// 			name: 'In Progress',
-	// 			items: tasks
-	// 				.filter(({ status }) => status === 'inProgress')
-	// 				.sort((t1, t2) => t1.order - t2.order),
-	// 		},
-	// 		done: {
-	// 			name: 'Done',
-	// 			items: tasks
-	// 				.filter(({ status }) => status === 'done')
-	// 				.sort((t1, t2) => t1.order - t2.order),
-	// 		},
-	// 	});
-	// }, [...tasks]);
-
 	/**
 	 * Moves an item from one list to another list.
 	 */
@@ -148,29 +124,28 @@ const ProjectBoard: React.FC = () => {
 			return;
 		}
 
-		console.log(source, destination);
+		const movedTask = tasks.filter(
+			({ status, order }) => status === source.droppableId && order === source.index
+		)[0];
 
 		if (source.droppableId === destination.droppableId) {
 			dispatch(
 				reorderTasks({
-					task: {
-						...tasks.filter(
-							({ order, status }) => status === source.droppableId && order === source.index
-						)[0],
-						order: destination.index,
-					},
+					task: { ...movedTask, order: destination.index },
 					oldOrder: source.index,
 				})
 			);
 		} else {
-			// const sourceStage = getList(source.droppableId as keyof Stages);
-			// const destStage = getList(destination.droppableId as keyof Stages);
-			// const result = move(sourceStage, destStage, source, destination);
-			// setStages({
-			// 	notStarted: result.notStarted,
-			// 	inProgress: result.inProgress,
-			// 	done: result.done,
-			// });
+			dispatch(
+				moveTask({
+					taskId: movedTask._id,
+					projectId: projectId,
+					newIndex: destination.index,
+					oldIndex: source.index,
+					newStatus: destination.droppableId,
+					oldStatus: source.droppableId,
+				})
+			);
 		}
 	};
 
