@@ -1,7 +1,11 @@
-import { PopperProps } from '@material-ui/core';
 import { ModalNames, ModalState } from './modals.reducer';
+import { PopperPropsExtra } from './modals.types';
 
-export function setModalOpen(state: ModalState, modalName: ModalNames, modalState: PopperProps) {
+export function setModalOpen(
+	state: ModalState,
+	modalName: ModalNames,
+	modalState: PopperPropsExtra
+) {
 	// Copy the existing state into a new variable
 	const newState = { ...state };
 

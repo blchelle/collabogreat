@@ -1,8 +1,11 @@
+import { User } from '../user/user.types';
+
 export interface Project {
 	_id?: string;
 	title: string;
 	description: string;
 	image?: string;
+	members?: Partial<User>[];
 	board: string[];
 }
 
