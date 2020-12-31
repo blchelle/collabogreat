@@ -38,23 +38,19 @@ const ProjectSchema = new Schema({
 		maxlength: 10,
 		validate: [
 			{
-				validator: function (arr: unknown[]) {
-					for (const el of arr) {
-						if (typeof el !== 'string') return false;
-					}
-
-					return true;
+				validator(arr: unknown[]) {
+					return arr.filter((el) => typeof el === 'string').length === 0;
 				},
 				message: 'All stage names must be a string',
 			},
 			{
-				validator: function (arr: unknown[]) {
+				validator(arr: unknown[]) {
 					return arr.length < 10;
 				},
 				message: 'Boards can have a max of 10 stages',
 			},
 			{
-				validator: function (arr: unknown[]) {
+				validator(arr: unknown[]) {
 					return arr.length > 0;
 				},
 				message: 'Boards must have at least one stage',
