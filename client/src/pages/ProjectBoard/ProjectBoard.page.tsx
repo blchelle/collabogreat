@@ -77,7 +77,12 @@ const ProjectBoard: React.FC = () => {
 				{Object.entries(stages).map(([droppableId, { name, items }]) => {
 					return (
 						<Grid item>
-							<BoardStage stageId={droppableId} stageName={name} tasks={items} />
+							<BoardStage
+								projectId={projectId}
+								stageId={droppableId}
+								stageName={name}
+								tasks={items}
+							/>
 						</Grid>
 					);
 				})}
