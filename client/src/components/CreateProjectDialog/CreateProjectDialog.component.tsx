@@ -41,7 +41,11 @@ const CreateProjectDialog: React.FC = () => {
 	const [description, setDescription] = useState<FormInputState>(initialInputState);
 	const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
-	const newProject: Project = { title: title.value, description: description.value };
+	const newProject: Project = {
+		title: title.value,
+		description: description.value,
+		board: ['To Do', 'In Progress', 'Done'],
+	};
 
 	// Form Handlers
 	const onInputChange = (setterFn: React.Dispatch<SetStateAction<FormInputState>>) => (

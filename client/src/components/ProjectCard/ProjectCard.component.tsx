@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Avatar, Button, Card, CardContent, Grid, Typography } from '@material-ui/core';
 
 import { Project } from '../../redux/project/project.types';
@@ -8,6 +9,8 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+	const history = useHistory();
+
 	return (
 		<Card>
 			<CardContent>
@@ -27,7 +30,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 						<Button color='primary'>Go To project</Button>
 					</Grid>
 					<Grid item>
-						<Button color='primary'>Board</Button>
+						<Button color='primary' onClick={() => history.push(`projects/${project._id}/board`)}>
+							Board
+						</Button>
 					</Grid>
 				</Grid>
 			</CardContent>

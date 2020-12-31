@@ -8,6 +8,7 @@ export interface IProject extends Document {
 	description: string;
 	members: string[];
 	createdAt: Date;
+	board: string[];
 }
 
 /**
@@ -30,6 +31,36 @@ const ProjectSchema = new Schema({
 			ref: 'User',
 		},
 	],
+	board: {
+		type: Schema.Types.Array,
+		default: ['Not Started', 'In Progress', 'Complete'],
+		minlength: 1,
+		maxlength: 10,
+		validate: [
+			{
+				validator: function (arr: unknown[]) {
+					for (const el of arr) {
+						if (typeof el !== 'string') return false;
+					}
+
+					return true;
+				},
+				message: 'All stage names must be a string',
+			},
+			{
+				validator: function (arr: unknown[]) {
+					return arr.length < 10;
+				},
+				message: 'Boards can have a max of 10 stages',
+			},
+			{
+				validator: function (arr: unknown[]) {
+					return arr.length > 0;
+				},
+				message: 'Boards must have at least one stage',
+			},
+		],
+	},
 });
 
 /**

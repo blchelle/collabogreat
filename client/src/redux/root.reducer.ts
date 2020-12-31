@@ -3,6 +3,7 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 import { errorReducer } from './error/error.reducer';
+import { taskReducer } from './tasks/tasks.reducer';
 import { modalReducer } from './modals/modals.reducer';
 import { projectReducer } from './project/project.reducer';
 import { userReducer } from './user/user.reducer';
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
 	error: errorReducer,
 	modals: modalReducer,
 	projects: projectReducer,
+	tasks: taskReducer,
 	user: userReducer,
 });
 
