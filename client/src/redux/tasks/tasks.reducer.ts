@@ -8,7 +8,7 @@ const initialState: Task[] = [
 		order: 0,
 		project: '5fe23d63e31dce327b686459',
 		user: '5fe23d28e31dce327b686458',
-		status: 'notStarted',
+		status: 'Not Started',
 	},
 	{
 		_id: 'b',
@@ -16,7 +16,7 @@ const initialState: Task[] = [
 		order: 1,
 		project: '5fe23d63e31dce327b686459',
 		user: '5fe23d28e31dce327b686458',
-		status: 'notStarted',
+		status: 'Not Started',
 	},
 	{
 		_id: 'c',
@@ -24,7 +24,7 @@ const initialState: Task[] = [
 		order: 2,
 		project: '5fe23d63e31dce327b686459',
 		user: '5fe23d28e31dce327b686458',
-		status: 'notStarted',
+		status: 'Not Started',
 	},
 	{
 		_id: 'd',
@@ -32,7 +32,7 @@ const initialState: Task[] = [
 		order: 3,
 		project: '5fe23d63e31dce327b686459',
 		user: '5fe23d28e31dce327b686458',
-		status: 'notStarted',
+		status: 'Not Started',
 	},
 	{
 		_id: 'e',
@@ -40,7 +40,7 @@ const initialState: Task[] = [
 		order: 0,
 		project: '5fe23d63e31dce327b686459',
 		user: '5fe23d28e31dce327b686458',
-		status: 'done',
+		status: 'Done',
 	},
 	{
 		_id: 'f',
@@ -48,7 +48,7 @@ const initialState: Task[] = [
 		order: 1,
 		project: '5fe23d63e31dce327b686459',
 		user: '5fe23d28e31dce327b686458',
-		status: 'done',
+		status: 'Done',
 	},
 ];
 

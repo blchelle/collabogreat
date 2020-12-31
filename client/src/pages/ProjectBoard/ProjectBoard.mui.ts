@@ -3,6 +3,11 @@ import theme from '../../theme';
 
 export default makeStyles({
 	container: {
-		marginLeft: theme.spacing(1),
+		padding: theme.spacing(1),
+		overflowX: 'auto',
+	},
+	addStageButton: {
+		height: 50,
+		width: 270,
 	},
 });

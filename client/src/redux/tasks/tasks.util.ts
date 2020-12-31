@@ -6,18 +6,18 @@ export const reorderTasks = (tasks: Task[], movedTask: Task, oldTaskOrder: numbe
 
 		if (task._id === movedTask._id) {
 			return movedTask;
-		} else {
-			if (oldTaskOrder < movedTask.order) {
-				if (task.order > oldTaskOrder && task.order <= movedTask.order) {
-					return { ...task, order: task.order - 1 };
-				}
-			} else if (oldTaskOrder > movedTask.order) {
-				if (task.order >= movedTask.order && task.order < oldTaskOrder)
-					return { ...task, order: task.order + 1 };
-			}
-
-			return task;
 		}
+
+		if (oldTaskOrder < movedTask.order) {
+			if (task.order > oldTaskOrder && task.order <= movedTask.order) {
+				return { ...task, order: task.order - 1 };
+			}
+		} else if (oldTaskOrder > movedTask.order) {
+			if (task.order >= movedTask.order && task.order < oldTaskOrder)
+				return { ...task, order: task.order + 1 };
+		}
+
+		return task;
 	});
 };
 
@@ -47,7 +47,7 @@ export const moveTasks = (
 		} else if (task.status === newStatus) {
 			// Increments the index of all tasks in the moved tasks new status that are now
 			// after the moved task
-			if (task.order > oldIndex) return { ...task, order: task.order + 1 };
+			if (task.order >= newIndex) return { ...task, order: task.order + 1 };
 		}
 
 		// Catches any tasks that were in the new tasks new column or old column, but occur
