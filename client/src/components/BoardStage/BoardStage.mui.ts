@@ -13,7 +13,6 @@ export default makeStyles({
 	},
 	addTaskButton: {
 		backgroundColor: theme.palette.background.paper,
-		justifySelf: 'stretch',
 		margin: theme.spacing(2),
 		marginTop: theme.spacing(1),
 	},
