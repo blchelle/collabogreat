@@ -25,10 +25,41 @@ class TaskController extends Controller {
 		this.router.use(this.protectRoute());
 		// All routes below this are protected
 
-		this.router.route('/').post(this.createOne());
+		this.router.route('/').post(this.createTask());
 		this.router.route('/me').get(this.getTasksForMe());
 		this.router.route('/project/:id').get(this.getTasksForProject());
 		this.router.route('/user/:id').get(this.getTasksForUser());
+	}
+
+	protected createTask() {
+		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+			// Pulls the task project id and status from the request
+			const { project, status } = req.body;
+			let taskOrder;
+
+			if (project && status) {
+				// Gets all the tasks with the same project and status
+				const similarTasks = await this.model.find({ $and: [{ project }, { status }] });
+
+				// Pulls the maximun order from the list of tasks
+				taskOrder = Object.values(similarTasks).length;
+			} else {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorBadRequest,
+						'Attempted to create a task without a status or linked project',
+						'Try giving your task both a project and a status'
+					)
+				);
+			}
+
+			const task = await this.model.create({ ...req.body, order: taskOrder });
+
+			res.status(StatusCode.SuccessCreated).json({
+				success: true,
+				task,
+			});
+		});
 	}
 
 	protected getTasksForMe() {

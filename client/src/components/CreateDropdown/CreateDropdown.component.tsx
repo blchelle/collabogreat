@@ -18,7 +18,12 @@ const CreateDropdown: React.FC = () => {
 
 	return (
 		<MenuList>
-			<MenuItem>
+			<MenuItem
+				onClick={() => {
+					dispatch(closeModal(ModalNames.CREATE_DROPDOWN));
+					dispatch(openModal(ModalNames.CREATE_TASK_DIALOG, { open: true, children: null }));
+				}}
+			>
 				<Grid container spacing={4} alignItems='center'>
 					<Grid item>
 						<NewTaskSVG className={classes.listItemImage} />

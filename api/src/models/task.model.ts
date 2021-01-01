@@ -39,6 +39,10 @@ const TaskSchema = new Schema({
 		type: String,
 		default: 'NOT STARTED',
 	},
+	order: {
+		type: Number,
+		required: [true, 'Tasks must have an order assigned to them'],
+	},
 });
 
 /**

@@ -10,6 +10,8 @@ import { Project, ProjectActionTypes, CREATE_PROJECT_START } from './project.typ
 
 function* attemptCreateProject({ payload }: ProjectActionTypes) {
 	try {
+		axios.defaults.baseURL = 'http://localhost:8000';
+
 		// Attempts to create a new project with the information provided
 		const res = yield axios('api/v0/projects', {
 			method: 'POST',

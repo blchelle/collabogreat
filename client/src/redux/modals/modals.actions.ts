@@ -1,9 +1,7 @@
-import { PopperProps } from '@material-ui/core';
-
-import { ModalActionTypes, OPEN_MODAL, CLOSE_MODAL } from './modals.types';
+import { ModalActionTypes, OPEN_MODAL, CLOSE_MODAL, PopperPropsExtra } from './modals.types';
 import { ModalNames } from './modals.reducer';
 
-export function openModal(modalName: ModalNames, modalState: PopperProps): ModalActionTypes {
+export function openModal(modalName: ModalNames, modalState: PopperPropsExtra): ModalActionTypes {
 	return {
 		type: OPEN_MODAL,
 		payload: { modalName, modalState },
