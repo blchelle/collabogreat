@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 	Avatar,
 	Button,
+	CircularProgress,
 	Dialog,
 	DialogContent,
 	FormControl,
@@ -21,8 +22,10 @@ import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
 import { closeModal } from '../../redux/modals/modals.actions';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 import { RootState } from '../../redux/root.reducer';
+import { Task } from '../../redux/tasks/tasks.types';
 import useStyles from './CreateTaskDialog.mui';
 import theme from '../../theme';
+import { createTaskStart } from '../../redux/tasks/tasks.actions';
 
 interface FormInputState {
 	visited: boolean;
@@ -34,8 +37,6 @@ interface CreateTaskDialogExtras {
 	initialStatus: string;
 }
 
-// TODO Add a field to the form for selecting a project image, either from a library or the users computer
-// TODO Add a field for inviting new members to a project
 const CreateTaskDialog: React.FC = () => {
 	// MUI Styles
 	const classes = useStyles();
@@ -56,7 +57,7 @@ const CreateTaskDialog: React.FC = () => {
 	const [title, setTitle] = useState<FormInputState>(initialInputState);
 	const [assignee, setAssignee] = useState<FormInputState>(initialInputState);
 	const [description, setDescription] = useState<FormInputState>(initialInputState);
-	// const [isWaiting, setIsWaiting] = useState<boolean>(false);
+	const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
 	useEffect(() => {
 		setProjectId({ visited: false, value: initialProjectId ?? '' });
@@ -84,12 +85,23 @@ const CreateTaskDialog: React.FC = () => {
 		setAssignee({ visited: true, value: event.target.value as string });
 	};
 
-	// const submitForm = async (event: React.FormEvent) => {
-	// 	event.preventDefault();
-	// 	setIsWaiting(true);
-	// 	await dispatch(createProjectStart(newProject));
-	// 	setIsWaiting(false);
-	// };
+	const submitForm = async (event: React.FormEvent) => {
+		event.preventDefault();
+
+		const newTask: Task = {
+			_id: '', // This field should be generated on the server
+			order: -1, // This field should be generated on the server
+			project: projectId.value,
+			status: status.value,
+			title: title.value,
+			user: assignee.value,
+			description: description.value,
+		};
+
+		setIsWaiting(true);
+		await dispatch(createTaskStart(newTask));
+		setIsWaiting(false);
+	};
 
 	// Media Queries
 	const isScreenSmall = useMediaQuery(theme.breakpoints.down('md'));
@@ -264,7 +276,7 @@ const CreateTaskDialog: React.FC = () => {
 										color='primary'
 										fullWidth
 										disabled={title.value === '' || projectId.value === '' || status.value === ''}
-										// onClick={submitForm}
+										onClick={submitForm}
 									>
 										Create Task
 									</Button>
@@ -274,7 +286,7 @@ const CreateTaskDialog: React.FC = () => {
 					</Grid>
 				</Grid>
 			</Dialog>
-			{/* {isWaiting ? <CircularProgress /> : null} */}
+			{isWaiting ? <CircularProgress /> : null}
 		</>
 	);
 };

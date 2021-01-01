@@ -51,8 +51,6 @@ function* attemptLogout() {
 			},
 		});
 
-		console.log(res);
-
 		// Throws if the fetch was unsuccesful
 		if (res.status !== 200 || !res.data.success) throw new Error('Failed to Logout');
 
