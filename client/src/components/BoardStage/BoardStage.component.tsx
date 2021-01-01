@@ -25,8 +25,8 @@ const BoardStage: React.FC<BoardStage> = ({ projectId, stageId, stageName, tasks
 
 	const dispatch = useDispatch();
 
-	const getListStyle = (isDraggingOver: boolean) => ({
-		backgroundColor: isDraggingOver ? '#ddd' : theme.palette.background.paper,
+	const getListStyle = () => ({
+		backgroundColor: theme.palette.background.paper,
 		width: 270,
 		paddingBottom: -1 * theme.spacing(1),
 	});
@@ -38,10 +38,10 @@ const BoardStage: React.FC<BoardStage> = ({ projectId, stageId, stageName, tasks
 					{stageName}
 				</Typography>
 				<Droppable droppableId={stageId}>
-					{(provided, result) => (
-						<CardContent ref={provided.innerRef} style={getListStyle(result.isDraggingOver)}>
+					{(provided) => (
+						<CardContent ref={provided.innerRef} style={getListStyle()} key={stageId}>
 							{tasks.map((item: Task, index: number) => (
-								<BoardCard taskName={item.title} taskId={item._id} cardIndex={index} />
+								<BoardCard taskName={item.title} taskId={item._id} cardIndex={index} key={index} />
 							))}
 							{provided.placeholder}
 						</CardContent>

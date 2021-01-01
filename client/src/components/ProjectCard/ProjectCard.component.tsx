@@ -1,8 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Avatar, Button, Card, CardContent, Grid, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, Grid, Typography } from '@material-ui/core';
 
 import { Project } from '../../redux/project/project.types';
+import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
 
 interface ProjectCardProps {
 	project: Project;
@@ -19,9 +20,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 						<Typography variant='h5'>{project.title}</Typography>
 					</Grid>
 					<Grid item>
-						<Avatar variant='rounded' src={project.image} style={{ width: '4rem', height: '4rem' }}>
-							{project.title[0]}
-						</Avatar>
+						<ColoredAvatar
+							id={project._id}
+							text={project.title}
+							variant='rounded'
+							src={project.image}
+							style={{ width: '4rem', height: '4rem' }}
+						/>
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant='body2'>{project.description}</Typography>
