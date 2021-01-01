@@ -15,7 +15,6 @@ const ProjectBoard = React.lazy(() => import('./pages/ProjectBoard/ProjectBoard.
 
 const Authenticated = () => {
 	const { pathname } = useLocation();
-	console.log(Object.values(Routes));
 
 	return (
 		<Suspense fallback={<Loading />}>

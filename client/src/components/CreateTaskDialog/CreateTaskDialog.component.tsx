@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 
 import { ReactComponent as UDNewTask } from '../../assets/insert-task.undraw.svg';
+import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
 import { closeModal } from '../../redux/modals/modals.actions';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 import { RootState } from '../../redux/root.reducer';
@@ -60,7 +61,7 @@ const CreateTaskDialog: React.FC = () => {
 	useEffect(() => {
 		setProjectId({ visited: false, value: initialProjectId ?? '' });
 		setStatus({ visited: false, value: initialStatus ?? '' });
-	}, [open]);
+	}, [open, initialStatus, initialProjectId]);
 
 	// Form Handlers
 	const onInputChange = (setterFn: React.Dispatch<SetStateAction<FormInputState>>) => (
@@ -92,8 +93,6 @@ const CreateTaskDialog: React.FC = () => {
 
 	// Media Queries
 	const isScreenSmall = useMediaQuery(theme.breakpoints.down('md'));
-
-	console.log(projectId.value);
 
 	return (
 		<>
@@ -139,6 +138,7 @@ const CreateTaskDialog: React.FC = () => {
 									<FormControl
 										variant='outlined'
 										fullWidth
+										size='small'
 										required
 										error={projectId.value === '' && projectId.visited}
 									>
@@ -152,18 +152,18 @@ const CreateTaskDialog: React.FC = () => {
 											onBlur={() => setProjectId({ ...projectId, visited: true })}
 										>
 											{userProjects.map((project) => (
-												<MenuItem value={project._id}>
+												<MenuItem value={project._id} key={project._id}>
 													<Grid container alignItems='center'>
-														<Avatar
+														<ColoredAvatar
+															id={project._id}
+															text={project.title}
 															variant='rounded'
 															style={{
 																width: theme.spacing(4),
 																height: theme.spacing(4),
 																marginRight: theme.spacing(2),
 															}}
-														>
-															{project.title[0]}
-														</Avatar>
+														/>
 														<Typography variant='subtitle1'>{project.title}</Typography>
 													</Grid>
 												</MenuItem>
@@ -177,6 +177,7 @@ const CreateTaskDialog: React.FC = () => {
 										variant='outlined'
 										fullWidth
 										required
+										size='small'
 										disabled={projectId.value === ''}
 										error={assignee.value === '' && assignee.visited}
 									>
@@ -192,7 +193,7 @@ const CreateTaskDialog: React.FC = () => {
 												? userProjects
 														.filter((project) => project._id === projectId.value)[0]
 														.members?.map((member) => (
-															<MenuItem value={member?._id}>
+															<MenuItem value={member?._id} key={member?._id}>
 																<Grid container alignItems='center'>
 																	<Avatar
 																		variant='rounded'
@@ -217,6 +218,7 @@ const CreateTaskDialog: React.FC = () => {
 										variant='outlined'
 										fullWidth
 										required
+										size='small'
 										disabled={projectId.value === ''}
 										error={projectId.value === '' && projectId.visited}
 									>
@@ -233,7 +235,7 @@ const CreateTaskDialog: React.FC = () => {
 												? userProjects
 														.filter((project) => project._id === projectId.value)[0]
 														.board.map((stageName) => (
-															<MenuItem value={stageName}>
+															<MenuItem value={stageName} key={stageName}>
 																<Typography variant='subtitle1'>{stageName}</Typography>
 															</MenuItem>
 														))

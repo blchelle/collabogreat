@@ -76,7 +76,7 @@ const ProjectBoard: React.FC = () => {
 			<DragDropContext onDragEnd={onDragEnd}>
 				{Object.entries(stages).map(([droppableId, { name, items }]) => {
 					return (
-						<Grid item>
+						<Grid item key={droppableId}>
 							<BoardStage
 								projectId={projectId}
 								stageId={droppableId}
