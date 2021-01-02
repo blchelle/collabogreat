@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Droppable } from 'react-beautiful-dnd';
 import { Button, Card, CardContent, Grid, Typography } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
@@ -12,6 +12,7 @@ import useStyles from './BoardStage.mui';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 import { openModal } from '../../redux/modals/modals.actions';
 import theme from '../../theme';
+import { RootState } from 'redux/root.reducer';
 
 interface BoardStage {
 	projectId: string;
@@ -24,6 +25,9 @@ const BoardStage: React.FC<BoardStage> = ({ projectId, stageId, stageName, tasks
 	const classes = useStyles();
 
 	const dispatch = useDispatch();
+	const projectMembers = useSelector(
+		(state: RootState) => state.projects.filter((project) => project._id === projectId)[0].members
+	);
 
 	const getListStyle = () => ({
 		backgroundColor: theme.palette.background.paper,
@@ -41,7 +45,14 @@ const BoardStage: React.FC<BoardStage> = ({ projectId, stageId, stageName, tasks
 					{(provided) => (
 						<CardContent ref={provided.innerRef} style={getListStyle()} key={stageId}>
 							{tasks.map((item: Task, index: number) => (
-								<BoardCard taskName={item.title} taskId={item._id} cardIndex={index} key={index} />
+								<BoardCard
+									taskName={item.title}
+									taskId={item._id}
+									taskDescription={item.description}
+									cardIndex={index}
+									key={index}
+									assignedUser={projectMembers?.find((user) => user?._id === item.user)}
+								/>
 							))}
 							{provided.placeholder}
 						</CardContent>
