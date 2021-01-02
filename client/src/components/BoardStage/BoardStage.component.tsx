@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Droppable } from 'react-beautiful-dnd';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { Button, Card, CardContent, Grid, Typography } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 
@@ -12,7 +12,7 @@ import useStyles from './BoardStage.mui';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 import { openModal } from '../../redux/modals/modals.actions';
 import theme from '../../theme';
-import { RootState } from 'redux/root.reducer';
+import { RootState } from '../../redux/root.reducer';
 
 interface BoardStage {
 	projectId: string;
@@ -36,49 +36,58 @@ const BoardStage: React.FC<BoardStage> = ({ projectId, stageId, stageName, tasks
 	});
 
 	return (
-		<Card className={classes.container}>
-			<Grid container>
-				<Typography variant='subtitle1' className={classes.stageTitle}>
-					{stageName}
-				</Typography>
-				<Droppable droppableId={stageId}>
-					{(provided) => (
-						<CardContent ref={provided.innerRef} style={getListStyle()} key={stageId}>
-							{tasks.map((item: Task, index: number) => (
-								<BoardCard
-									taskName={item.title}
-									taskId={item._id}
-									taskDescription={item.description}
-									cardIndex={index}
-									key={index}
-									assignedUser={projectMembers?.find((user) => user?._id === item.user)}
-								/>
-							))}
-							{provided.placeholder}
-						</CardContent>
-					)}
-				</Droppable>
-				<Button
-					disableElevation
-					className={classes.addTaskButton}
-					variant='contained'
-					fullWidth
-					size='small'
-					startIcon={<AddIcon />}
-					onClick={() =>
-						dispatch(
-							openModal(ModalNames.CREATE_TASK_DIALOG, {
-								children: null,
-								open: true,
-								extra: { initialProjectId: projectId, initialStatus: stageName },
-							})
-						)
-					}
+		<Draggable draggableId={stageId} index={+stageId}>
+			{(provided) => (
+				<Card
+					ref={provided.innerRef}
+					className={classes.container}
+					{...provided.dragHandleProps}
+					{...provided.draggableProps}
 				>
-					Add Task
-				</Button>
-			</Grid>
-		</Card>
+					<Grid container>
+						<Typography variant='subtitle1' className={classes.stageTitle}>
+							{stageName}
+						</Typography>
+						<Droppable droppableId={stageId} type='CARD'>
+							{(provided) => (
+								<CardContent ref={provided.innerRef} style={getListStyle()} key={stageId}>
+									{tasks.map((item: Task, index: number) => (
+										<BoardCard
+											taskName={item.title}
+											taskId={item._id}
+											taskDescription={item.description}
+											cardIndex={index}
+											key={item._id}
+											assignedUser={projectMembers?.find((user) => user?._id === item.user)}
+										/>
+									))}
+									{provided.placeholder}
+								</CardContent>
+							)}
+						</Droppable>
+						<Button
+							disableElevation
+							className={classes.addTaskButton}
+							variant='contained'
+							fullWidth
+							size='small'
+							startIcon={<AddIcon />}
+							onClick={() =>
+								dispatch(
+									openModal(ModalNames.CREATE_TASK_DIALOG, {
+										children: null,
+										open: true,
+										extra: { initialProjectId: projectId, initialStatus: stageName },
+									})
+								)
+							}
+						>
+							Add Task
+						</Button>
+					</Grid>
+				</Card>
+			)}
+		</Draggable>
 	);
 };
 

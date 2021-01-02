@@ -5,6 +5,7 @@ export default makeStyles({
 	container: {
 		width: 270,
 		overflowY: 'auto',
+		marginRight: theme.spacing(2),
 	},
 	stageTitle: {
 		padding: theme.spacing(2),
