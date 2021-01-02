@@ -3,7 +3,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { Button, Grid } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 
@@ -11,6 +11,8 @@ import useStyles from './ProjectBoard.mui';
 import { moveTask, reorderTasks } from '../../redux/tasks/tasks.actions';
 import { RootState } from '../../redux/root.reducer';
 import BoardStage from '../../components/BoardStage/BoardStage.component';
+import { editProject } from '../../redux/project/project.actions';
+import { Project } from '../../redux/project/project.types';
 
 const ProjectBoard: React.FC = () => {
 	const classes = useStyles();
@@ -23,9 +25,11 @@ const ProjectBoard: React.FC = () => {
 		state.tasks.filter((task) => task.project === projectId)
 	);
 
-	const stageNames = useSelector((state: RootState) =>
-		state.projects.filter((project) => project._id === projectId)
-	)[0].board;
+	const project = useSelector((state: RootState) =>
+		state.projects.find((project) => project._id === projectId)
+	);
+
+	const stageNames = project!.board;
 
 	const dispatch = useDispatch();
 
@@ -46,58 +50,75 @@ const ProjectBoard: React.FC = () => {
 			return;
 		}
 
-		const movedTask = tasks.filter(
-			({ status, order }) => status === stageNames[+source.droppableId] && order === source.index
-		)[0];
+		if (result.type === 'CARD') {
+			const movedTask = tasks.filter(
+				({ status, order }) => status === stageNames[+source.droppableId] && order === source.index
+			)[0];
 
-		if (source.droppableId === destination.droppableId) {
-			dispatch(
-				reorderTasks({
-					task: { ...movedTask, order: destination.index },
-					oldOrder: source.index,
-				})
-			);
+			if (source.droppableId === destination.droppableId) {
+				dispatch(
+					reorderTasks({
+						task: { ...movedTask, order: destination.index },
+						oldOrder: source.index,
+					})
+				);
+			} else {
+				dispatch(
+					moveTask({
+						taskId: movedTask._id,
+						projectId,
+						newIndex: destination.index,
+						oldIndex: source.index,
+						newStatus: stageNames[+destination.droppableId],
+						oldStatus: stageNames[+source.droppableId],
+					})
+				);
+			}
 		} else {
-			dispatch(
-				moveTask({
-					taskId: movedTask._id,
-					projectId,
-					newIndex: destination.index,
-					oldIndex: source.index,
-					newStatus: stageNames[+destination.droppableId],
-					oldStatus: stageNames[+source.droppableId],
-				})
-			);
+			const temp = stageNames[source.index];
+
+			// Removes the element from the array
+			stageNames.splice(source.index, 1);
+
+			// Adds the element back to the array at the new index
+			stageNames.splice(destination.index, 0, temp);
+
+			dispatch(editProject({ ...project, board: stageNames } as Project));
 		}
 	};
 
 	return (
-		<Grid container className={classes.container} spacing={2}>
-			<DragDropContext onDragEnd={onDragEnd}>
-				{Object.entries(stages).map(([droppableId, { name, items }]) => {
-					return (
-						<Grid item key={droppableId}>
-							<BoardStage
-								projectId={projectId}
-								stageId={droppableId}
-								stageName={name}
-								tasks={items}
-							/>
+		<DragDropContext onDragEnd={onDragEnd}>
+			<Droppable droppableId='board' type='STAGES' direction='horizontal'>
+				{(provided) => (
+					<Grid ref={provided.innerRef} container className={classes.container}>
+						{Object.entries(stages).map(([droppableId, { name, items }]) => {
+							return (
+								<Grid item key={droppableId}>
+									<BoardStage
+										projectId={projectId}
+										stageId={droppableId}
+										stageName={name}
+										tasks={items}
+									/>
+								</Grid>
+							);
+						})}
+						{provided.placeholder}
+						<Grid item>
+							<Button
+								disableElevation
+								variant='contained'
+								className={classes.addStageButton}
+								startIcon={<AddIcon />}
+							>
+								Add Stage
+							</Button>
 						</Grid>
-					);
-				})}
-				<Grid item>
-					<Button
-						disableElevation
-						variant='contained'
-						className={classes.addStageButton}
-						startIcon={<AddIcon />}
-					>
-						Add Stage
-					</Button>
-				</Grid>
-			</DragDropContext>
-		</Grid>
+					</Grid>
+				)}
+			</Droppable>
+		</DragDropContext>
 	);
 };
 

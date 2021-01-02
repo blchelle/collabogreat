@@ -12,6 +12,7 @@ export interface Project {
 export const SET_ALL_PROJECTS = 'SET_ALL_PROJECTS';
 export const CREATE_PROJECT_START = 'CREATE_PROJECT_START';
 export const CREATE_PROJECT_SUCCESS = 'CREATE_PROJECT_SUCCESS';
+export const EDIT_PROJECT = 'EDIT_PROJECT';
 
 interface CreateProjectStartAction {
 	type: typeof CREATE_PROJECT_START;
@@ -28,7 +29,13 @@ interface SetAllProjectsAction {
 	payload: Project[];
 }
 
+interface EditProjectAction {
+	type: typeof EDIT_PROJECT;
+	payload: Project;
+}
+
 export type ProjectActionTypes =
 	| CreateProjectStartAction
 	| CreateProjectSuccessAction
-	| SetAllProjectsAction;
+	| SetAllProjectsAction
+	| EditProjectAction;
