@@ -108,7 +108,12 @@ const ProjectBoard: React.FC = () => {
 			<DragDropContext onDragEnd={onDragEnd}>
 				<Droppable droppableId='board' type='STAGES' direction='horizontal'>
 					{(provided) => (
-						<Grid ref={provided.innerRef} container wrap='nowrap' style={{ overflowX: 'auto' }}>
+						<Grid
+							ref={provided.innerRef}
+							container
+							wrap='nowrap'
+							style={{ overflowX: 'auto', paddingBottom: theme.spacing(1) }}
+						>
 							{Object.entries(stages).map(([droppableId, { name, items }]) => {
 								return (
 									<Grid item key={droppableId}>
