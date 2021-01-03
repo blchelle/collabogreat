@@ -4,6 +4,7 @@ import mongoose, { Document, Schema } from 'mongoose';
  * The structure of a Task Document
  */
 export interface ITask extends Document {
+	_id: string;
 	title: string;
 	description: string;
 	user: string;
