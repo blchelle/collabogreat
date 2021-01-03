@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
-import { Button, Grid } from '@material-ui/core';
+import { Breadcrumbs, Button, Grid, Link } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 
 import useStyles from './ProjectBoard.mui';
@@ -14,6 +14,7 @@ import AddStageForm from '../../components/AddStageForm/AddStageForm.component';
 import BoardStage from '../../components/BoardStage/BoardStage.component';
 import { editProject } from '../../redux/project/project.actions';
 import { Project } from '../../redux/project/project.types';
+import theme from '../../theme';
 
 const ProjectBoard: React.FC = () => {
 	const classes = useStyles();
@@ -92,42 +93,55 @@ const ProjectBoard: React.FC = () => {
 	};
 
 	return (
-		<DragDropContext onDragEnd={onDragEnd}>
-			<Droppable droppableId='board' type='STAGES' direction='horizontal'>
-				{(provided) => (
-					<Grid ref={provided.innerRef} container className={classes.container} wrap='nowrap'>
-						{Object.entries(stages).map(([droppableId, { name, items }]) => {
-							return (
-								<Grid item key={droppableId}>
-									<BoardStage
-										project={project}
-										stageId={droppableId}
-										stageName={name}
-										tasks={items}
-									/>
-								</Grid>
-							);
-						})}
-						{provided.placeholder}
-						<Grid item>
-							{showAddStageForm ? (
-								<AddStageForm closeClickHandler={setShowAddStageForm} project={project} />
-							) : (
-								<Button
-									disableElevation
-									variant='contained'
-									className={classes.addStageButton}
-									startIcon={<AddIcon />}
-									onClick={() => setShowAddStageForm(true)}
-								>
-									Add Stage
-								</Button>
-							)}
+		<>
+			<Breadcrumbs aria-label='breadcrumb' style={{ marginBottom: theme.spacing(2) }}>
+				<Link color='inherit' href='/dashboard'>
+					Dashboard
+				</Link>
+				<Link color='inherit' href='/dashboard'>
+					{project.title}
+				</Link>
+				<Link color='textPrimary' href={`/${project._id}/board`} aria-current='page'>
+					Board
+				</Link>
+			</Breadcrumbs>
+			<DragDropContext onDragEnd={onDragEnd}>
+				<Droppable droppableId='board' type='STAGES' direction='horizontal'>
+					{(provided) => (
+						<Grid ref={provided.innerRef} container wrap='nowrap' style={{ overflowX: 'auto' }}>
+							{Object.entries(stages).map(([droppableId, { name, items }]) => {
+								return (
+									<Grid item key={droppableId}>
+										<BoardStage
+											project={project}
+											stageId={droppableId}
+											stageName={name}
+											tasks={items}
+										/>
+									</Grid>
+								);
+							})}
+							{provided.placeholder}
+							<Grid item>
+								{showAddStageForm ? (
+									<AddStageForm closeClickHandler={setShowAddStageForm} project={project} />
+								) : (
+									<Button
+										disableElevation
+										variant='contained'
+										className={classes.addStageButton}
+										startIcon={<AddIcon />}
+										onClick={() => setShowAddStageForm(true)}
+									>
+										Add Stage
+									</Button>
+								)}
+							</Grid>
 						</Grid>
-					</Grid>
-				)}
-			</Droppable>
-		</DragDropContext>
+					)}
+				</Droppable>
+			</DragDropContext>
+		</>
 	);
 };
 

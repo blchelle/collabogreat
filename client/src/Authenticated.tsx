@@ -1,6 +1,7 @@
 import React, { Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
+import { Grid } from '@material-ui/core';
 
 import Routes from './routes';
 import CGAppBar from './components/CGAppBar/CGAppBar.component';
@@ -10,6 +11,7 @@ import Error from './components/Error/Error.component';
 import Loading from './pages/Loading/Loading.page';
 import { fetchTasksStart } from './redux/tasks/tasks.actions';
 import { RootState } from './redux/root.reducer';
+import theme from './theme';
 
 const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard.page'));
 const NotFound = React.lazy(() => import('./pages/NotFound/NotFound.page'));
@@ -35,15 +37,23 @@ const Authenticated = () => {
 			{Routes.some((regex) => regex.test(pathname)) ? (
 				<>
 					<CGAppBar />
-					<Switch>
-						<Route exact path='/'>
-							<Redirect to='/dashboard' />
-						</Route>
-						<Route exact path='/dashboard' component={Dashboard} />
-						<Route exact path='/loading' component={Loading} />
-						{/* <Route path='/projects/:id' component={ProjectHub} /> */}
-						<Route exact path='/projects/:id/board' component={ProjectBoard} />
-					</Switch>
+					<Grid
+						container
+						direction='column'
+						style={{
+							padding: theme.spacing(1),
+						}}
+					>
+						<Switch>
+							<Route exact path='/'>
+								<Redirect to='/dashboard' />
+							</Route>
+							<Route exact path='/dashboard' component={Dashboard} />
+							<Route exact path='/loading' component={Loading} />
+							{/* <Route path='/projects/:id' component={ProjectHub} /> */}
+							<Route exact path='/projects/:id/board' component={ProjectBoard} />
+						</Switch>
+					</Grid>
 				</>
 			) : (
 				<NotFound />
