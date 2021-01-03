@@ -8,6 +8,8 @@ import { FETCH_CURRENT_USER, LOGOUT_START } from './user.types';
 
 function* getUserInformation() {
 	try {
+		axios.defaults.baseURL = 'http://localhost:8000';
+
 		// Attempts to fetch an authenticated users information
 		const res = yield axios('api/v0/user/me', {
 			method: 'GET',
