@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
+import mongoose from 'mongoose';
 import StatusCode from 'status-code-enum';
 
 import Controller from './base.controller';
 import APIError from '../errors/api.error';
-import Task from '../models/task.model';
+import Task, { ITask } from '../models/task.model';
 import { IUser } from '../models/user.model';
 import catchAsync from '../utils/catchAsync.util';
 
@@ -25,7 +26,7 @@ class TaskController extends Controller {
 		this.router.use(this.protectRoute());
 		// All routes below this are protected
 
-		this.router.route('/').post(this.createTask());
+		this.router.route('/').post(this.createTask()).patch(this.patchTasks());
 		this.router.route('/me').get(this.getTasksForMe());
 		this.router.route('/project/:id').get(this.getTasksForProject());
 		this.router.route('/user/:id').get(this.getTasksForUser());
@@ -59,6 +60,40 @@ class TaskController extends Controller {
 				success: true,
 				task,
 			});
+		});
+	}
+
+	protected patchTasks() {
+		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+			const reqTasks = req.body.tasks as ITask[];
+
+			// Throws if the request didn't have a tasks attribute in the body
+			if (!reqTasks) {
+				next(
+					new APIError(
+						StatusCode.ClientErrorBadRequest,
+						"No field 'tasks' was given in the body of the request",
+						"Make sure the body of your request has a 'tasks' field"
+					)
+				);
+			}
+
+			// Uses a transaction to ensure that all patches are successful
+			const session = await mongoose.startSession();
+			session.startTransaction();
+
+			const resTasks = await Promise.all(
+				reqTasks.map(async (task) => {
+					await this.model.findByIdAndUpdate(task._id, task);
+					return task;
+				})
+			);
+
+			// Commits the transaction and ends the session
+			await session.commitTransaction();
+			session.endSession();
+
+			res.status(StatusCode.SuccessOK).json({ tasks: resTasks });
 		});
 	}
 
