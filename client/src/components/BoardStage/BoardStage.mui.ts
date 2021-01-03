@@ -7,9 +7,11 @@ export default makeStyles({
 		overflowY: 'auto',
 		marginRight: theme.spacing(2),
 	},
-	stageTitle: {
+	stageHeader: {
 		padding: theme.spacing(2),
 		paddingBottom: 0,
+	},
+	stageTitle: {
 		fontWeight: 'bold',
 	},
 	addTaskButton: {

@@ -8,7 +8,7 @@ export default makeStyles({
 		},
 		transition: 'opacity 0.1s',
 
-		'&:hover .makeStyles-iconButton-25': {
+		'&:hover button': {
 			opacity: 1,
 		},
 	},

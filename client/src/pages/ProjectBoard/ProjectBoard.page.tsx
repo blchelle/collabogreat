@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
@@ -10,12 +10,16 @@ import { Add as AddIcon } from '@material-ui/icons';
 import useStyles from './ProjectBoard.mui';
 import { moveTask, reorderTasks } from '../../redux/tasks/tasks.actions';
 import { RootState } from '../../redux/root.reducer';
+import AddStageForm from '../../components/AddStageForm/AddStageForm.component';
 import BoardStage from '../../components/BoardStage/BoardStage.component';
 import { editProject } from '../../redux/project/project.actions';
 import { Project } from '../../redux/project/project.types';
 
 const ProjectBoard: React.FC = () => {
 	const classes = useStyles();
+
+	// ProjectBoard State
+	const [showAddStageForm, setShowAddStageForm] = useState(false);
 
 	// Gets the project Id from the route
 	const projectId = useParams<{ id: string }>().id;
@@ -25,8 +29,8 @@ const ProjectBoard: React.FC = () => {
 		state.tasks.filter((task) => task.project === projectId)
 	);
 
-	const project = useSelector((state: RootState) =>
-		state.projects.find((project) => project._id === projectId)
+	const project = useSelector(
+		(state: RootState) => state.projects.find((project) => project._id === projectId)!
 	);
 
 	const stageNames = project!.board;
@@ -91,12 +95,12 @@ const ProjectBoard: React.FC = () => {
 		<DragDropContext onDragEnd={onDragEnd}>
 			<Droppable droppableId='board' type='STAGES' direction='horizontal'>
 				{(provided) => (
-					<Grid ref={provided.innerRef} container className={classes.container}>
+					<Grid ref={provided.innerRef} container className={classes.container} wrap='nowrap'>
 						{Object.entries(stages).map(([droppableId, { name, items }]) => {
 							return (
 								<Grid item key={droppableId}>
 									<BoardStage
-										projectId={projectId}
+										project={project}
 										stageId={droppableId}
 										stageName={name}
 										tasks={items}
@@ -106,14 +110,19 @@ const ProjectBoard: React.FC = () => {
 						})}
 						{provided.placeholder}
 						<Grid item>
-							<Button
-								disableElevation
-								variant='contained'
-								className={classes.addStageButton}
-								startIcon={<AddIcon />}
-							>
-								Add Stage
-							</Button>
+							{showAddStageForm ? (
+								<AddStageForm closeClickHandler={setShowAddStageForm} project={project} />
+							) : (
+								<Button
+									disableElevation
+									variant='contained'
+									className={classes.addStageButton}
+									startIcon={<AddIcon />}
+									onClick={() => setShowAddStageForm(true)}
+								>
+									Add Stage
+								</Button>
+							)}
 						</Grid>
 					</Grid>
 				)}
