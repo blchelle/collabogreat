@@ -8,10 +8,11 @@ import { Breadcrumbs, Button, Grid, Link } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 
 import useStyles from './ProjectBoard.mui';
-import { moveTask, reorderTasks } from '../../redux/tasks/tasks.actions';
-import { RootState } from '../../redux/root.reducer';
 import AddStageForm from '../../components/AddStageForm/AddStageForm.component';
 import BoardStage from '../../components/BoardStage/BoardStage.component';
+import { RootState } from '../../redux/root.reducer';
+import { editTasksStart } from '../../redux/tasks/tasks.actions';
+import { reorderTasks, moveTasks } from '../../redux/tasks/tasks.util';
 import { editProject } from '../../redux/project/project.actions';
 import { Project } from '../../redux/project/project.types';
 import theme from '../../theme';
@@ -61,22 +62,21 @@ const ProjectBoard: React.FC = () => {
 			)[0];
 
 			if (source.droppableId === destination.droppableId) {
-				dispatch(
-					reorderTasks({
-						task: { ...movedTask, order: destination.index },
-						oldOrder: source.index,
-					})
-				);
+				movedTask.order = destination.index;
+				dispatch(editTasksStart(reorderTasks(tasks, movedTask, source.index)));
 			} else {
 				dispatch(
-					moveTask({
-						taskId: movedTask._id,
-						projectId,
-						newIndex: destination.index,
-						oldIndex: source.index,
-						newStatus: stageNames[+destination.droppableId],
-						oldStatus: stageNames[+source.droppableId],
-					})
+					editTasksStart(
+						moveTasks(
+							tasks,
+							movedTask._id,
+							projectId,
+							source.index,
+							stageNames[+source.droppableId],
+							destination.index,
+							stageNames[+destination.droppableId]
+						)
+					)
 				);
 			}
 		} else {

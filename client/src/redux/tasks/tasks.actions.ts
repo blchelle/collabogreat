@@ -1,32 +1,25 @@
 import {
 	Task,
 	TaskActionTypes,
-	REORDER_TASKS,
-	MOVE_TASK,
 	CREATE_TASK_START,
 	CREATE_TASK_SUCCESS,
 	FETCH_TASKS_START,
 	FETCH_TASKS_SUCCESS,
+	EDIT_TASKS_START,
+	EDIT_TASKS_SUCCESS,
 } from './tasks.types';
 
-export function reorderTasks(reorderInfo: { task: Task; oldOrder: number }): TaskActionTypes {
+export function editTasksStart(tasks: Task[]): TaskActionTypes {
 	return {
-		type: REORDER_TASKS,
-		payload: reorderInfo,
+		type: EDIT_TASKS_START,
+		payload: tasks,
 	};
 }
 
-export function moveTask(moveInfo: {
-	taskId: string;
-	projectId: string;
-	oldIndex: number;
-	oldStatus: string;
-	newIndex: number;
-	newStatus: string;
-}): TaskActionTypes {
+export function editTasksSuccess(tasks: Task[]): TaskActionTypes {
 	return {
-		type: MOVE_TASK,
-		payload: moveInfo,
+		type: EDIT_TASKS_SUCCESS,
+		payload: tasks,
 	};
 }
 
