@@ -55,3 +55,13 @@ export const moveTasks = (
 		return task;
 	});
 };
+
+export const updateTasks = (tasks: Task[], updatedTasks: Task[]) => {
+	const updatedTaskObject: { [key: string]: Task } = {};
+
+	updatedTasks.forEach((task) => {
+		updatedTaskObject[task._id] = task;
+	});
+
+	return tasks.map((task) => updatedTaskObject[task._id] ?? task);
+};

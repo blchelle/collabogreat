@@ -8,31 +8,23 @@ export interface Task {
 	project: string;
 }
 
-export const REORDER_TASKS = 'REORDER_TASKS';
-export const MOVE_TASK = 'MOVE_TASK';
+// export const REORDER_TASKS = 'REORDER_TASKS';
+// export const MOVE_TASK = 'MOVE_TASK';
+export const EDIT_TASKS_START = 'EDIT_TASKS_START';
+export const EDIT_TASKS_SUCCESS = 'EDIT_TASKS_SUCCESS';
 export const CREATE_TASK_START = 'CREATE_TASK_START';
 export const CREATE_TASK_SUCCESS = 'CREATE_TASK_SUCCESS';
 export const FETCH_TASKS_START = 'FETCH_TASKS_START';
 export const FETCH_TASKS_SUCCESS = 'FETCH_TASKS_SUCCESS';
 
-interface ReorderTasksAction {
-	type: typeof REORDER_TASKS;
-	payload: {
-		task: Task;
-		oldOrder: number;
-	};
+interface EditTasksStartAction {
+	type: typeof EDIT_TASKS_START;
+	payload: Task[];
 }
 
-interface MoveTaskAction {
-	type: typeof MOVE_TASK;
-	payload: {
-		taskId: string;
-		projectId: string;
-		oldIndex: number;
-		oldStatus: string;
-		newIndex: number;
-		newStatus: string;
-	};
+interface EditTasksSuccessAction {
+	type: typeof EDIT_TASKS_SUCCESS;
+	payload: Task[];
 }
 
 interface CreateTaskStartAction {
@@ -56,8 +48,8 @@ interface FetchTasksSuccessAction {
 }
 
 export type TaskActionTypes =
-	| ReorderTasksAction
-	| MoveTaskAction
+	| EditTasksStartAction
+	| EditTasksSuccessAction
 	| CreateTaskStartAction
 	| CreateTaskSuccessAction
 	| FetchTasksStartAction

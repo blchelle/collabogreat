@@ -29,7 +29,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 						/>
 					</Grid>
 					<Grid item xs={12}>
-						<Typography variant='body2'>{project.description}</Typography>
+						<Typography variant='body1'>{project.description}</Typography>
 					</Grid>
 					<Grid item>
 						<Button color='primary'>Go To project</Button>
