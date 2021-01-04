@@ -12,7 +12,8 @@ export interface Project {
 export const SET_ALL_PROJECTS = 'SET_ALL_PROJECTS';
 export const CREATE_PROJECT_START = 'CREATE_PROJECT_START';
 export const CREATE_PROJECT_SUCCESS = 'CREATE_PROJECT_SUCCESS';
-export const EDIT_PROJECT = 'EDIT_PROJECT';
+export const EDIT_PROJECT_START = 'EDIT_PROJECT_START';
+export const EDIT_PROJECT_SUCCESS = 'EDIT_PROJECT_SUCCESS';
 
 interface CreateProjectStartAction {
 	type: typeof CREATE_PROJECT_START;
@@ -29,8 +30,13 @@ interface SetAllProjectsAction {
 	payload: Project[];
 }
 
-interface EditProjectAction {
-	type: typeof EDIT_PROJECT;
+interface EditProjectStartAction {
+	type: typeof EDIT_PROJECT_START;
+	payload: Project;
+}
+
+interface EditProjectSuccessAction {
+	type: typeof EDIT_PROJECT_SUCCESS;
 	payload: Project;
 }
 
@@ -38,4 +44,5 @@ export type ProjectActionTypes =
 	| CreateProjectStartAction
 	| CreateProjectSuccessAction
 	| SetAllProjectsAction
-	| EditProjectAction;
+	| EditProjectStartAction
+	| EditProjectSuccessAction;

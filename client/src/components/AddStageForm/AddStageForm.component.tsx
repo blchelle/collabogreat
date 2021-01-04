@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Button, Card, Grid, IconButton, TextField } from '@material-ui/core';
 import { Clear as ClearIcon } from '@material-ui/icons';
 
-import { editProject } from '../../redux/project/project.actions';
+import { editProjectStart } from '../../redux/project/project.actions';
 import { Project } from '../../redux/project/project.types';
 import useStyles from './AddStageForm.mui';
 
@@ -45,7 +45,7 @@ const AddStageForm: React.FC<AddStageFormProps> = ({ closeClickHandler, project 
 						onClick={() => {
 							closeClickHandler(false);
 							dispatch(
-								editProject({
+								editProjectStart({
 									...project,
 									board: [...project.board, newStageName],
 								} as Project)

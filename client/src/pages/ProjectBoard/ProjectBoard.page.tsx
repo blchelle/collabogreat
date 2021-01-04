@@ -13,7 +13,7 @@ import BoardStage from '../../components/BoardStage/BoardStage.component';
 import { RootState } from '../../redux/root.reducer';
 import { editTasksStart } from '../../redux/tasks/tasks.actions';
 import { reorderTasks, moveTasks } from '../../redux/tasks/tasks.util';
-import { editProject } from '../../redux/project/project.actions';
+import { editProjectStart } from '../../redux/project/project.actions';
 import { Project } from '../../redux/project/project.types';
 import theme from '../../theme';
 
@@ -88,7 +88,7 @@ const ProjectBoard: React.FC = () => {
 			// Adds the element back to the array at the new index
 			stageNames.splice(destination.index, 0, temp);
 
-			dispatch(editProject({ ...project, board: stageNames } as Project));
+			dispatch(editProjectStart({ ...project, board: stageNames } as Project));
 		}
 	};
 

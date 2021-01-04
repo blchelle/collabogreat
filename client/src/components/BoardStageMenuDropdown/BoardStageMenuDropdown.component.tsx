@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openModal } from '../../redux/modals/modals.actions';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 import { RootState } from '../../redux/root.reducer';
-import { editProject } from '../../redux/project/project.actions';
+import { editProjectStart } from '../../redux/project/project.actions';
 import { Project } from '../../redux/project/project.types';
 import { openError } from '../../redux/error/error.actions';
 
@@ -42,7 +42,7 @@ const BoardStageMenuDropdown = () => {
 
 		const newStages = [...project!.board];
 		newStages.splice(stageIndex, 1);
-		dispatch(editProject({ ...project, board: newStages } as Project));
+		dispatch(editProjectStart({ ...project, board: newStages } as Project));
 	};
 
 	return (
