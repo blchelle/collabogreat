@@ -26,7 +26,7 @@ class ProjectController extends Controller {
 		this.router.use(this.protectRoute());
 		// All routes below this are protected
 
-		this.router.route('/').get(this.getAll()).post(this.createProject());
+		this.router.route('/').get(this.getAll()).post(this.createProject()).patch(this.patchOne());
 		this.router.route('/:id').get(this.getOneById()).delete(this.deleteOneById());
 	}
 

@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { Document, Model } from 'mongoose';
 import StatusCode from 'status-code-enum';
+import APIError from '../errors/api.error';
 
 import DocumentNotFoundError from '../errors/documentNotFound.error';
 import User from '../models/user.model';
@@ -77,6 +78,38 @@ abstract class Controller {
 				status: 'success',
 				[this.model.modelName]: doc,
 			});
+		});
+	}
+
+	protected patchOne() {
+		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+			const modelName = this.model.modelName.toLowerCase();
+
+			if (!req.body[modelName]) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorBadRequest,
+						`No field '${modelName}' was found in the body of the request`,
+						`Make sure the body of your request has a '${modelName}' field`
+					)
+				);
+			}
+
+			const reqBody = req.body[modelName];
+
+			if (!reqBody._id) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorBadRequest,
+						"The body of the incoming request had no '_id' field",
+						'Please pass the _id of the document you want to modify'
+					)
+				);
+			}
+
+			const doc = await this.model.findByIdAndUpdate(reqBody._id, reqBody, { new: true });
+
+			res.status(StatusCode.SuccessOK).json({ [modelName]: doc });
 		});
 	}
 
