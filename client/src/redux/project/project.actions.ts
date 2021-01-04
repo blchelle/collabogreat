@@ -4,7 +4,8 @@ import {
 	CREATE_PROJECT_START,
 	CREATE_PROJECT_SUCCESS,
 	SET_ALL_PROJECTS,
-	EDIT_PROJECT,
+	EDIT_PROJECT_START,
+	EDIT_PROJECT_SUCCESS,
 } from './project.types';
 
 export function createProjectStart(newProject: Project): ProjectActionTypes {
@@ -28,9 +29,16 @@ export function setAllProjects(projects: Project[]): ProjectActionTypes {
 	};
 }
 
-export function editProject(project: Project): ProjectActionTypes {
+export function editProjectStart(project: Project): ProjectActionTypes {
 	return {
-		type: EDIT_PROJECT,
+		type: EDIT_PROJECT_START,
+		payload: project,
+	};
+}
+
+export function editProjectSuccess(project: Project): ProjectActionTypes {
+	return {
+		type: EDIT_PROJECT_SUCCESS,
 		payload: project,
 	};
 }
