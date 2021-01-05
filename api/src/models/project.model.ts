@@ -55,6 +55,12 @@ const ProjectSchema = new Schema({
 				},
 				message: 'Boards must have at least one stage',
 			},
+			{
+				validator(arr: unknown[]) {
+					return arr.length === new Set(arr).size;
+				},
+				message: 'Boards cannot have stages with duplicate names',
+			},
 		],
 	},
 });

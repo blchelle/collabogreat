@@ -107,7 +107,10 @@ abstract class Controller {
 				);
 			}
 
-			const doc = await this.model.findByIdAndUpdate(reqBody._id, reqBody, { new: true });
+			const doc = await this.model.findByIdAndUpdate(reqBody._id, reqBody, {
+				new: true,
+				runValidators: true,
+			});
 
 			res.status(StatusCode.SuccessOK).json({ [modelName]: doc });
 		});
