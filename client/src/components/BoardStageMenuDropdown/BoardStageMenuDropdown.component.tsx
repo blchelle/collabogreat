@@ -14,13 +14,14 @@ interface ExtraProps {
 	stageName: string;
 	stageIndex: number;
 	numTasks: number;
+	numStages: number;
 }
 
 const BoardStageMenuDropdown = () => {
 	// Redux
 	const dropdownState = useSelector((state: RootState) => state.modals.BOARD_STAGE_MENU_DROPDOWN);
 	const extra = dropdownState.extra as ExtraProps;
-	const { projectId, stageName, stageIndex, numTasks } = extra;
+	const { projectId, stageName, stageIndex, numTasks, numStages } = extra;
 
 	const project = useSelector((state: RootState) =>
 		state.projects.find((p) => p._id === projectId)
@@ -35,6 +36,16 @@ const BoardStageMenuDropdown = () => {
 				openError(
 					'Unable to delete stage',
 					'The stage you are trying to delete currently has ongoing tasks, try moving these tasks or deleting them first'
+				)
+			);
+			return;
+		}
+
+		if (numStages === 1) {
+			dispatch(
+				openError(
+					'Unable to delete stage',
+					'This is the only remaining stage in the project, add another stage before deleting this one'
 				)
 			);
 			return;
@@ -60,7 +71,20 @@ const BoardStageMenuDropdown = () => {
 			>
 				<Typography>Add Task...</Typography>
 			</MenuItem>
-			<MenuItem>
+			<MenuItem
+				onClick={() =>
+					dispatch(
+						openModal(ModalNames.RENAME_STAGE_DIALOG, {
+							children: null,
+							open: true,
+							extra: {
+								project,
+								stageIndex,
+							},
+						})
+					)
+				}
+			>
 				<Typography>Rename Stage...</Typography>
 			</MenuItem>
 			<MenuItem onClick={deleteStage}>

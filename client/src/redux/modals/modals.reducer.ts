@@ -4,6 +4,7 @@ import { setModalOpen } from './modals.utils';
 export enum ModalNames {
 	CREATE_PROJECT_DIALOG = 'CREATE_PROJECT_DIALOG',
 	CREATE_TASK_DIALOG = 'CREATE_TASK_DIALOG',
+	RENAME_STAGE_DIALOG = 'RENAME_STAGE_DIALOG',
 	BOARD_STAGE_MENU_DROPDOWN = 'BOARD_STAGE_MENU_DROPDOWN',
 	CREATE_DROPDOWN = 'CREATE_DROPDOWN',
 	USER_DROPDOWN = 'USER_DROPDOWN',
@@ -23,6 +24,7 @@ const initialModalState: PopperPropsExtra = {
 const initialState: ModalState = {
 	CREATE_PROJECT_DIALOG: initialModalState,
 	CREATE_TASK_DIALOG: initialModalState,
+	RENAME_STAGE_DIALOG: initialModalState,
 	BOARD_STAGE_MENU_DROPDOWN: initialModalState,
 	CREATE_DROPDOWN: initialModalState,
 	USER_DROPDOWN: initialModalState,
