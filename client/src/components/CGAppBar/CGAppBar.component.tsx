@@ -8,6 +8,7 @@ import {
 	IconButton,
 	InputBase,
 	Link,
+	PopperProps,
 	Toolbar,
 	useMediaQuery,
 } from '@material-ui/core';
@@ -21,6 +22,7 @@ import Dropdown from '../Dropdown/Dropdown.component';
 import UserDropdown from '../UserDropdown/UserDropdown.component';
 import CreateDropdown from '../CreateDropdown/CreateDropdown.component';
 import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdown.component';
+import SearchDropdown from '../SearchDropdown/SearchDropdown.component';
 import { ReactComponent as LogoText } from '../../assets/logo-text.svg';
 import { ReactComponent as LogoIcon } from '../../assets/logo-icon.svg';
 import { openModal } from '../../redux/modals/modals.actions';
@@ -29,25 +31,61 @@ import { RootState } from '../../redux/root.reducer';
 import useStyles from './CGAppBar.mui';
 import theme from '../../theme';
 
+export interface SearchResult {
+	type: 'project' | 'task';
+	_id: string;
+	title: string;
+	image?: string;
+}
+
 const CGAppBar: React.FC = () => {
 	// MUI Classes
 	const classes = useStyles();
 
 	// Redux
 	const user = useSelector((state: RootState) => state.user);
+	const searchResults = useSelector((state: RootState) => [
+		...state.projects.map<SearchResult>((project) => {
+			return {
+				type: 'project',
+				_id: project._id!,
+				title: project.title,
+				image: project.image,
+			};
+		}),
+		...state.tasks.map<SearchResult>((task) => {
+			return {
+				type: 'task',
+				_id: task._id,
+				title: task.title,
+				image: undefined,
+			};
+		}),
+	]);
+
 	const dispatch = useDispatch();
 
 	// Handlers
-	const openDropdown = (dropdownName: ModalNames, children: ReactElement) => (
-		event: React.SyntheticEvent
-	) => {
+	const openDropdown = (
+		dropdownName: ModalNames,
+		children: ReactElement,
+		position: PopperProps['placement'] = 'bottom-end',
+		extra?: Object
+	) => (event: React.SyntheticEvent) => {
 		dispatch(
 			openModal(dropdownName, {
 				open: true,
-				placement: 'bottom-end',
+				placement: position,
 				anchorEl: event.currentTarget as HTMLElement,
 				children,
+				extra,
 			})
+		);
+	};
+
+	const search = (value: string) => {
+		return searchResults.filter((result) =>
+			result.title.toLowerCase().includes(value.toLowerCase())
 		);
 	};
 
@@ -74,6 +112,15 @@ const CGAppBar: React.FC = () => {
 								placeholder='Search for projects, teams, tasks'
 								inputProps={{ 'aria-label': 'search' }}
 								fullWidth
+								onChange={(event: React.SyntheticEvent) => {
+									const results = search((event.target as HTMLInputElement).value);
+									openDropdown(
+										ModalNames.SEARCH_DROPDOWN,
+										<SearchDropdown />,
+										'bottom-start',
+										results
+									)(event);
+								}}
 							/>
 						</Grid>
 
@@ -116,6 +163,7 @@ const CGAppBar: React.FC = () => {
 			<Dropdown modalName={ModalNames.CREATE_DROPDOWN} />
 			<Dropdown modalName={ModalNames.NOTIFICATIONS_DROPDOWN} />
 			<Dropdown modalName={ModalNames.USER_DROPDOWN} />
+			<Dropdown modalName={ModalNames.SEARCH_DROPDOWN} />
 		</>
 	);
 };
