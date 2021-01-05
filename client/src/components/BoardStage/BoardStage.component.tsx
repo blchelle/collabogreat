@@ -9,6 +9,7 @@ import { Add as AddIcon, MoreHoriz as MoreIcon } from '@material-ui/icons';
 import { Task } from '../../redux/tasks/tasks.types';
 import BoardCard from '../BoardCard/BoardCard.component';
 import BoardStageMenuDropdown from '../BoardStageMenuDropdown/BoardStageMenuDropdown.component';
+import RenameStageDialog from '../RenameStageDialog/RenameStageDialog.component';
 import Dropdown from '../Dropdown/Dropdown.component';
 import useStyles from './BoardStage.mui';
 import { ModalNames } from '../../redux/modals/modals.reducer';
@@ -53,6 +54,7 @@ const BoardStage: React.FC<BoardStage> = ({ stageId, stageName, project, tasks }
 					stageName,
 					stageIndex: +stageId,
 					numTasks: tasks.length,
+					numStages: project.board.length,
 				},
 			})
 		);
@@ -128,6 +130,7 @@ const BoardStage: React.FC<BoardStage> = ({ stageId, stageName, project, tasks }
 				)}
 			</Draggable>
 			<Dropdown modalName={ModalNames.BOARD_STAGE_MENU_DROPDOWN} />
+			<RenameStageDialog />
 		</>
 	);
 };
