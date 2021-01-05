@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { Breadcrumbs, Container, Link } from '@material-ui/core';
+import { Breadcrumbs, Container, Grid, Link } from '@material-ui/core';
 import ProjectsContainer from '../../components/ProjectsContainer/ProjectsContainer.component';
+import TasksContainer from '../../components/TasksContainer/TasksContainer.component';
 import theme from '../../theme';
 
 const Dashboard: React.FC = () => {
@@ -13,7 +14,14 @@ const Dashboard: React.FC = () => {
 				</Link>
 			</Breadcrumbs>
 			<Container maxWidth='xl'>
-				<ProjectsContainer />
+				<Grid container direction='column' spacing={10}>
+					<Grid item>
+						<ProjectsContainer />
+					</Grid>
+					<Grid item>
+						<TasksContainer />
+					</Grid>
+				</Grid>
 			</Container>
 		</>
 	);

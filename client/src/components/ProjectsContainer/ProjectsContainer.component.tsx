@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-
 import { Grid, Typography } from '@material-ui/core';
+
 import ProjectCard from '../ProjectCard/ProjectCard.component';
 import { RootState } from '../../redux/root.reducer';
 
