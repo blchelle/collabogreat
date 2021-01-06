@@ -7,21 +7,9 @@ import {
 	FETCH_TASKS_SUCCESS,
 	EDIT_TASKS_START,
 	EDIT_TASKS_SUCCESS,
+	DELETE_TASK_START,
+	DELETE_TASK_SUCCESS,
 } from './tasks.types';
-
-export function editTasksStart(tasks: Task[]): TaskActionTypes {
-	return {
-		type: EDIT_TASKS_START,
-		payload: tasks,
-	};
-}
-
-export function editTasksSuccess(tasks: Task[]): TaskActionTypes {
-	return {
-		type: EDIT_TASKS_SUCCESS,
-		payload: tasks,
-	};
-}
 
 export function createTaskStart(newTask: Task): TaskActionTypes {
 	return {
@@ -48,5 +36,33 @@ export function fetchTasksSuccess(tasks: Task[]): TaskActionTypes {
 	return {
 		type: FETCH_TASKS_SUCCESS,
 		payload: tasks,
+	};
+}
+
+export function editTasksStart(tasks: Task[]): TaskActionTypes {
+	return {
+		type: EDIT_TASKS_START,
+		payload: tasks,
+	};
+}
+
+export function editTasksSuccess(tasks: Task[]): TaskActionTypes {
+	return {
+		type: EDIT_TASKS_SUCCESS,
+		payload: tasks,
+	};
+}
+
+export function deleteTaskStart(task: Task): TaskActionTypes {
+	return {
+		type: DELETE_TASK_START,
+		payload: task,
+	};
+}
+
+export function deleteTaskSuccess(taskId: string): TaskActionTypes {
+	return {
+		type: DELETE_TASK_SUCCESS,
+		payload: taskId,
 	};
 }
