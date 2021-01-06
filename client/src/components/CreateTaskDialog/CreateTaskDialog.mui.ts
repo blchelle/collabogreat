@@ -16,4 +16,22 @@ export default makeStyles({
 		width: '75%',
 		height: 'auto',
 	},
+	colorButton: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 4,
+	},
+	color: {
+		width: theme.spacing(5),
+		height: theme.spacing(4),
+		transition: 'filter 0.1s',
+
+		'&:hover': {
+			filter: 'brightness(85%)',
+		},
+	},
+	selectedColor: {
+		border: '3px solid #333',
+		padding: theme.spacing(1),
+	},
 });

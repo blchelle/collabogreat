@@ -33,6 +33,7 @@ function* attemptCreateTask({ payload }: TaskActionTypes) {
 			title: taskPayload.title,
 			user: taskPayload.user,
 			description: taskPayload.description,
+			color: taskPayload.color,
 		};
 
 		// Attempts to create a new project with the information provided

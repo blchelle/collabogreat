@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 	Avatar,
 	Button,
+	Card,
 	CircularProgress,
 	Dialog,
 	DialogContent,
@@ -22,7 +23,7 @@ import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
 import { closeModal } from '../../redux/modals/modals.actions';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 import { RootState } from '../../redux/root.reducer';
-import { Task } from '../../redux/tasks/tasks.types';
+import { Task, TaskColor } from '../../redux/tasks/tasks.types';
 import useStyles from './CreateTaskDialog.mui';
 import theme from '../../theme';
 import { createTaskStart } from '../../redux/tasks/tasks.actions';
@@ -57,6 +58,7 @@ const CreateTaskDialog: React.FC = () => {
 	const [title, setTitle] = useState<FormInputState>(initialInputState);
 	const [assignee, setAssignee] = useState<FormInputState>(initialInputState);
 	const [description, setDescription] = useState<FormInputState>(initialInputState);
+	const [color, setColor] = useState<FormInputState>({ visited: false, value: TaskColor.GREY });
 	const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
 	// Clears the inputs when the dialog opens/closes
@@ -66,6 +68,7 @@ const CreateTaskDialog: React.FC = () => {
 		setTitle({ visited: false, value: '' });
 		setAssignee({ visited: false, value: '' });
 		setDescription({ visited: false, value: '' });
+		setColor({ visited: false, value: TaskColor.GREY });
 	}, [open, initialStatus, initialProjectId]);
 
 	// Form Handlers
@@ -100,6 +103,7 @@ const CreateTaskDialog: React.FC = () => {
 			title: title.value,
 			user: assignee.value,
 			description: description.value,
+			color: color.value as TaskColor,
 		};
 
 		setIsWaiting(true);
@@ -259,6 +263,32 @@ const CreateTaskDialog: React.FC = () => {
 										</Select>
 										<FormHelperText>Set the initial status of the task</FormHelperText>
 									</FormControl>
+								</Grid>
+								<Grid item>
+									<Card>
+										<Grid container>
+											<Grid item xs={2}>
+												<div
+													style={{ backgroundColor: color.value, width: '100%', height: '100%' }}
+												/>
+											</Grid>
+											<Grid item xs={10} container alignContent='center'>
+												{Object.values(TaskColor).map((c) => (
+													<Grid item xs={2} container className={classes.colorButton}>
+														<Card
+															elevation={0}
+															style={{ backgroundColor: c }}
+															className={`${classes.color} ${
+																color.value === c ? classes.selectedColor : ''
+															}`}
+															onClick={() => setColor({ visited: true, value: c })}
+														/>
+													</Grid>
+												))}
+											</Grid>
+										</Grid>
+									</Card>
+									<FormHelperText>Give your task a color so you can find it easily</FormHelperText>
 								</Grid>
 								<Grid item>
 									<TextField

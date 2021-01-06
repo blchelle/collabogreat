@@ -51,7 +51,7 @@ const BoardCard: React.FC<BoardCardProps> = ({ task, assignedUser }) => {
 						container
 						justify='flex-end'
 						alignItems='center'
-						style={{ backgroundColor: theme.palette.secondary.main, height: theme.spacing(4) }}
+						style={{ backgroundColor: task.color, height: theme.spacing(4) }}
 					>
 						<Grid item>
 							<IconButton className={classes.iconButton}>
