@@ -59,9 +59,13 @@ const CreateTaskDialog: React.FC = () => {
 	const [description, setDescription] = useState<FormInputState>(initialInputState);
 	const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
+	// Clears the inputs when the dialog opens/closes
 	useEffect(() => {
 		setProjectId({ visited: false, value: initialProjectId ?? '' });
 		setStatus({ visited: false, value: initialStatus ?? '' });
+		setTitle({ visited: false, value: '' });
+		setAssignee({ visited: false, value: '' });
+		setDescription({ visited: false, value: '' });
 	}, [open, initialStatus, initialProjectId]);
 
 	// Form Handlers

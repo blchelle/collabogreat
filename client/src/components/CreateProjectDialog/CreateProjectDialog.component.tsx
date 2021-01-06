@@ -1,4 +1,4 @@
-import React, { useState, SetStateAction, SyntheticEvent } from 'react';
+import React, { useState, SetStateAction, SyntheticEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	Button,
@@ -46,6 +46,12 @@ const CreateProjectDialog: React.FC = () => {
 		description: description.value,
 		board: ['To Do', 'In Progress', 'Done'],
 	};
+
+	// Clears the inputs when the dialog opens/closes
+	useEffect(() => {
+		setTitle({ visited: false, value: '' });
+		setDescription({ visited: false, value: '' });
+	}, [open]);
 
 	// Form Handlers
 	const onInputChange = (setterFn: React.Dispatch<SetStateAction<FormInputState>>) => (
