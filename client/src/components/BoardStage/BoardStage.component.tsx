@@ -15,7 +15,6 @@ import useStyles from './BoardStage.mui';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 import { openModal } from '../../redux/modals/modals.actions';
 import { Project } from '../../redux/project/project.types';
-import theme from '../../theme';
 
 interface BoardStage {
 	stageId: string;
@@ -32,12 +31,6 @@ const BoardStage: React.FC<BoardStage> = ({ stageId, stageName, project, tasks }
 
 	const projectId = project._id;
 	const projectMembers = project.members;
-
-	const getListStyle = () => ({
-		backgroundColor: theme.palette.background.paper,
-		width: 270,
-		paddingBottom: -1 * theme.spacing(1),
-	});
 
 	// Handlers
 	const openDropdown = (dropdownName: ModalNames, children: ReactElement) => (
@@ -70,7 +63,7 @@ const BoardStage: React.FC<BoardStage> = ({ stageId, stageName, project, tasks }
 						{...provided.dragHandleProps}
 						{...provided.draggableProps}
 					>
-						<Grid container>
+						<Grid container style={{ height: '100%' }}>
 							<Grid item container alignItems='center' className={classes.stageHeader}>
 								<Grid item xs>
 									<Typography variant='subtitle1' className={classes.stageTitle}>
@@ -91,7 +84,11 @@ const BoardStage: React.FC<BoardStage> = ({ stageId, stageName, project, tasks }
 							</Grid>
 							<Droppable droppableId={stageId} type='CARD'>
 								{(provided) => (
-									<CardContent ref={provided.innerRef} style={getListStyle()} key={stageId}>
+									<CardContent
+										ref={provided.innerRef}
+										className={classes.cardContent}
+										key={stageId}
+									>
 										{tasks.map((task: Task) => (
 											<BoardCard
 												task={task}

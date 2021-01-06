@@ -4,6 +4,7 @@ import theme from '../../theme';
 export default makeStyles({
 	appBar: {
 		boxShadow: 'none',
+		flex: '0 1 auto',
 	},
 	toolBar: {
 		display: 'flex',
