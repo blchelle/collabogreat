@@ -31,7 +31,7 @@ function* attemptCreateProject({ payload }: ProjectActionTypes) {
 		// Throws if the action was unsuccessful
 		// TODO Read the error description and solution from the response into the error message.
 		if (res.status !== 201) {
-			yield put(openError('Error', 'Here is a solution'));
+			yield put(openError(res.message, res.solution));
 			return;
 		}
 
