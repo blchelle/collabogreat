@@ -11,8 +11,14 @@ import {
 	Task,
 	FETCH_TASKS_START,
 	EDIT_TASKS_START,
+	DELETE_TASK_START,
 } from './tasks.types';
-import { createTaskSuccess, editTasksSuccess, fetchTasksSuccess } from './tasks.actions';
+import {
+	createTaskSuccess,
+	deleteTaskSuccess,
+	editTasksSuccess,
+	fetchTasksSuccess,
+} from './tasks.actions';
 
 type RequestTask = Pick<Task, Exclude<keyof Task, '_id' | 'order'>>;
 
@@ -140,6 +146,42 @@ function* attemptModifyTasks({ payload }: TaskActionTypes) {
 	}
 }
 
+function* attemptDeleteTask({ payload }: TaskActionTypes) {
+	// Store the task preemptively, so that you can recover from a failed deletion
+	const task = payload as Task;
+	try {
+		// Delete the task optimistically
+		yield put(deleteTaskSuccess(task._id));
+
+		const res = yield axios(`api/v0/tasks/${task._id}`, {
+			method: 'DELETE',
+			withCredentials: true,
+			headers: {
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Credentials': true,
+			},
+		});
+
+		// Throws if the action was unsuccessful
+		// TODO Read the error description and solution from the response into the error message.
+		if (res.status !== 204) {
+			// Put the task back if the deletion failed
+			yield put(createTaskSuccess(task));
+			yield put(openError(res.message, res.solution));
+			return;
+		}
+
+		// The actual response is going to have all the project information embedded in it
+		// User documents should only contain references to the project
+		// The id will be extracted from each project
+		yield put(deleteTaskSuccess(payload as string));
+	} catch (err) {
+		// Put the task back if the deletion failed
+		yield put(createTaskSuccess(task));
+		yield put(openError('Error', 'Here is a solution'));
+	}
+}
+
 function* onCreateTaskStart() {
 	yield takeLatest(CREATE_TASK_START, attemptCreateTask);
 }
@@ -152,6 +194,15 @@ function* onModifyTasksStart() {
 	yield takeLatest(EDIT_TASKS_START, attemptModifyTasks);
 }
 
+function* onDeleteTaskStart() {
+	yield takeLatest(DELETE_TASK_START, attemptDeleteTask);
+}
+
 export function* taskSagas() {
-	yield all([call(onCreateTaskStart), call(onFetchTasksStart), call(onModifyTasksStart)]);
+	yield all([
+		call(onCreateTaskStart),
+		call(onFetchTasksStart),
+		call(onModifyTasksStart),
+		call(onDeleteTaskStart),
+	]);
 }

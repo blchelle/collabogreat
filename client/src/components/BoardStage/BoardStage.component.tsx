@@ -92,14 +92,11 @@ const BoardStage: React.FC<BoardStage> = ({ stageId, stageName, project, tasks }
 							<Droppable droppableId={stageId} type='CARD'>
 								{(provided) => (
 									<CardContent ref={provided.innerRef} style={getListStyle()} key={stageId}>
-										{tasks.map((item: Task, index: number) => (
+										{tasks.map((task: Task) => (
 											<BoardCard
-												taskName={item.title}
-												taskId={item._id}
-												taskDescription={item.description}
-												cardIndex={index}
-												key={item._id}
-												assignedUser={projectMembers?.find((user) => user?._id === item.user)}
+												task={task}
+												key={task._id}
+												assignedUser={projectMembers?.find((user) => user?._id === task.user)}
 											/>
 										))}
 										{provided.placeholder}

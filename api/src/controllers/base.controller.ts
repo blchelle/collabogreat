@@ -74,10 +74,7 @@ abstract class Controller {
 			}
 
 			// Sends an empty response to indicate it was deleted successfully
-			res.status(StatusCode.SuccessNoContent).json({
-				status: 'success',
-				[this.model.modelName]: doc,
-			});
+			res.status(StatusCode.SuccessNoContent).json();
 		});
 	}
 

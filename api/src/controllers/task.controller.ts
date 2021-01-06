@@ -27,6 +27,7 @@ class TaskController extends Controller {
 		// All routes below this are protected
 
 		this.router.route('/').post(this.createTask()).patch(this.patchTasks());
+		this.router.route('/:id').delete(this.deleteOneById());
 		this.router.route('/me').get(this.getTasksForMe());
 		this.router.route('/project/:id').get(this.getTasksForProject());
 		this.router.route('/user/:id').get(this.getTasksForUser());

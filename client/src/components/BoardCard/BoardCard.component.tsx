@@ -1,28 +1,23 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { CSSProperties } from 'react';
+import { useDispatch } from 'react-redux';
 import { Draggable, DraggingStyle, NotDraggingStyle } from 'react-beautiful-dnd';
 import { Avatar, Card, CardContent, Grid, IconButton, Typography } from '@material-ui/core';
 import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
 
-import theme from '../../theme';
 import { User } from '../../redux/user/user.types';
+import { deleteTaskStart } from '../../redux/tasks/tasks.actions';
+import { Task } from '../../redux/tasks/tasks.types';
 import useStyles from './BoardCard.mui';
+import theme from '../../theme';
 
 interface BoardCardProps {
-	taskId: string;
-	taskName: string;
-	taskDescription?: string;
+	task: Task;
 	assignedUser?: Partial<User>;
-	cardIndex: number;
 }
 
-const BoardCard: React.FC<BoardCardProps> = ({
-	taskName,
-	taskDescription,
-	taskId,
-	assignedUser,
-	cardIndex,
-}) => {
+const BoardCard: React.FC<BoardCardProps> = ({ task, assignedUser }) => {
+	// MUI
 	const classes = useStyles();
 
 	const getItemStyle = (
@@ -39,8 +34,11 @@ const BoardCard: React.FC<BoardCardProps> = ({
 		...draggableStyle,
 	});
 
+	// Redux
+	const dispatch = useDispatch();
+
 	return (
-		<Draggable key={taskId} draggableId={taskId} index={cardIndex}>
+		<Draggable key={task._id} draggableId={task._id} index={task.order}>
 			{(provided) => (
 				<Card
 					ref={provided.innerRef}
@@ -61,19 +59,22 @@ const BoardCard: React.FC<BoardCardProps> = ({
 							</IconButton>
 						</Grid>
 						<Grid item>
-							<IconButton className={classes.iconButton}>
+							<IconButton
+								className={classes.iconButton}
+								onClick={() => dispatch(deleteTaskStart(task))}
+							>
 								<DeleteIcon className={classes.icon} />
 							</IconButton>
 						</Grid>
 					</Grid>
 					<CardContent style={{ padding: theme.spacing(1) }}>
-						<Typography variant='subtitle1'>{taskName}</Typography>
+						<Typography variant='subtitle1'>{task.title}</Typography>
 						<Grid container alignItems='flex-end'>
 							<Grid item xs>
-								{taskDescription ? (
+								{task.description ? (
 									<Typography variant='body2'>
-										{`${taskDescription?.substr(0, 50)}${
-											taskDescription?.length > 50 ? '...' : ''
+										{`${task.description?.substr(0, 50)}${
+											task.description?.length > 50 ? '...' : ''
 										}`}
 									</Typography>
 								) : null}
