@@ -27,7 +27,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, showAssignee }) => {
 
 	return (
 		<Card className={classes.container}>
-			<div className={classes.cardHead} />
+			<div
+				style={{
+					backgroundColor: task.color,
+					height: theme.spacing(2),
+				}}
+			/>
 
 			<CardContent className={classes.container}>
 				<Grid container className={classes.container}>

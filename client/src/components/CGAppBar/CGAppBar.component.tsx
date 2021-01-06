@@ -27,15 +27,23 @@ import { ReactComponent as LogoText } from '../../assets/logo-text.svg';
 import { ReactComponent as LogoIcon } from '../../assets/logo-icon.svg';
 import { openModal } from '../../redux/modals/modals.actions';
 import { ModalNames } from '../../redux/modals/modals.reducer';
+import { TaskColor } from '../../redux/tasks/tasks.types';
 import { RootState } from '../../redux/root.reducer';
 import useStyles from './CGAppBar.mui';
 import theme from '../../theme';
 
-export interface SearchResult {
-	type: 'project' | 'task';
+export interface ProjectSearchResult {
+	type: 'project';
 	_id: string;
 	title: string;
 	image?: string;
+}
+
+export interface TaskSearchResult {
+	type: 'task';
+	_id: string;
+	title: string;
+	color: TaskColor;
 }
 
 const CGAppBar: React.FC = () => {
@@ -45,7 +53,7 @@ const CGAppBar: React.FC = () => {
 	// Redux
 	const user = useSelector((state: RootState) => state.user);
 	const searchResults = useSelector((state: RootState) => [
-		...state.projects.map<SearchResult>((project) => {
+		...state.projects.map<ProjectSearchResult>((project) => {
 			return {
 				type: 'project',
 				_id: project._id!,
@@ -53,12 +61,12 @@ const CGAppBar: React.FC = () => {
 				image: project.image,
 			};
 		}),
-		...state.tasks.map<SearchResult>((task) => {
+		...state.tasks.map<TaskSearchResult>((task) => {
 			return {
 				type: 'task',
 				_id: task._id,
 				title: task.title,
-				image: undefined,
+				color: task.color,
 			};
 		}),
 	]);

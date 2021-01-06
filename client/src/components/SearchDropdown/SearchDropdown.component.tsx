@@ -1,19 +1,20 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Divider, List, MenuItem, Typography } from '@material-ui/core';
+import { Card, Divider, List, MenuItem, Typography } from '@material-ui/core';
 
-import { SearchResult } from '../CGAppBar/CGAppBar.component';
+import { ProjectSearchResult, TaskSearchResult } from '../CGAppBar/CGAppBar.component';
 import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
 import { RootState } from '../../redux/root.reducer';
 import theme from '../../theme';
 
 const SearchDropdown = () => {
-	const results = useSelector(
-		(state: RootState) => state.modals.SEARCH_DROPDOWN.extra
-	) as SearchResult[];
+	const results = useSelector((state: RootState) => state.modals.SEARCH_DROPDOWN.extra) as (
+		| ProjectSearchResult
+		| TaskSearchResult
+	)[];
 
-	const projectResults = results.filter(({ type }) => type === 'project');
-	const taskResults = results.filter(({ type }) => type === 'task');
+	const projectResults = results.filter(({ type }) => type === 'project') as ProjectSearchResult[];
+	const taskResults = results.filter(({ type }) => type === 'task') as TaskSearchResult[];
 
 	if (results.length > 0) {
 		return (
@@ -30,6 +31,8 @@ const SearchDropdown = () => {
 									src={result.image}
 									variant='rounded'
 									style={{
+										width: theme.spacing(4),
+										height: theme.spacing(4),
 										marginRight: theme.spacing(2),
 									}}
 								/>
@@ -44,14 +47,14 @@ const SearchDropdown = () => {
 						<Divider />
 						{taskResults.map((result) => (
 							<MenuItem>
-								<ColoredAvatar
-									id={result._id}
-									text={result.title}
-									src={result.image}
-									variant='rounded'
+								<Card
 									style={{
+										width: theme.spacing(3),
+										height: theme.spacing(3),
+										backgroundColor: result.color,
 										marginRight: theme.spacing(2),
 									}}
+									elevation={0}
 								/>
 								<Typography>{result.title}</Typography>
 							</MenuItem>

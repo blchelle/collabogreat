@@ -5,10 +5,6 @@ export default makeStyles({
 	container: {
 		height: '100%',
 	},
-	cardHead: {
-		backgroundColor: theme.palette.primary.main,
-		height: theme.spacing(2),
-	},
 	cardDescription: {
 		marginBottom: theme.spacing(2),
 	},
