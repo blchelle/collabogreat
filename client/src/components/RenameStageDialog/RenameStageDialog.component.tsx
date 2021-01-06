@@ -107,6 +107,8 @@ const RenameStageDialog: React.FC = () => {
 												})
 											)
 										);
+
+										dispatch(closeModal(ModalNames.RENAME_STAGE_DIALOG));
 									}}
 								>
 									Confirm
