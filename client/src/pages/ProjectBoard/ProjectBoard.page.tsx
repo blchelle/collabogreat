@@ -52,7 +52,10 @@ const ProjectBoard: React.FC = () => {
 		const { source, destination } = result;
 
 		// dropped outside the list
-		if (!destination) {
+		if (
+			!destination ||
+			(source.droppableId === destination.droppableId && source.index === destination.index)
+		) {
 			return;
 		}
 
