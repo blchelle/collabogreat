@@ -4,6 +4,7 @@ import theme from '../../theme';
 export default makeStyles({
 	appBar: {
 		boxShadow: 'none',
+		flex: '0 1 auto',
 	},
 	toolBar: {
 		display: 'flex',
@@ -25,6 +26,8 @@ export default makeStyles({
 	searchBarMobile: {
 		order: 1,
 		margin: 0,
+		marginTop: theme.spacing(1),
+		marginBottom: theme.spacing(1),
 	},
 	searchIcon: {
 		margin: theme.spacing(1),

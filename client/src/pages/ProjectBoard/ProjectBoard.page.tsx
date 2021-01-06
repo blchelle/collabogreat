@@ -8,6 +8,7 @@ import { Breadcrumbs, Button, Grid, Link } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 
 import useStyles from './ProjectBoard.mui';
+import useCommonStyles from '../common.mui';
 import AddStageForm from '../../components/AddStageForm/AddStageForm.component';
 import BoardStage from '../../components/BoardStage/BoardStage.component';
 import { RootState } from '../../redux/root.reducer';
@@ -19,6 +20,7 @@ import theme from '../../theme';
 
 const ProjectBoard: React.FC = () => {
 	const classes = useStyles();
+	const commonClasses = useCommonStyles();
 
 	// ProjectBoard State
 	const [showAddStageForm, setShowAddStageForm] = useState(false);
@@ -96,8 +98,8 @@ const ProjectBoard: React.FC = () => {
 	};
 
 	return (
-		<>
-			<Breadcrumbs aria-label='breadcrumb' style={{ marginBottom: theme.spacing(2) }}>
+		<Grid container style={{ height: '100%' }} direction='column'>
+			<Breadcrumbs aria-label='breadcrumb' className={commonClasses.breadCrumb}>
 				<Link color='inherit' href='/dashboard'>
 					Dashboard
 				</Link>
@@ -114,12 +116,19 @@ const ProjectBoard: React.FC = () => {
 						<Grid
 							ref={provided.innerRef}
 							container
+							xs
+							alignItems='flex-start'
 							wrap='nowrap'
-							style={{ overflowX: 'auto', paddingBottom: theme.spacing(1) }}
+							style={{ overflowX: 'auto', padding: theme.spacing(2) }}
 						>
 							{Object.entries(stages).map(([droppableId, { name, items }]) => {
 								return (
-									<Grid item key={droppableId}>
+									<Grid
+										item
+										key={droppableId}
+										style={{ maxHeight: '100%', height: '100%' }}
+										alignItems='flex-start'
+									>
 										<BoardStage
 											project={project}
 											stageId={droppableId}
@@ -149,7 +158,7 @@ const ProjectBoard: React.FC = () => {
 					)}
 				</Droppable>
 			</DragDropContext>
-		</>
+		</Grid>
 	);
 };
 
