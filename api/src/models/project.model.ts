@@ -66,7 +66,7 @@ const ProjectSchema = new Schema({
 });
 
 /**
- * Populates the projects property of the user so that it also includes the titles
+ * Populates the members property of the project before a find
  */
 ProjectSchema.pre<Query<IProject>>(/^find/, function (next) {
 	this.populate({
@@ -75,6 +75,13 @@ ProjectSchema.pre<Query<IProject>>(/^find/, function (next) {
 	});
 
 	next();
+});
+
+/**
+ * Populates the members property of the project after a save
+ */
+ProjectSchema.post<IProject>('save', function (doc) {
+	doc.populate({ path: 'members', select: ['displayName', 'image'] }).execPopulate();
 });
 
 /**
