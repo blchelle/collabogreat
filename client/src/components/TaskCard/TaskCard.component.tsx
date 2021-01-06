@@ -48,7 +48,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, showAssignee }) => {
 						<Typography variant='subtitle1' style={{ marginRight: theme.spacing(1) }}>
 							Project:
 						</Typography>
-						<Link href={`/projects/${project._id}/board`} color='primary' variant='subtitle1'>
+						<Link href={`/projects/${project._id}/board`} color='textPrimary' variant='subtitle1'>
 							{project.title}
 						</Link>
 					</Grid>

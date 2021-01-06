@@ -26,6 +26,8 @@ export default makeStyles({
 	searchBarMobile: {
 		order: 1,
 		margin: 0,
+		marginTop: theme.spacing(1),
+		marginBottom: theme.spacing(1),
 	},
 	searchIcon: {
 		margin: theme.spacing(1),
