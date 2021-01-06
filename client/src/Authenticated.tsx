@@ -41,6 +41,7 @@ const Authenticated = () => {
 						container
 						direction='column'
 						style={{
+							marginTop: theme.spacing(2),
 							padding: theme.spacing(1),
 						}}
 					>
