@@ -52,6 +52,7 @@ async function StrategyCallback(
 	// Checks if the user associated with the profile already exists
 	const { provider } = profile;
 	const currentUser = await User.findOne({ [`${provider}Id`]: profile.id });
+
 	if (currentUser) {
 		return done(undefined, currentUser);
 	}
@@ -87,7 +88,10 @@ function configureProviderStrategy(provider: RegisteredOAuthProvider) {
 	let strategy: Strategy;
 	switch (provider) {
 		case RegisteredOAuthProvider.FACEBOOK:
-			strategy = new FacebookStrategy(config, StrategyCallback);
+			strategy = new FacebookStrategy(
+				{ ...config, profileFields: ['id', 'emails', 'photos', 'displayName'] },
+				StrategyCallback
+			);
 			break;
 		case RegisteredOAuthProvider.GOOGLE:
 			strategy = new GoogleStrategy(config, StrategyCallback);
