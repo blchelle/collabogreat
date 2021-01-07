@@ -53,7 +53,13 @@ const Dropdown: React.FC<DropdownProps> = ({ modalName }) => {
 	};
 
 	return (
-		<Popper open={open} anchorEl={anchorEl} placement={placement} transition>
+		<Popper
+			open={open}
+			anchorEl={anchorEl}
+			placement={placement}
+			transition
+			style={{ zIndex: 100000 }}
+		>
 			<ClickAwayListener onClickAway={() => dispatch(closeModal(modalName))}>
 				<Grow in={open} style={{ transformOrigin: getTransformOrigin() }}>
 					<Paper className={classes.paper}>{children}</Paper>
