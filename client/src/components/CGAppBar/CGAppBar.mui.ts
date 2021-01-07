@@ -5,6 +5,7 @@ export default makeStyles({
 	appBar: {
 		boxShadow: 'none',
 		flex: '0 1 auto',
+		backgroundColor: theme.palette.grey[200],
 	},
 	toolBar: {
 		display: 'flex',
@@ -31,6 +32,7 @@ export default makeStyles({
 	},
 	searchIcon: {
 		margin: theme.spacing(1),
+		fill: 'black',
 	},
 	createButton: {
 		boxShadow: 'none',

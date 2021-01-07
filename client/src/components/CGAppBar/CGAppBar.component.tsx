@@ -99,7 +99,7 @@ const CGAppBar: React.FC = () => {
 
 	return (
 		<>
-			<AppBar className={classes.appBar} color='inherit' position='static'>
+			<AppBar className={classes.appBar} position='static'>
 				<Toolbar className={classes.toolBar}>
 					<Grid container alignItems='center' justify='space-between'>
 						<Grid item>
