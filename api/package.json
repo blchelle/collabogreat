@@ -3,7 +3,7 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"dev": "NODE_ENV=development&&run-p compile:watch run",
+		"dev": "NODE_ENV=development run-p compile:watch run",
 		"lint": "eslint --ext .ts",
 		"compile": "tsc",
 		"compile:watch": "tsc --watch",
