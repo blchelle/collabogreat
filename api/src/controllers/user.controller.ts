@@ -25,6 +25,7 @@ class ProjectController extends Controller {
 		// All routes below this are protected
 
 		this.router.route('/me').get(this.getMe());
+		this.router.route('/:email').get(this.findUserByEmail());
 	}
 
 	/**
@@ -48,6 +49,23 @@ class ProjectController extends Controller {
 			const user = req.user as IUser;
 
 			res.status(StatusCode.SuccessOK).json({ user });
+		});
+	}
+
+	protected findUserByEmail() {
+		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+			// Pulls the email off of the url params
+			const { email } = req.params;
+
+			// Searches for a user by their email address
+			const user = await this.model.findOne({ email });
+
+			// Sends the users id back in the request
+			if (user) {
+				res.status(StatusCode.SuccessOK).json({ userId: user.id });
+			} else {
+				res.status(StatusCode.ClientErrorNotFound).json({ userId: null });
+			}
 		});
 	}
 }
