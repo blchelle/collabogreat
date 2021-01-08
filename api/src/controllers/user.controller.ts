@@ -53,7 +53,7 @@ class ProjectController extends Controller {
 	}
 
 	protected findUserByEmail() {
-		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+		return catchAsync(async (req: Request, res: Response) => {
 			// Pulls the email off of the url params
 			const { email } = req.params;
 
@@ -61,11 +61,7 @@ class ProjectController extends Controller {
 			const user = await this.model.findOne({ email });
 
 			// Sends the users id back in the request
-			if (user) {
-				res.status(StatusCode.SuccessOK).json({ userId: user.id });
-			} else {
-				res.status(StatusCode.ClientErrorNotFound).json({ userId: null });
-			}
+			res.status(StatusCode.SuccessOK).json({ userId: user?.id });
 		});
 	}
 }
