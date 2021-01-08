@@ -274,7 +274,7 @@ const CreateTaskDialog: React.FC = () => {
 											</Grid>
 											<Grid item xs={10} container alignContent='center'>
 												{Object.values(TaskColor).map((c) => (
-													<Grid item xs={2} container className={classes.colorButton}>
+													<Grid item xs={2} container className={classes.colorButton} key={c}>
 														<Card
 															elevation={0}
 															style={{ backgroundColor: c }}

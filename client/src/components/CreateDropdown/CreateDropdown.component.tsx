@@ -20,32 +20,30 @@ const CreateDropdown: React.FC = () => {
 	return (
 		<MenuList className={classes.container}>
 			{numProjects > 0 ? (
-				<>
-					<MenuItem
-						onClick={() => {
-							dispatch(closeModal(ModalNames.CREATE_DROPDOWN));
-							dispatch(openModal(ModalNames.CREATE_TASK_DIALOG, { open: true, children: null }));
-						}}
-					>
-						<Grid container spacing={4} alignItems='center'>
-							<Grid item>
-								<NewTaskSVG className={classes.listItemImage} />
-							</Grid>
-							<Grid item xs container direction='column'>
-								<Typography variant='subtitle1' gutterBottom>
-									Create a New Task
-								</Typography>
-								<Typography variant='body2'>
-									A task is a is a bite-sized job which will
-									<br />
-									contribute to the completion of a project.
-								</Typography>
-							</Grid>
+				<MenuItem
+					onClick={() => {
+						dispatch(closeModal(ModalNames.CREATE_DROPDOWN));
+						dispatch(openModal(ModalNames.CREATE_TASK_DIALOG, { open: true, children: null }));
+					}}
+				>
+					<Grid container spacing={4} alignItems='center'>
+						<Grid item>
+							<NewTaskSVG className={classes.listItemImage} />
 						</Grid>
-					</MenuItem>
-					<Divider />
-				</>
+						<Grid item xs container direction='column'>
+							<Typography variant='subtitle1' gutterBottom>
+								Create a New Task
+							</Typography>
+							<Typography variant='body2'>
+								A task is a is a bite-sized job which will
+								<br />
+								contribute to the completion of a project.
+							</Typography>
+						</Grid>
+					</Grid>
+				</MenuItem>
 			) : null}
+			{numProjects > 0 ? <Divider /> : null}
 			<MenuItem
 				onClick={() => {
 					dispatch(closeModal(ModalNames.CREATE_DROPDOWN));
