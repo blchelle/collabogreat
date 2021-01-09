@@ -156,7 +156,10 @@ const CGAppBar: React.FC = () => {
 								onClick={openDropdown(ModalNames.NOTIFICATIONS_DROPDOWN, <NotificationsDropdown />)}
 								className={classes.notificationsButton}
 							>
-								<Badge badgeContent={user?.projectInvitations.length} color='error'>
+								<Badge
+									badgeContent={user!.projectInvitations.length + user!.newTasks.length}
+									color='error'
+								>
 									<NotificationsIcon />
 								</Badge>
 							</IconButton>

@@ -5,7 +5,7 @@ import StatusCode from 'status-code-enum';
 import Controller from './base.controller';
 import APIError from '../errors/api.error';
 import Task, { ITask } from '../models/task.model';
-import { IUser } from '../models/user.model';
+import UserModel, { IUser } from '../models/user.model';
 import catchAsync from '../utils/catchAsync.util';
 
 /**
@@ -35,8 +35,19 @@ class TaskController extends Controller {
 
 	protected createTask() {
 		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+			// Ensures that the user is on the request
+			if (!req.user) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorUnauthorized,
+						'Attempted to create a Task without a user',
+						'Try adding yourself to the next task you create'
+					)
+				);
+			}
+
 			// Pulls the task project id and status from the request
-			const { project, status } = req.body;
+			const { project, status, user } = req.body;
 			let taskOrder;
 
 			if (project && status) {
@@ -56,6 +67,12 @@ class TaskController extends Controller {
 			}
 
 			const task = await this.model.create({ ...req.body, order: taskOrder });
+
+			// If the task was assigned to someone other than the creator, send that person a new task notification
+			if ((req.user as IUser).id !== user) {
+				// Update the user
+				await UserModel.findByIdAndUpdate(user, { $push: { newTasks: task.id } });
+			}
 
 			res.status(StatusCode.SuccessCreated).json({
 				success: true,
@@ -105,8 +122,8 @@ class TaskController extends Controller {
 				return next(
 					new APIError(
 						StatusCode.ClientErrorUnauthorized,
-						'Attempted to create a Project without a User',
-						'Try adding yourself to the next Project you create'
+						'Attempted to get tasks for an unknown user',
+						'Try logging out and then logging back in'
 					)
 				);
 			}

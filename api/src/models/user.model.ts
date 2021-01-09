@@ -10,6 +10,7 @@ export interface IUser extends Document {
 	email: string;
 	projects: string[];
 	projectInvitations: string[];
+	newTasks: string[];
 
 	image?: string;
 	googleId?: string;
@@ -53,6 +54,12 @@ const UserSchema = new Schema({
 			ref: 'Project',
 		},
 	],
+	newTasks: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: 'Task',
+		},
+	],
 	image: {
 		type: String,
 		required: false,
@@ -68,6 +75,7 @@ const UserSchema = new Schema({
 UserSchema.pre<Query<IUser>>('findOne', function (next) {
 	this.populate({ path: 'projects' });
 	this.populate({ path: 'projectInvitations', select: ['title', 'image'] });
+	this.populate({ path: 'newTasks', select: ['title', 'color'] });
 	next();
 });
 
