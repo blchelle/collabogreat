@@ -16,4 +16,7 @@ export default makeStyles({
 		width: '75%',
 		height: 'auto',
 	},
+	otherMemberField: {
+		marginBottom: theme.spacing(1),
+	},
 });

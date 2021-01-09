@@ -5,6 +5,8 @@ import {
 	SET_CURRENT_USER,
 	LOGOUT_START,
 	ADD_PROJECT_TO_USER,
+	ACCEPT_INVITE_START,
+	REJECT_INVITE_START,
 } from './user.types';
 
 export function fetchCurrentUser(): UserActionTypes {
@@ -32,5 +34,27 @@ export function addProjectToUser(projectId: string): UserActionTypes {
 	return {
 		type: ADD_PROJECT_TO_USER,
 		payload: projectId,
+	};
+}
+
+export function acceptInviteStart(
+	projects: string[],
+	projectInvitations: Partial<User>[],
+	acceptedInviteId: string,
+	myId: string
+): UserActionTypes {
+	return {
+		type: ACCEPT_INVITE_START,
+		payload: { projects, projectInvitations, acceptedInviteId, myId },
+	};
+}
+
+export function rejectInviteStart(
+	inviteId: string,
+	projectInvitations: Partial<User>[]
+): UserActionTypes {
+	return {
+		type: REJECT_INVITE_START,
+		payload: { inviteId, projectInvitations },
 	};
 }

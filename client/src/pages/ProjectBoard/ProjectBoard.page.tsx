@@ -116,19 +116,13 @@ const ProjectBoard: React.FC = () => {
 						<Grid
 							ref={provided.innerRef}
 							container
-							xs
 							alignItems='flex-start'
 							wrap='nowrap'
 							style={{ overflowX: 'auto', padding: theme.spacing(2) }}
 						>
 							{Object.entries(stages).map(([droppableId, { name, items }]) => {
 								return (
-									<Grid
-										item
-										key={droppableId}
-										style={{ maxHeight: '100%', height: '100%' }}
-										alignItems='flex-start'
-									>
+									<Grid item key={droppableId} style={{ maxHeight: '100%', height: '100%' }}>
 										<BoardStage
 											project={project}
 											stageId={droppableId}

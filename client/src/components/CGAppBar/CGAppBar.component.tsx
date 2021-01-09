@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 	AppBar,
 	Avatar,
+	Badge,
 	Button,
 	Grid,
 	IconButton,
@@ -155,7 +156,9 @@ const CGAppBar: React.FC = () => {
 								onClick={openDropdown(ModalNames.NOTIFICATIONS_DROPDOWN, <NotificationsDropdown />)}
 								className={classes.notificationsButton}
 							>
-								<NotificationsIcon />
+								<Badge badgeContent={user?.projectInvitations.length} color='error'>
+									<NotificationsIcon />
+								</Badge>
 							</IconButton>
 							<IconButton
 								onClick={openDropdown(ModalNames.USER_DROPDOWN, <UserDropdown />)}

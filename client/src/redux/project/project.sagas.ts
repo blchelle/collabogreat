@@ -17,10 +17,20 @@ axios.defaults.baseURL = 'http://localhost:8000';
 
 function* attemptCreateProject({ payload }: ProjectActionTypes) {
 	try {
+		if (Array.isArray(payload)) {
+			yield put(
+				openError(
+					'Unable to create project',
+					"This looks like it's our mistake, please contact brocklchelle@gmail.com and explain the issue"
+				)
+			);
+			return;
+		}
+
 		// Attempts to create a new project with the information provided
 		const res = yield axios('api/v0/projects', {
 			method: 'POST',
-			data: payload,
+			data: { ...payload, members: payload.members!.map((member) => member!._id) },
 			withCredentials: true,
 			headers: {
 				'Content-Type': 'application/json',
