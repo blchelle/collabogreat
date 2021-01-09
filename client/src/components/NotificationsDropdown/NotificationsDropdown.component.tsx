@@ -1,15 +1,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Divider, Grid, List, ListItem, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 
 import { RootState } from '../../redux/root.reducer';
 import NotificationItem from '../NotificationItem/NotificationItem.component';
 import { ReactComponent as NoNotifications } from '../../assets/no-notifications.svg';
 
 const NotificationsDropdown: React.FC = () => {
-	const projectInvitations = useSelector((state: RootState) => state.user!.projectInvitations);
+	const { projectInvitations, newTasks } = useSelector((state: RootState) => state.user!);
 
-	if (projectInvitations.length === 0) {
+	if (projectInvitations.length + newTasks.length === 0) {
 		return (
 			<Grid container direction='column' alignItems='center' spacing={2}>
 				<Typography variant='h6' gutterBottom>
@@ -26,16 +26,18 @@ const NotificationsDropdown: React.FC = () => {
 	}
 
 	return (
-		<List>
+		<Grid container direction='column' spacing={2}>
 			{projectInvitations.map((project) => (
-				<>
-					<ListItem>
-						<NotificationItem _id={project._id!} type='project' title={project.title!} />
-					</ListItem>
-					<Divider />
-				</>
+				<Grid item>
+					<NotificationItem _id={project._id!} type='project' title={project.title!} />
+				</Grid>
 			))}
-		</List>
+			{newTasks.map((task) => (
+				<Grid item>
+					<NotificationItem _id={task._id!} type='task' title={task.title!} color={task.color} />
+				</Grid>
+			))}
+		</Grid>
 	);
 };
 
