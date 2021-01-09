@@ -28,7 +28,7 @@ const Authenticated = () => {
 		if (projectIds.length !== 0) {
 			dispatch(fetchTasksStart(projectIds));
 		}
-	}, [...projectIds, dispatch]);
+	}, [JSON.stringify(projectIds), dispatch]);
 
 	return (
 		<Suspense fallback={<Loading />}>
