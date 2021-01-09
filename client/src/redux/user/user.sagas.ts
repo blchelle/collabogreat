@@ -1,14 +1,19 @@
 import axios from 'axios';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import { closeModal } from 'redux/modals/modals.actions';
-import { ModalNames } from 'redux/modals/modals.reducer';
 
 import { createProjectSuccess, setAllProjects } from '../project/project.actions';
 import { Project } from '../project/project.types';
-import { setCurrentUser } from './user.actions';
+import {
+	acceptInviteSuccess,
+	dismissTaskSuccess,
+	rejectInviteSuccess,
+	setCurrentUser,
+} from './user.actions';
 import {
 	AcceptInviteStartAction,
 	ACCEPT_INVITE_START,
+	DismissTaskStartAction,
+	DISMISS_TASK_START,
 	FETCH_CURRENT_USER,
 	LOGOUT_START,
 	RejectInviteStartAction,
@@ -129,12 +134,10 @@ function* attemptAcceptInvite({
 
 		// Pulls the user and project off of the requests
 		const { project } = projectRes.data;
-		const user = { ...userRes.data.user, projectInvitations: updatedInvitations };
 
 		// Updates the user and project locally
-		yield put(setCurrentUser(user));
+		yield put(acceptInviteSuccess(acceptedInviteId));
 		yield put(createProjectSuccess(project));
-		yield put(closeModal(ModalNames.NOTIFICATIONS_DROPDOWN));
 	} catch (err) {
 		console.log(err);
 	}
@@ -162,12 +165,35 @@ function* attemptRejectInvite({
 			throw new Error('Request to update user failed');
 		}
 
-		// Pulls the user off of the requests
-		const { user } = userRes.data;
+		// Updates the user and project locally
+		yield put(rejectInviteSuccess(inviteId));
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+function* attemptDismissTask({ payload: { taskId, newTasks } }: DismissTaskStartAction) {
+	try {
+		// Deletes the id of the task from the newTasks
+		const updatedNewTasks = newTasks.filter((task) => task?._id !== taskId);
+
+		// Performs an api call to update the user
+		const userRes = yield axios('api/v0/user/me', {
+			method: 'PATCH',
+			data: { newTasks: updatedNewTasks.map((task) => task._id) },
+			withCredentials: true,
+			headers: {
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Credentials': true,
+			},
+		});
+
+		if (userRes.status !== 200) {
+			throw new Error('Request to update user failed');
+		}
 
 		// Updates the user and project locally
-		yield put(setCurrentUser(user));
-		yield put(closeModal(ModalNames.NOTIFICATIONS_DROPDOWN));
+		yield put(dismissTaskSuccess(taskId));
 	} catch (err) {
 		console.log(err);
 	}
@@ -189,11 +215,16 @@ function* onRejectInviteStart() {
 	yield takeLatest(REJECT_INVITE_START, attemptRejectInvite);
 }
 
+function* onDismissTaskStart() {
+	yield takeLatest(DISMISS_TASK_START, attemptDismissTask);
+}
+
 export function* userSagas() {
 	yield all([
 		call(onFetchCurrentUser),
 		call(onLogoutStart),
 		call(onAcceptInviteStart),
 		call(onRejectInviteStart),
+		call(onDismissTaskStart),
 	]);
 }

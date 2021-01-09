@@ -1,3 +1,4 @@
+import { Task } from '../tasks/tasks.types';
 import {
 	User,
 	UserActionTypes,
@@ -7,6 +8,10 @@ import {
 	ADD_PROJECT_TO_USER,
 	ACCEPT_INVITE_START,
 	REJECT_INVITE_START,
+	DISMISS_TASK_START,
+	ACCEPT_INVITE_SUCCESS,
+	DISMISS_TASK_SUCCESS,
+	REJECT_INVITE_SUCCESS,
 } from './user.types';
 
 export function fetchCurrentUser(): UserActionTypes {
@@ -49,6 +54,13 @@ export function acceptInviteStart(
 	};
 }
 
+export function acceptInviteSuccess(projectId: string): UserActionTypes {
+	return {
+		type: ACCEPT_INVITE_SUCCESS,
+		payload: { projectId },
+	};
+}
+
 export function rejectInviteStart(
 	inviteId: string,
 	projectInvitations: Partial<User>[]
@@ -56,5 +68,26 @@ export function rejectInviteStart(
 	return {
 		type: REJECT_INVITE_START,
 		payload: { inviteId, projectInvitations },
+	};
+}
+
+export function rejectInviteSuccess(projectId: string): UserActionTypes {
+	return {
+		type: REJECT_INVITE_SUCCESS,
+		payload: { projectId },
+	};
+}
+
+export function dismissTaskStart(taskId: string, newTasks: Partial<Task>[]): UserActionTypes {
+	return {
+		type: DISMISS_TASK_START,
+		payload: { taskId, newTasks },
+	};
+}
+
+export function dismissTaskSuccess(taskId: string): UserActionTypes {
+	return {
+		type: DISMISS_TASK_SUCCESS,
+		payload: { taskId },
 	};
 }
