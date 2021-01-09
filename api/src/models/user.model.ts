@@ -67,6 +67,7 @@ const UserSchema = new Schema({
  */
 UserSchema.pre<Query<IUser>>('findOne', function (next) {
 	this.populate({ path: 'projects' });
+	this.populate({ path: 'projectInvitations', select: ['title', 'image'] });
 	next();
 });
 
