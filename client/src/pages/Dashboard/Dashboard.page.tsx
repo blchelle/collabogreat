@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Breadcrumbs, Container, Grid, Link } from '@material-ui/core';
+import { Breadcrumbs, Container, Grid, Typography } from '@material-ui/core';
 import ProjectsContainer from '../../components/ProjectsContainer/ProjectsContainer.component';
 import TasksContainer from '../../components/TasksContainer/TasksContainer.component';
 import useCommonStyles from '../common.mui';
@@ -11,9 +11,7 @@ const Dashboard: React.FC = () => {
 	return (
 		<>
 			<Breadcrumbs aria-label='breadcrumb' className={commonClasses.breadCrumb}>
-				<Link color='inherit' href='/dashboard'>
-					Dashboard
-				</Link>
+				<Typography color='textPrimary'>Dashboard</Typography>
 			</Breadcrumbs>
 			<Container maxWidth='xl'>
 				<Grid container direction='column' spacing={10}>
