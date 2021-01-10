@@ -11,6 +11,7 @@ import {
 	Link,
 	List,
 	ListItem,
+	Tooltip,
 	Typography,
 } from '@material-ui/core';
 
@@ -131,7 +132,6 @@ const ProjectHub = () => {
 					</Grid>
 					<Grid item container>
 						<Card
-							elevation={8}
 							style={{
 								width: '100%',
 								height: 30,
@@ -142,15 +142,17 @@ const ProjectHub = () => {
 							}}
 						>
 							{project.board.map((stage, index) => (
-								<div
-									style={{
-										width: `${
-											100 * (tasks.filter((t) => t.status === stage).length / tasks.length)
-										}%`,
-										height: '100%',
-										backgroundColor: getColor(index),
-									}}
-								/>
+								<Tooltip title={stage}>
+									<div
+										style={{
+											width: `${
+												100 * (tasks.filter((t) => t.status === stage).length / tasks.length)
+											}%`,
+											height: '100%',
+											backgroundColor: getColor(index),
+										}}
+									/>
+								</Tooltip>
 							))}
 						</Card>
 					</Grid>
