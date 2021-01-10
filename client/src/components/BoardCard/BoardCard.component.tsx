@@ -2,7 +2,15 @@
 import React, { CSSProperties } from 'react';
 import { useDispatch } from 'react-redux';
 import { Draggable, DraggingStyle, NotDraggingStyle } from 'react-beautiful-dnd';
-import { Avatar, Card, CardContent, Grid, IconButton, Typography } from '@material-ui/core';
+import {
+	Avatar,
+	Card,
+	CardContent,
+	Grid,
+	IconButton,
+	Tooltip,
+	Typography,
+} from '@material-ui/core';
 import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
 
 import { User } from '../../redux/user/user.types';
@@ -80,16 +88,18 @@ const BoardCard: React.FC<BoardCardProps> = ({ task, assignedUser }) => {
 								) : null}
 							</Grid>
 							<Grid item>
-								<Avatar
-									style={{
-										height: theme.spacing(3),
-										width: theme.spacing(3),
-										marginLeft: theme.spacing(1),
-									}}
-									src={assignedUser?.image}
-								>
-									{assignedUser?.displayName}
-								</Avatar>
+								<Tooltip title={assignedUser!.displayName!} placement='right'>
+									<Avatar
+										style={{
+											height: theme.spacing(3),
+											width: theme.spacing(3),
+											marginLeft: theme.spacing(1),
+										}}
+										src={assignedUser?.image}
+									>
+										{assignedUser?.displayName}
+									</Avatar>
+								</Tooltip>
 							</Grid>
 						</Grid>
 					</CardContent>
