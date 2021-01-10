@@ -40,7 +40,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 					</Grid>
 					<Grid item container className={classes.cardButtons}>
 						<Grid item>
-							<Button color='primary'>Go To project</Button>
+							<Button color='primary' onClick={() => history.push(`projects/${project._id}`)}>
+								Go To project
+							</Button>
 						</Grid>
 						<Grid item>
 							<Button color='primary' onClick={() => history.push(`projects/${project._id}/board`)}>

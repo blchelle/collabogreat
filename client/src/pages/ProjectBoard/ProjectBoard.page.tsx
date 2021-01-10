@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
-import { Breadcrumbs, Button, Grid, Link } from '@material-ui/core';
+import { Breadcrumbs, Button, Grid, Link, Typography } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 
 import useStyles from './ProjectBoard.mui';
@@ -103,12 +103,10 @@ const ProjectBoard: React.FC = () => {
 				<Link color='inherit' href='/dashboard'>
 					Dashboard
 				</Link>
-				<Link color='inherit' href='/dashboard'>
+				<Link color='inherit' href={`/projects/${projectId}`}>
 					{project.title}
 				</Link>
-				<Link color='textPrimary' href={`/${project._id}/board`} aria-current='page'>
-					Board
-				</Link>
+				<Typography color='textPrimary'>Board</Typography>
 			</Breadcrumbs>
 			<DragDropContext onDragEnd={onDragEnd}>
 				<Droppable droppableId='board' type='STAGES' direction='horizontal'>
