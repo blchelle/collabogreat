@@ -24,9 +24,10 @@ import theme from '../../theme';
 interface AuthDialogProps {
 	open: boolean;
 	onCloseHandler: () => void;
+	type: 'sign in' | 'sign up';
 }
 
-const AuthDialog: React.FC<AuthDialogProps> = ({ open, onCloseHandler }) => {
+const AuthDialog: React.FC<AuthDialogProps> = ({ open, onCloseHandler, type }) => {
 	const classes = useStyles();
 	const providerButtonClasses = classes.providerButton;
 	const facebookButtonClasses = `${classes.facebookButton} ${providerButtonClasses}`;
@@ -41,6 +42,7 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onCloseHandler }) => {
 			onClose={onCloseHandler}
 			classes={{ paperWidthXs: classes.widthXS }}
 		>
+			<div style={{ backgroundColor: theme.palette.primary.main, height: 16, width: '100%' }} />
 			<IconButton
 				style={{
 					alignSelf: 'flex-end',
@@ -58,13 +60,15 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onCloseHandler }) => {
 				style={{ marginBottom: theme.spacing(2), marginTop: theme.spacing(-2) }}
 			>
 				<Typography variant='h5' classes={{ root: classes.dialogTitle }}>
-					Sign in to
+					{`${type === 'sign in' ? 'Sign in to' : 'Sign up for'}`}
 				</Typography>
 				<LogoText />
 			</Grid>
 			<DialogContent>
 				<Typography variant='body1' align='center'>
-					We pinky promise not to steal all of your information and ruin your life
+					{type === 'sign in'
+						? 'Use any of the providers below to sign into your account'
+						: 'Use any of the providers below to create an account'}
 				</Typography>
 				<List>
 					<ListItem>
