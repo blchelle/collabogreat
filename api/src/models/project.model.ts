@@ -71,7 +71,7 @@ const ProjectSchema = new Schema({
 ProjectSchema.pre<Query<IProject>>(/^find/, function (next) {
 	this.populate({
 		path: 'members',
-		select: ['displayName', 'image'],
+		select: ['displayName', 'image', 'email'],
 	});
 
 	next();

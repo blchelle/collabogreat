@@ -26,6 +26,7 @@ class ProjectController extends Controller {
 
 		this.router.route('/me').get(this.getMe()).patch(this.updateMe());
 		this.router.route('/:email').get(this.findUserByEmail());
+		this.router.route('/invite').patch(this.inviteUserToProject());
 	}
 
 	/**
@@ -89,6 +90,21 @@ class ProjectController extends Controller {
 
 			// Sends the users id back in the request
 			res.status(StatusCode.SuccessOK).json({ userId: user?.id });
+		});
+	}
+
+	protected inviteUserToProject() {
+		return catchAsync(async (req: Request, res: Response) => {
+			// Pulls the userId and projectId off of the body of the request
+			const { userId, projectId } = req.body;
+
+			// Pushes the project id onto the users projectInvitations
+			await this.model.findByIdAndUpdate(userId, {
+				$push: { projectInvitations: projectId },
+			});
+
+			// Sends the users id back in the request
+			res.status(StatusCode.SuccessOK).json();
 		});
 	}
 }
