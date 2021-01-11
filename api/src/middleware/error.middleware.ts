@@ -5,6 +5,7 @@ import { StatusCode } from 'status-code-enum';
 
 import APIError from '../errors/api.error';
 import logger from '../utils/logger.utils';
+import environment from '../configs/environment.config';
 
 /**
  * The format of the error in the http response
@@ -21,12 +22,17 @@ type ErrorResponse = string | { [prop: string]: string }[];
  * @param res Outgoing Response
  * @param _next Calls the next middleware, UNUSED
  */
-function handleError(err: Error, _req: Request, res: Response, _next: NextFunction) {
+function handleError(err: Error, req: Request, res: Response, _next: NextFunction) {
 	let statusCode;
 	let responseError: ErrorResponse;
 	let responseSolution: string | null = null;
 
 	logger('ErrorHandler', `${err.message} ❌`);
+
+	if (req.path.includes(`api/v${environment.development.version}/auth`)) {
+		res.redirect(environment.development.oauth.failureRoute);
+		return;
+	}
 
 	// Handles the error based on what kind of error is received
 	if (err instanceof APIError) {
@@ -35,6 +41,7 @@ function handleError(err: Error, _req: Request, res: Response, _next: NextFuncti
 		responseSolution = err.solution;
 	} else if (err instanceof MongooseError.ValidationError) {
 		statusCode = StatusCode.ServerErrorInternal;
+
 		responseError = Object.values(err.errors).map(({ path, message }) => {
 			return { [path]: message };
 		});
