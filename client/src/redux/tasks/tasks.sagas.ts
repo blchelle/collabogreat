@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
-import axios from 'axios';
-
 import { all, call, put, takeLatest } from 'redux-saga/effects';
+
+import axios from '../../config/axios.config';
 import { closeModal } from '../modals/modals.actions';
 import { ModalNames } from '../modals/modals.reducer';
 import { openError } from '../error/error.actions';
@@ -22,8 +22,6 @@ import {
 
 type RequestTask = Pick<Task, Exclude<keyof Task, '_id' | 'order'>>;
 
-axios.defaults.baseURL = 'http://localhost:8000';
-
 function* attemptCreateTask({ payload }: TaskActionTypes) {
 	try {
 		const taskPayload = payload as Task;
@@ -40,11 +38,6 @@ function* attemptCreateTask({ payload }: TaskActionTypes) {
 		const res = yield axios('api/v0/tasks', {
 			method: 'POST',
 			data: reqTask,
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
 		});
 
 		// Throws if the action was unsuccessful
@@ -72,14 +65,7 @@ function* attemptFetchTasks({ payload }: TaskActionTypes) {
 
 		if (Array.isArray(payload)) {
 			for (const projectId of payload) {
-				const res = yield axios(`api/v0/tasks/project/${projectId}`, {
-					method: 'GET',
-					withCredentials: true,
-					headers: {
-						'Content-Type': 'application/json',
-						'Access-Control-Allow-Credentials': true,
-					},
-				});
+				const res = yield axios(`api/v0/tasks/project/${projectId}`, { method: 'GET' });
 
 				// Throws if the action was unsuccessful
 				// TODO Read the error description and solution from the response into the error message.
@@ -122,11 +108,6 @@ function* attemptModifyTasks({ payload }: TaskActionTypes) {
 			data: {
 				tasks,
 			},
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
 		});
 
 		// Throws if the action was unsuccessful
@@ -155,14 +136,7 @@ function* attemptDeleteTask({ payload }: TaskActionTypes) {
 		// Delete the task optimistically
 		yield put(deleteTaskSuccess(task._id));
 
-		const res = yield axios(`api/v0/tasks/${task._id}`, {
-			method: 'DELETE',
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
-		});
+		const res = yield axios(`api/v0/tasks/${task._id}`, { method: 'DELETE' });
 
 		// Throws if the action was unsuccessful
 		// TODO Read the error description and solution from the response into the error message.

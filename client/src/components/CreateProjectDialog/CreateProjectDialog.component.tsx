@@ -1,6 +1,5 @@
 import React, { useState, SetStateAction, SyntheticEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import {
 	Button,
 	CircularProgress,
@@ -14,6 +13,7 @@ import {
 } from '@material-ui/core';
 import { Add as AddIcon, Close as CloseIcon } from '@material-ui/icons';
 
+import axios from '../../config/axios.config';
 import { ReactComponent as UDScrumBoard } from '../../assets/scrum-board.undraw.svg';
 import { closeModal } from '../../redux/modals/modals.actions';
 import { Project } from '../../redux/project/project.types';
@@ -110,15 +110,7 @@ const CreateProjectDialog: React.FC = () => {
 			setOtherMembers(updatedOtherMembers);
 		}
 
-		axios.defaults.baseURL = 'http://localhost:8000';
-		const res = await axios(`api/v0/user/${email}`, {
-			method: 'GET',
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
-		});
+		const res = await axios(`api/v0/user/${email}`, { method: 'GET' });
 
 		if (!res.data.userId) {
 			updatedOtherMembers[index].errorReason = 'We could not find a user with this Email Address';

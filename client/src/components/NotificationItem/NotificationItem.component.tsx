@@ -34,7 +34,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ _id, type, title, c
 								<Grid item>
 									<ColoredAvatar id={_id} text={title} />
 								</Grid>
-								<Grid item>
+								<Grid item xs>
 									<Typography>{`You've been invited to join the project '${title}'`}</Typography>
 								</Grid>
 							</Grid>
@@ -66,18 +66,18 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ _id, type, title, c
 						</>
 					) : (
 						<>
-							<Grid item xs={12} container alignItems='center' spacing={1}>
-								<Grid item xs>
+							<Grid item xs={12} container alignItems='center' spacing={2}>
+								<Grid item>
 									<Card
 										style={{
 											backgroundColor: color,
-											height: theme.spacing(4),
-											width: theme.spacing(4),
+											height: theme.spacing(5),
+											width: theme.spacing(5),
 										}}
 										elevation={0}
 									/>
 								</Grid>
-								<Grid item xs={10}>
+								<Grid item xs>
 									<Typography>{`You've been assigned to the task '${title}'`}</Typography>
 								</Grid>
 							</Grid>

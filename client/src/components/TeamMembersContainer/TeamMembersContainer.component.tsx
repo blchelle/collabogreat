@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import {
 	Button,
 	Card,
@@ -14,6 +13,7 @@ import {
 } from '@material-ui/core';
 import { Add as AddIcon, Send as SendIcon, Close as CloseIcon } from '@material-ui/icons';
 
+import axios from '../../config/axios.config';
 import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
 import { User } from '../../redux/user/user.types';
 import { Task } from '../../redux/tasks/tasks.types';
@@ -63,15 +63,7 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 			return;
 		}
 
-		axios.defaults.baseURL = 'http://localhost:8000';
-		const res = await axios(`api/v0/user/${email}`, {
-			method: 'GET',
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
-		});
+		const res = await axios(`api/v0/user/${email}`, { method: 'GET' });
 
 		if (!res.data.userId) {
 			setNewMemberEmail({
@@ -87,11 +79,6 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 		const res2 = await axios(`api/v0/user/invite`, {
 			method: 'PATCH',
 			data: { userId: res.data.userId, projectId },
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
 		});
 
 		if (res2.status === 200) {
