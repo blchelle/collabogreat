@@ -16,6 +16,9 @@ import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
 import { User } from '../../redux/user/user.types';
 import { deleteTaskStart } from '../../redux/tasks/tasks.actions';
 import { Task } from '../../redux/tasks/tasks.types';
+import { openModal } from '../../redux/modals/modals.actions';
+import { ModalNames } from '../../redux/modals/modals.reducer';
+
 import useStyles from './BoardCard.mui';
 import theme from '../../theme';
 
@@ -62,7 +65,27 @@ const BoardCard: React.FC<BoardCardProps> = ({ task, assignedUser }) => {
 						style={{ backgroundColor: task.color, height: theme.spacing(4) }}
 					>
 						<Grid item>
-							<IconButton className={classes.iconButton}>
+							<IconButton
+								className={classes.iconButton}
+								onClick={() =>
+									dispatch(
+										openModal(ModalNames.CREATE_TASK_DIALOG, {
+											children: null,
+											open: true,
+											extra: {
+												id: task._id,
+												initialProjectId: task.project,
+												initialStatus: task.status,
+												initialTitle: task.title,
+												initialDescription: task.description,
+												initialColor: task.color,
+												initialAssignee: task.user,
+												mode: 'edit',
+											},
+										})
+									)
+								}
+							>
 								<EditIcon className={classes.icon} />
 							</IconButton>
 						</Grid>

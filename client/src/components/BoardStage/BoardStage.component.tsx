@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { Button, Card, CardContent, Grid, IconButton, Typography } from '@material-ui/core';
@@ -32,27 +32,6 @@ const BoardStage: React.FC<BoardStage> = ({ stageId, stageName, project, tasks }
 	const projectId = project._id;
 	const projectMembers = project.members;
 
-	// Handlers
-	const openDropdown = (dropdownName: ModalNames, children: ReactElement) => (
-		event: React.SyntheticEvent
-	) => {
-		dispatch(
-			openModal(dropdownName, {
-				open: true,
-				placement: 'bottom-end',
-				anchorEl: event.currentTarget as HTMLElement,
-				children,
-				extra: {
-					projectId,
-					stageName,
-					stageIndex: +stageId,
-					numTasks: tasks.length,
-					numStages: project.board.length,
-				},
-			})
-		);
-	};
-
 	return (
 		<>
 			<Draggable draggableId={stageId} index={+stageId}>
@@ -73,10 +52,23 @@ const BoardStage: React.FC<BoardStage> = ({ stageId, stageName, project, tasks }
 								<Grid item>
 									<IconButton
 										size='small'
-										onClick={openDropdown(
-											ModalNames.BOARD_STAGE_MENU_DROPDOWN,
-											<BoardStageMenuDropdown />
-										)}
+										onClick={(event: React.SyntheticEvent) => {
+											dispatch(
+												openModal(ModalNames.BOARD_STAGE_MENU_DROPDOWN, {
+													open: true,
+													placement: 'bottom-end',
+													anchorEl: event.currentTarget as HTMLElement,
+													children: <BoardStageMenuDropdown />,
+													extra: {
+														projectId,
+														stageName,
+														stageIndex: +stageId,
+														numTasks: tasks.length,
+														numStages: project.board.length,
+													},
+												})
+											);
+										}}
 									>
 										<MoreIcon />
 									</IconButton>
