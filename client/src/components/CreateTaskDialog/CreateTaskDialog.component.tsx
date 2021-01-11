@@ -26,7 +26,7 @@ import { RootState } from '../../redux/root.reducer';
 import { Task, TaskColor } from '../../redux/tasks/tasks.types';
 import useStyles from './CreateTaskDialog.mui';
 import theme from '../../theme';
-import { createTaskStart } from '../../redux/tasks/tasks.actions';
+import { createTaskStart, editTasksStart } from '../../redux/tasks/tasks.actions';
 
 interface FormInputState {
 	visited: boolean;
@@ -34,8 +34,14 @@ interface FormInputState {
 }
 
 interface CreateTaskDialogExtras {
+	id?: string; // Only applies in 'edit' mode
+	initialTitle: string;
+	initialDescription: string;
 	initialProjectId: string;
 	initialStatus: string;
+	initialAssignee: string;
+	initialColor: TaskColor;
+	mode: 'create' | 'edit';
 }
 
 const CreateTaskDialog: React.FC = () => {
@@ -47,8 +53,14 @@ const CreateTaskDialog: React.FC = () => {
 	const userProjects = useSelector((state: RootState) => state.projects);
 	const { open, extra } = useSelector((state: RootState) => state.modals.CREATE_TASK_DIALOG);
 
+	const id = (extra as CreateTaskDialogExtras)?.id;
+	const initialTitle = (extra as CreateTaskDialogExtras)?.initialTitle;
+	const initialDescription = (extra as CreateTaskDialogExtras)?.initialDescription;
 	const initialProjectId = (extra as CreateTaskDialogExtras)?.initialProjectId;
 	const initialStatus = (extra as CreateTaskDialogExtras)?.initialStatus;
+	const initialAssignee = (extra as CreateTaskDialogExtras)?.initialAssignee;
+	const initialColor = (extra as CreateTaskDialogExtras)?.initialColor;
+	const mode = (extra as CreateTaskDialogExtras)?.mode ?? 'create';
 
 	// Form State
 	const initialInputState: FormInputState = { visited: false, value: '' };
@@ -58,18 +70,29 @@ const CreateTaskDialog: React.FC = () => {
 	const [title, setTitle] = useState<FormInputState>(initialInputState);
 	const [assignee, setAssignee] = useState<FormInputState>(initialInputState);
 	const [description, setDescription] = useState<FormInputState>(initialInputState);
-	const [color, setColor] = useState<FormInputState>({ visited: false, value: TaskColor.GREY });
+	const [color, setColor] = useState<FormInputState>({
+		visited: false,
+		value: TaskColor.GREY,
+	});
 	const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
 	// Clears the inputs when the dialog opens/closes
 	useEffect(() => {
 		setProjectId({ visited: false, value: initialProjectId ?? '' });
 		setStatus({ visited: false, value: initialStatus ?? '' });
-		setTitle({ visited: false, value: '' });
-		setAssignee({ visited: false, value: '' });
-		setDescription({ visited: false, value: '' });
-		setColor({ visited: false, value: TaskColor.GREY });
-	}, [open, initialStatus, initialProjectId]);
+		setTitle({ visited: false, value: initialTitle ?? '' });
+		setAssignee({ visited: false, value: initialAssignee ?? '' });
+		setDescription({ visited: false, value: initialDescription ?? '' });
+		setColor({ visited: false, value: initialColor ?? TaskColor.GREY });
+	}, [
+		open,
+		initialStatus,
+		initialProjectId,
+		initialAssignee,
+		initialColor,
+		initialTitle,
+		initialDescription,
+	]);
 
 	// Form Handlers
 	const onInputChange = (setterFn: React.Dispatch<SetStateAction<FormInputState>>) => (
@@ -95,8 +118,8 @@ const CreateTaskDialog: React.FC = () => {
 	const submitForm = async (event: React.FormEvent) => {
 		event.preventDefault();
 
-		const newTask: Task = {
-			_id: '', // This field should be generated on the server
+		const task: Task = {
+			_id: mode === 'edit' ? id! : '', // This field should be generated on the server
 			order: -1, // This field should be generated on the server
 			project: projectId.value,
 			status: status.value,
@@ -107,7 +130,12 @@ const CreateTaskDialog: React.FC = () => {
 		};
 
 		setIsWaiting(true);
-		await dispatch(createTaskStart(newTask));
+
+		if (mode === 'edit') {
+			await dispatch(editTasksStart([task]));
+		} else {
+			await dispatch(createTaskStart(task));
+		}
 		setIsWaiting(false);
 	};
 
@@ -134,7 +162,7 @@ const CreateTaskDialog: React.FC = () => {
 							<Grid className={classes.dialogRight} container direction='column' spacing={2}>
 								<Grid item>
 									<Typography variant='h5' gutterBottom>
-										Let&apos;s Get to Work!
+										{mode === 'edit' ? 'Edit Task Information' : "Let's Get to Work!"}
 									</Typography>
 								</Grid>
 								<Grid item>
@@ -301,7 +329,7 @@ const CreateTaskDialog: React.FC = () => {
 										value={description.value}
 										onChange={onInputChange(setDescription)}
 										onBlur={() => setDescription({ ...description, visited: true })}
-										helperText='Give clear details tso the assignee knows what they need to do'
+										helperText='Give clear details to the assignee knows what they need to do'
 									/>
 								</Grid>
 								<Grid item>
@@ -312,7 +340,7 @@ const CreateTaskDialog: React.FC = () => {
 										disabled={title.value === '' || projectId.value === '' || status.value === ''}
 										onClick={submitForm}
 									>
-										Create Task
+										{mode === 'edit' ? 'Confirm Changes' : 'Create Task'}
 									</Button>
 								</Grid>
 							</Grid>

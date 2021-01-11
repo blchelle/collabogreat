@@ -142,6 +142,7 @@ function* attemptModifyTasks({ payload }: TaskActionTypes) {
 		// User documents should only contain references to the project
 		// The id will be extracted from each project
 		yield put(editTasksSuccess(resTasks));
+		yield put(closeModal(ModalNames.CREATE_TASK_DIALOG));
 	} catch (err) {
 		yield put(openError('Error', 'Here is a solution'));
 	}
