@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
-import { Breadcrumbs, Grid, Link, Typography } from '@material-ui/core';
+import { Breadcrumbs, Grid, Link, Typography, useMediaQuery } from '@material-ui/core';
 
 import ColoredAvatar from '../../components/ColoredAvatar/ColoredAvatar.component';
 import TasksContainer from '../../components/TasksContainer/TasksContainer.component';
@@ -21,8 +21,11 @@ const ProjectHub = () => {
 	const tasks = useSelector((state: RootState) => state.tasks.filter((t) => t.project === id));
 	const commonClasses = useCommonStyles();
 
+	// MUI Media Query
+	const isScreenSmall = useMediaQuery(theme.breakpoints.down('md'));
+
 	return (
-		<Grid container direction='column'>
+		<Grid container direction='column' justify='center'>
 			<Grid item>
 				<Breadcrumbs aria-label='breadcrumb' className={commonClasses.breadCrumb}>
 					<Link color='inherit' href='/dashboard'>
@@ -34,17 +37,25 @@ const ProjectHub = () => {
 			<Grid
 				item
 				container
+				direction={isScreenSmall ? 'column' : 'row'}
 				style={{
-					paddingLeft: theme.spacing(10),
-					paddingRight: theme.spacing(10),
+					paddingLeft: theme.spacing(isScreenSmall ? 4 : 10),
+					paddingRight: theme.spacing(isScreenSmall ? 4 : 10),
 					marginTop: theme.spacing(1),
 					marginBottom: theme.spacing(1),
 				}}
-				spacing={10}
+				spacing={isScreenSmall ? 4 : 10}
 			>
-				<Grid item container direction='column' xs={8} spacing={4}>
-					<Grid item container spacing={2} alignItems='center'>
-						<Grid item>
+				<Grid item container direction='column' xs={12} lg={8} spacing={isScreenSmall ? 0 : 4}>
+					{/* Project Header */}
+					<Grid
+						item
+						container
+						spacing={2}
+						style={{ marginBottom: isScreenSmall ? theme.spacing(2) : 0 }}
+						alignItems='center'
+					>
+						<Grid item style={{ marginBottom: isScreenSmall ? theme.spacing(2) : 0 }}>
 							<ColoredAvatar
 								src={project.image}
 								text={project.title}
@@ -57,13 +68,19 @@ const ProjectHub = () => {
 							<Typography variant='h4'>{project.title}</Typography>
 						</Grid>
 					</Grid>
+
+					{/* Tasks BreakDown */}
 					<Grid item container>
 						<TaskBreakdownContainer tasks={tasks} board={project.board} projectId={id} />
 					</Grid>
+
+					{/* Tasks List */}
 					<Grid item>
 						<TasksContainer type='project' tasks={tasks} />
 					</Grid>
 				</Grid>
+
+				{/* Team Members */}
 				<Grid item xs>
 					<TeamMembersContainer members={project.members!} tasks={tasks} projectId={id} />
 				</Grid>
