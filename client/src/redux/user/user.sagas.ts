@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
+import axios from '../../config/axios.config';
 import { createProjectSuccess, setAllProjects } from '../project/project.actions';
 import { Project } from '../project/project.types';
 import {
@@ -20,19 +20,10 @@ import {
 	REJECT_INVITE_START,
 } from './user.types';
 
-axios.defaults.baseURL = 'http://localhost:8000';
-
 function* getUserInformation() {
 	try {
 		// Attempts to fetch an authenticated users information
-		const res = yield axios('api/v0/user/me', {
-			method: 'GET',
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
-		});
+		const res = yield axios('api/v0/user/me', { method: 'GET' });
 
 		// Throws if the fetch was unsuccesful
 		if (res.status !== 200) throw new Error('Failed to authenticate user');
@@ -59,11 +50,6 @@ function* attemptLogout() {
 		// Attempts to fetch an authenticated users information
 		const res = yield axios('api/v0/auth/logout', {
 			method: 'GET',
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
 		});
 
 		// Throws if the fetch was unsuccesful
@@ -93,11 +79,6 @@ function* attemptAcceptInvite({
 		const userRes = yield axios('api/v0/user/me', {
 			method: 'PATCH',
 			data: { projects, projectInvitations: updatedInvitations },
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
 		});
 
 		if (userRes.status !== 200) {
@@ -107,11 +88,6 @@ function* attemptAcceptInvite({
 		// Calls the API to get the existing project members
 		const { members } = (yield axios(`api/v0/projects/${acceptedInviteId}`, {
 			method: 'GET',
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
 		})).data.project;
 
 		// Updates the projects members
@@ -121,11 +97,6 @@ function* attemptAcceptInvite({
 		const projectRes = yield axios('api/v0/projects', {
 			method: 'PATCH',
 			data: { project: { _id: acceptedInviteId, members } },
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
 		});
 
 		if (projectRes.status !== 200) {
@@ -154,11 +125,6 @@ function* attemptRejectInvite({
 		const userRes = yield axios('api/v0/user/me', {
 			method: 'PATCH',
 			data: { projectInvitations: updatedInvitations },
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
 		});
 
 		if (userRes.status !== 200) {
@@ -181,11 +147,6 @@ function* attemptDismissTask({ payload: { taskId, newTasks } }: DismissTaskStart
 		const userRes = yield axios('api/v0/user/me', {
 			method: 'PATCH',
 			data: { newTasks: updatedNewTasks.map((task) => task._id) },
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
 		});
 
 		if (userRes.status !== 200) {

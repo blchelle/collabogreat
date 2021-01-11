@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
+import axios from '../../config/axios.config';
 import { addProjectToUser } from '../user/user.actions';
 import { createProjectSuccess, editProjectSuccess } from './project.actions';
 import { closeModal } from '../modals/modals.actions';
@@ -12,8 +12,6 @@ import {
 	CREATE_PROJECT_START,
 	EDIT_PROJECT_START,
 } from './project.types';
-
-axios.defaults.baseURL = 'http://localhost:8000';
 
 function* attemptCreateProject({ payload }: ProjectActionTypes) {
 	try {
@@ -31,11 +29,6 @@ function* attemptCreateProject({ payload }: ProjectActionTypes) {
 		const res = yield axios('api/v0/projects', {
 			method: 'POST',
 			data: { ...payload, members: payload.members!.map((member) => member!._id) },
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
 		});
 
 		// Throws if the action was unsuccessful
@@ -67,11 +60,6 @@ function* attemptEditProject({ payload }: ProjectActionTypes) {
 		const res = yield axios('api/v0/projects', {
 			method: 'PATCH',
 			data: { project: payload },
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Credentials': true,
-			},
 		});
 
 		// Throws if the action was unsuccessful
