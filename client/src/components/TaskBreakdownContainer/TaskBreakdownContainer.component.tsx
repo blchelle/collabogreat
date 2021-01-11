@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import { Button, Card, Divider, Grid, Tooltip, Typography } from '@material-ui/core';
+import { Button, Card, Divider, Grid, Tooltip, Typography, useMediaQuery } from '@material-ui/core';
 
 import { Task } from '../../redux/tasks/tasks.types';
 import theme from '../../theme';
@@ -52,13 +52,22 @@ const TaskBreakdownContainer: React.FC<TaskBreakdownContainerProps> = ({
 		}
 	};
 
+	// MUI Media Query
+	const isScreenSmall = useMediaQuery(theme.breakpoints.down('md'));
+
 	return (
 		<Grid container spacing={4}>
 			<Grid item xs>
 				<Typography variant='h5'>Task Breakdown</Typography>
 				<Divider />
 			</Grid>
-			<Grid item container justify='flex-start' spacing={2}>
+			<Grid
+				item
+				container
+				justify='flex-start'
+				spacing={2}
+				direction={isScreenSmall ? 'column' : 'row'}
+			>
 				{board.map((stage, index) => (
 					<>
 						<Grid item container spacing={2} style={{ width: 'auto' }} alignItems='center'>
@@ -78,7 +87,6 @@ const TaskBreakdownContainer: React.FC<TaskBreakdownContainerProps> = ({
 								</Typography>
 							</Grid>
 						</Grid>
-						{index !== board.length - 1 ? <Divider orientation='vertical' /> : null}
 					</>
 				))}
 			</Grid>
