@@ -1,11 +1,14 @@
 import React from 'react';
 import { useParams } from 'react-router';
-import { useSelector } from 'react-redux';
-import { Breadcrumbs, Grid, Link, Typography, useMediaQuery } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { Breadcrumbs, Button, Grid, Link, Typography, useMediaQuery } from '@material-ui/core';
+import { Edit as EditIcon } from '@material-ui/icons';
 
 import ColoredAvatar from '../../components/ColoredAvatar/ColoredAvatar.component';
 import TasksContainer from '../../components/TasksContainer/TasksContainer.component';
 import TeamMembersContainer from '../../components/TeamMembersContainer/TeamMembersContainer.component';
+import { ModalNames } from '../../redux/modals/modals.reducer';
+import { openModal } from '../../redux/modals/modals.actions';
 import { RootState } from '../../redux/root.reducer';
 
 import useCommonStyles from '../common.mui';
@@ -13,13 +16,16 @@ import theme from '../../theme';
 import TaskBreakdownContainer from '../../components/TaskBreakdownContainer/TaskBreakdownContainer.component';
 
 const ProjectHub = () => {
+	// MUI
+	const commonClasses = useCommonStyles();
+
 	// Hooks
 	const { id } = useParams<{ id: string }>();
 
 	// Redux
 	const project = useSelector((state: RootState) => state.projects.find((p) => p._id === id)!);
 	const tasks = useSelector((state: RootState) => state.tasks.filter((t) => t.project === id));
-	const commonClasses = useCommonStyles();
+	const dispatch = useDispatch();
 
 	// MUI Media Query
 	const isScreenSmall = useMediaQuery(theme.breakpoints.down('md'));
@@ -64,8 +70,33 @@ const ProjectHub = () => {
 								style={{ width: theme.spacing(6), height: theme.spacing(6), fontSize: 20 }}
 							/>
 						</Grid>
-						<Grid item>
+						<Grid item xs>
 							<Typography variant='h4'>{project.title}</Typography>
+						</Grid>
+						<Grid item>
+							<Button
+								variant='outlined'
+								color='primary'
+								endIcon={<EditIcon />}
+								onClick={() =>
+									dispatch(
+										openModal(ModalNames.CREATE_PROJECT_DIALOG, {
+											children: null,
+											open: true,
+											extra: {
+												id: project._id,
+												initialTitle: project.title,
+												initialDescription: project.description,
+												currentBoard: project.board,
+												currentMembers: project.members!,
+												mode: 'edit',
+											},
+										})
+									)
+								}
+							>
+								Edit Project
+							</Button>
 						</Grid>
 					</Grid>
 
