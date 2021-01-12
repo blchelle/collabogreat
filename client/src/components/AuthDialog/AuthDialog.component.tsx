@@ -42,7 +42,13 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onCloseHandler, type }) =
 			onClose={onCloseHandler}
 			classes={{ paperWidthXs: classes.widthXS }}
 		>
-			<div style={{ backgroundColor: theme.palette.primary.main, height: 16, width: '100%' }} />
+			<div
+				style={{
+					backgroundColor: theme.palette.primary.main,
+					height: theme.spacing(1),
+					width: '100%',
+				}}
+			/>
 			<IconButton
 				style={{
 					alignSelf: 'flex-end',

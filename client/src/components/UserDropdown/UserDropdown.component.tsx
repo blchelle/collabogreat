@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Divider, Grid, MenuItem, MenuList, Typography } from '@material-ui/core';
-import { Settings as SettingsIcon, ExitToApp as LogOutIcon } from '@material-ui/icons';
+import { ExitToApp as LogOutIcon } from '@material-ui/icons';
 
 import useStyles from './UserDropdown.mui';
 import { logoutStart } from '../../redux/user/user.actions';
@@ -28,10 +28,6 @@ const UserDropdown: React.FC = () => {
 			</Grid>
 			<Divider />
 			<MenuList className={classes.menu}>
-				<MenuItem className={classes.menuItem}>
-					<SettingsIcon className={classes.marginRight} />
-					<Typography>Settings</Typography>
-				</MenuItem>
 				<MenuItem className={classes.menuItem} onClick={() => dispatch(logoutStart())}>
 					<LogOutIcon className={classes.marginRight} />
 					Log Out
