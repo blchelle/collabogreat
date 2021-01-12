@@ -12,6 +12,8 @@ import {
 	ACCEPT_INVITE_SUCCESS,
 	DISMISS_TASK_SUCCESS,
 	REJECT_INVITE_SUCCESS,
+	LEAVE_PROJECT_START,
+	LEAVE_PROJECT_SUCCESS,
 } from './user.types';
 
 export function fetchCurrentUser(): UserActionTypes {
@@ -39,6 +41,20 @@ export function addProjectToUser(projectId: string): UserActionTypes {
 	return {
 		type: ADD_PROJECT_TO_USER,
 		payload: projectId,
+	};
+}
+
+export function leaveProjectStart(projectId: string): UserActionTypes {
+	return {
+		type: LEAVE_PROJECT_START,
+		payload: { projectId },
+	};
+}
+
+export function leaveProjectSuccess(projectId: string): UserActionTypes {
+	return {
+		type: LEAVE_PROJECT_SUCCESS,
+		payload: { projectId },
 	};
 }
 

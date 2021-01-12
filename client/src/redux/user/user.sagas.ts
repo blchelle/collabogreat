@@ -7,6 +7,7 @@ import { stopLoading } from '../loading/loading.actions';
 import {
 	acceptInviteSuccess,
 	dismissTaskSuccess,
+	leaveProjectSuccess,
 	rejectInviteSuccess,
 	setCurrentUser,
 } from './user.actions';
@@ -16,6 +17,8 @@ import {
 	DismissTaskStartAction,
 	DISMISS_TASK_START,
 	FETCH_CURRENT_USER,
+	LeaveProjectStartAction,
+	LEAVE_PROJECT_START,
 	LOGOUT_START,
 	RejectInviteStartAction,
 	REJECT_INVITE_START,
@@ -63,6 +66,23 @@ function* attemptLogout() {
 		yield put(setAllProjects([]));
 	} catch (err) {
 		console.log(err);
+	}
+}
+
+function* attemptLeaveProject({ payload: { projectId } }: LeaveProjectStartAction) {
+	try {
+		// Calls the api route to leave a project
+		const res = yield axios(`api/v0/user/me/leave/${projectId}`, { method: 'PATCH' });
+
+		if (res.status !== 200) {
+			throw new Error(res.message);
+		}
+
+		// Calls the success handlers
+		yield put(leaveProjectSuccess(projectId));
+		window.location.replace('/dashboard');
+	} catch (err) {
+		console.log(err.message);
 	}
 }
 
@@ -175,6 +195,10 @@ function* onLogoutStart() {
 	yield takeLatest(LOGOUT_START, attemptLogout);
 }
 
+function* onLeaveProjectStart() {
+	yield takeLatest(LEAVE_PROJECT_START, attemptLeaveProject);
+}
+
 function* onAcceptInviteStart() {
 	yield takeLatest(ACCEPT_INVITE_START, attemptAcceptInvite);
 }
@@ -191,6 +215,7 @@ export function* userSagas() {
 	yield all([
 		call(onFetchCurrentUser),
 		call(onLogoutStart),
+		call(onLeaveProjectStart),
 		call(onAcceptInviteStart),
 		call(onRejectInviteStart),
 		call(onDismissTaskStart),

@@ -1,18 +1,21 @@
 import { NextFunction, Request, Response } from 'express';
+import mongoose from 'mongoose';
 import StatusCode from 'status-code-enum';
 
 import Controller from './base.controller';
 import APIError from '../errors/api.error';
-import User, { IUser } from '../models/user.model';
+import UserModel, { IUser } from '../models/user.model';
 import catchAsync from '../utils/catchAsync.util';
+import ProjectModel from '../models/project.model';
+import TaskModel from '../models/task.model';
 
 /**
  * Used to perform operations relating to the Project Model
  */
-class ProjectController extends Controller {
+class UserController extends Controller {
 	public path = 'user';
 
-	public model = User;
+	public model = UserModel;
 
 	constructor() {
 		super();
@@ -25,6 +28,7 @@ class ProjectController extends Controller {
 		// All routes below this are protected
 
 		this.router.route('/me').get(this.getMe()).patch(this.updateMe());
+		this.router.route('/me/leave/:id').patch(this.leaveProject());
 		this.router.route('/:email').get(this.findUserByEmail());
 		this.router.route('/invite').patch(this.inviteUserToProject());
 	}
@@ -107,6 +111,63 @@ class ProjectController extends Controller {
 			res.status(StatusCode.SuccessOK).json();
 		});
 	}
+
+	protected leaveProject() {
+		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+			// Ensures that the user is on the request object
+			if (!req.user) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorUnauthorized,
+						'Unable to find your information',
+						'Try logging out and logging back in with the same provider'
+					)
+				);
+			}
+
+			const userId = (req.user as IUser).id;
+
+			// Ensures that the user is trying to leave a rel project
+			const projectId = req.params.id;
+			if (!(await ProjectModel.findById(projectId))) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorBadRequest,
+						`Unable to find a project with id ${projectId}`,
+						'Ensure that the project you are trying to leave has not been deleted'
+					)
+				);
+			}
+
+			// Ensures that the user doesn't have any tasks left to do in the project
+			const tasks = await TaskModel.find({ $and: [{ user: userId }, { project: projectId }] });
+			if (tasks.length > 0) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorBadRequest,
+						'Unable to leave project',
+						'You must transfer ownership or delete any outstanding tasks you have in this project'
+					)
+				);
+			}
+
+			// Uses a transaction to ensure that all operations are successful
+			const session = await mongoose.startSession();
+			session.startTransaction();
+
+			// Removes the project from the users 'projects' atrribute
+			const user = await UserModel.findByIdAndUpdate(userId, { $pull: { projects: projectId } });
+
+			// Removes the user from the projects 'members' attribute
+			await ProjectModel.findByIdAndUpdate(projectId, { $pull: { members: userId } });
+
+			await session.commitTransaction();
+			session.endSession();
+
+			// Sends the users id back in the request
+			res.status(StatusCode.SuccessOK).json({ user });
+		});
+	}
 }
 
-export default ProjectController;
+export default UserController;

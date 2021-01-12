@@ -1,14 +1,12 @@
 import React from 'react';
 import { useParams } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
-import { Breadcrumbs, Button, Grid, Link, Typography, useMediaQuery } from '@material-ui/core';
-import { Edit as EditIcon } from '@material-ui/icons';
+import { useSelector } from 'react-redux';
+import { Breadcrumbs, Grid, Link, Typography, useMediaQuery } from '@material-ui/core';
 
 import ColoredAvatar from '../../components/ColoredAvatar/ColoredAvatar.component';
+import ProjectSettings from '../../components/ProjectSettings/ProjectSettings.component';
 import TasksContainer from '../../components/TasksContainer/TasksContainer.component';
 import TeamMembersContainer from '../../components/TeamMembersContainer/TeamMembersContainer.component';
-import { ModalNames } from '../../redux/modals/modals.reducer';
-import { openModal } from '../../redux/modals/modals.actions';
 import { RootState } from '../../redux/root.reducer';
 
 import useCommonStyles from '../common.mui';
@@ -24,8 +22,8 @@ const ProjectHub = () => {
 
 	// Redux
 	const project = useSelector((state: RootState) => state.projects.find((p) => p._id === id)!);
+	const userId = useSelector((state: RootState) => state.user!._id);
 	const tasks = useSelector((state: RootState) => state.tasks.filter((t) => t.project === id));
-	const dispatch = useDispatch();
 
 	// MUI Media Query
 	const isScreenSmall = useMediaQuery(theme.breakpoints.down('md'));
@@ -73,31 +71,6 @@ const ProjectHub = () => {
 						<Grid item xs>
 							<Typography variant='h4'>{project.title}</Typography>
 						</Grid>
-						<Grid item>
-							<Button
-								variant='outlined'
-								color='primary'
-								endIcon={<EditIcon />}
-								onClick={() =>
-									dispatch(
-										openModal(ModalNames.CREATE_PROJECT_DIALOG, {
-											children: null,
-											open: true,
-											extra: {
-												id: project._id,
-												initialTitle: project.title,
-												initialDescription: project.description,
-												currentBoard: project.board,
-												currentMembers: project.members!,
-												mode: 'edit',
-											},
-										})
-									)
-								}
-							>
-								Edit Project
-							</Button>
-						</Grid>
 					</Grid>
 
 					{/* Tasks BreakDown */}
@@ -110,10 +83,17 @@ const ProjectHub = () => {
 						<TasksContainer type='project' tasks={tasks} />
 					</Grid>
 				</Grid>
-
-				{/* Team Members */}
-				<Grid item xs>
-					<TeamMembersContainer members={project.members!} tasks={tasks} projectId={id} />
+				<Grid item xs container direction='column' spacing={6}>
+					{/* Team Members */}
+					<Grid item>
+						<TeamMembersContainer members={project.members!} tasks={tasks} projectId={id} />
+					</Grid>
+					<Grid item>
+						<ProjectSettings
+							project={project}
+							numUserTasks={tasks.filter((t) => t.user === userId).length}
+						/>
+					</Grid>
 				</Grid>
 			</Grid>
 		</Grid>
