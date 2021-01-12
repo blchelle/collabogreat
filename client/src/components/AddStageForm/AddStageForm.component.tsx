@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, Card, Grid, IconButton, TextField } from '@material-ui/core';
+import { Card, Grid, IconButton, TextField } from '@material-ui/core';
 import { Clear as ClearIcon } from '@material-ui/icons';
 
+import LoadingButton from '../LoadingButton/LoadingButton.component';
 import { editProjectStart } from '../../redux/project/project.actions';
 import { Project } from '../../redux/project/project.types';
 import useStyles from './AddStageForm.mui';
@@ -24,8 +25,8 @@ const AddStageForm: React.FC<AddStageFormProps> = ({ closeClickHandler, project 
 
 	return (
 		<Card className={classes.addStageForm}>
-			<Grid container alignItems='center' spacing={1}>
-				<Grid item xs={12}>
+			<Grid container direction='column' alignItems='center'>
+				<Grid item>
 					<TextField
 						fullWidth
 						size='small'
@@ -36,28 +37,33 @@ const AddStageForm: React.FC<AddStageFormProps> = ({ closeClickHandler, project 
 						}
 					/>
 				</Grid>
-				<Grid item>
-					<Button
-						color='primary'
-						variant='contained'
-						disableElevation
-						disabled={newStageName.trim() === ''}
-						onClick={() => {
-							closeClickHandler(false);
-							dispatch(
-								editProjectStart({
-									...project,
-									board: [...project.board, newStageName],
-								} as Project)
-							);
-						}}
-					>
-						Confirm
-					</Button>
+				<Grid item container alignItems='center'>
+					<Grid item>
+						<LoadingButton
+							id='add stage'
+							color='primary'
+							variant='contained'
+							disableElevation
+							disabled={newStageName.trim() === ''}
+							onClick={() => {
+								closeClickHandler(false);
+								dispatch(
+									editProjectStart({
+										...project,
+										board: [...project.board, newStageName],
+									} as Project)
+								);
+							}}
+						>
+							Confirm
+						</LoadingButton>
+					</Grid>
+					<Grid item>
+						<IconButton onClick={() => closeClickHandler(false)} size='small'>
+							<ClearIcon />
+						</IconButton>
+					</Grid>
 				</Grid>
-				<IconButton onClick={() => closeClickHandler(false)}>
-					<ClearIcon />
-				</IconButton>
 			</Grid>
 		</Card>
 	);

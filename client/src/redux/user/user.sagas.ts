@@ -3,6 +3,7 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import axios from '../../config/axios.config';
 import { createProjectSuccess, setAllProjects } from '../project/project.actions';
 import { Project } from '../project/project.types';
+import { stopLoading } from '../loading/loading.actions';
 import {
 	acceptInviteSuccess,
 	dismissTaskSuccess,
@@ -112,6 +113,8 @@ function* attemptAcceptInvite({
 	} catch (err) {
 		console.log(err);
 	}
+
+	yield put(stopLoading());
 }
 
 function* attemptRejectInvite({
@@ -136,6 +139,8 @@ function* attemptRejectInvite({
 	} catch (err) {
 		console.log(err);
 	}
+
+	yield put(stopLoading());
 }
 
 function* attemptDismissTask({ payload: { taskId, newTasks } }: DismissTaskStartAction) {
@@ -158,6 +163,8 @@ function* attemptDismissTask({ payload: { taskId, newTasks } }: DismissTaskStart
 	} catch (err) {
 		console.log(err);
 	}
+
+	yield put(stopLoading());
 }
 
 function* onFetchCurrentUser() {

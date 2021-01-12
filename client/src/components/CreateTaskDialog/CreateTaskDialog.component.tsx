@@ -2,9 +2,7 @@ import React, { useState, SetStateAction, SyntheticEvent, useEffect } from 'reac
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	Avatar,
-	Button,
 	Card,
-	CircularProgress,
 	Dialog,
 	DialogContent,
 	FormControl,
@@ -20,6 +18,7 @@ import {
 
 import { ReactComponent as UDNewTask } from '../../assets/insert-task.undraw.svg';
 import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
+import LoadingButton from '../LoadingButton/LoadingButton.component';
 import { closeModal } from '../../redux/modals/modals.actions';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 import { RootState } from '../../redux/root.reducer';
@@ -74,7 +73,6 @@ const CreateTaskDialog: React.FC = () => {
 		visited: false,
 		value: TaskColor.GREY,
 	});
-	const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
 	// Clears the inputs when the dialog opens/closes
 	useEffect(() => {
@@ -129,14 +127,11 @@ const CreateTaskDialog: React.FC = () => {
 			color: color.value as TaskColor,
 		};
 
-		setIsWaiting(true);
-
 		if (mode === 'edit') {
-			await dispatch(editTasksStart([task]));
+			dispatch(editTasksStart([task]));
 		} else {
-			await dispatch(createTaskStart(task));
+			dispatch(createTaskStart(task));
 		}
-		setIsWaiting(false);
 	};
 
 	// Media Queries
@@ -333,22 +328,27 @@ const CreateTaskDialog: React.FC = () => {
 									/>
 								</Grid>
 								<Grid item>
-									<Button
+									<LoadingButton
+										id='create task'
 										variant='contained'
 										color='primary'
 										fullWidth
-										disabled={title.value === '' || projectId.value === '' || status.value === ''}
+										disabled={
+											title.value === '' ||
+											projectId.value === '' ||
+											status.value === '' ||
+											assignee.value === ''
+										}
 										onClick={submitForm}
 									>
 										{mode === 'edit' ? 'Confirm Changes' : 'Create Task'}
-									</Button>
+									</LoadingButton>
 								</Grid>
 							</Grid>
 						</DialogContent>
 					</Grid>
 				</Grid>
 			</Dialog>
-			{isWaiting ? <CircularProgress /> : null}
 		</>
 	);
 };

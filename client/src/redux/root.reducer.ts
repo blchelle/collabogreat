@@ -7,16 +7,18 @@ import { taskReducer } from './tasks/tasks.reducer';
 import { modalReducer } from './modals/modals.reducer';
 import { projectReducer } from './project/project.reducer';
 import { userReducer } from './user/user.reducer';
+import { loadingReducer } from './loading/loading.reducer';
 
 const persistConfig = {
 	key: 'root',
 	storage,
-	blacklist: ['modals', 'error'],
+	blacklist: ['modals', 'error', 'loading'],
 };
 
 const rootReducer = combineReducers({
 	error: errorReducer,
 	modals: modalReducer,
+	loading: loadingReducer,
 	projects: projectReducer,
 	tasks: taskReducer,
 	user: userReducer,

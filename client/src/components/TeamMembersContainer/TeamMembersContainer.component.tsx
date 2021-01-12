@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
 	Button,
 	Card,
@@ -15,8 +16,10 @@ import { Add as AddIcon, Send as SendIcon, Close as CloseIcon } from '@material-
 
 import axios from '../../config/axios.config';
 import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
+import LoadingButton from '../LoadingButton/LoadingButton.component';
 import { User } from '../../redux/user/user.types';
 import { Task } from '../../redux/tasks/tasks.types';
+import { stopLoading } from '../../redux/loading/loading.actions';
 
 interface TeamMembersContainerProps {
 	members: Partial<User>[];
@@ -40,6 +43,9 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 	const [showInvitationSent, setShowInvitationSent] = useState(false);
 	const [newMemberEmail, setNewMemberEmail] = useState<NewMemberFieldState>({ email: '' });
 
+	// Redux
+	const dispatch = useDispatch();
+
 	// Helper Method
 	const validateEmailAddress = async (email: string) => {
 		// Validates the email address first to prevent any useless requests
@@ -54,12 +60,14 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 				error: 'This user is already a member of the project',
 				uid: undefined,
 			});
+			dispatch(stopLoading());
 			return;
 		}
 
 		if (!re.test(email.toLowerCase())) {
 			// Set the field to an invalid state
 			setNewMemberEmail({ ...newMemberEmail, error: 'Invalid Email Address', uid: undefined });
+			dispatch(stopLoading());
 			return;
 		}
 
@@ -71,6 +79,7 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 				error: 'We could not find a user with this Email Address',
 				uid: undefined,
 			});
+			dispatch(stopLoading());
 			return;
 		}
 
@@ -161,7 +170,8 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 										</Grid>
 										<Grid item container justify='space-between' alignItems='center'>
 											<Grid item>
-												<Button
+												<LoadingButton
+													id='add-new-member'
 													color='primary'
 													variant='contained'
 													onClick={() => {
@@ -171,7 +181,7 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 													endIcon={<SendIcon />}
 												>
 													Send Invitation
-												</Button>
+												</LoadingButton>
 											</Grid>
 											{showInvitationSent ? (
 												<Grid item>
