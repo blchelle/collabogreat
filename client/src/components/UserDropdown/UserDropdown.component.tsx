@@ -28,7 +28,7 @@ const UserDropdown: React.FC = () => {
 			</Grid>
 			<Divider />
 			<MenuList className={classes.menu}>
-				<MenuItem className={classes.menuItem} onClick={() => dispatch(logoutStart())}>
+				<MenuItem onClick={() => dispatch(logoutStart())}>
 					<LogOutIcon className={classes.marginRight} />
 					Log Out
 				</MenuItem>

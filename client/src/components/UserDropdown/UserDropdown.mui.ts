@@ -10,22 +10,11 @@ export default makeStyles({
 		height: theme.spacing(7),
 	},
 	header: {
-		marginBottom: '5px',
+		marginBottom: 5,
 		marginRight: theme.spacing(6),
 	},
 	menu: {
 		padding: 0,
 	},
-	menuItem: {
-		paddingLeft: theme.spacing(1),
-		paddingRight: theme.spacing(1),
-		transition: 'color 0.2s',
-		'&:hover': {
-			color: theme.palette.primary.main,
-			backgroundColor: 'inherit',
-		},
-	},
-	marginRight: {
-		marginRight: theme.spacing(2),
-	},
+	marginRight: { marginRight: theme.spacing(2) },
 });
