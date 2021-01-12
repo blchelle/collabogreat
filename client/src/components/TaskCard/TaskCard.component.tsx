@@ -43,7 +43,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, showAssignee }) => {
 
 				<CardContent className={classes.container}>
 					<Grid container className={classes.container}>
-						<Grid item container xs={12} alignItems='center'>
+						<Grid item container xs={12} alignItems='flex-start'>
 							<Grid item xs>
 								<Typography variant='h6'>{task.title}</Typography>
 							</Grid>
@@ -62,6 +62,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, showAssignee }) => {
 											})
 										)
 									}
+									size='small'
 								>
 									<MoreHorizIcon />
 								</IconButton>

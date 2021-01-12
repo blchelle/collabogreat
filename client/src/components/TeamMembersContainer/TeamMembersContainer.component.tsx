@@ -109,7 +109,7 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 					<CardContent style={{ paddingBottom: 8 }}>
 						<List>
 							{members.map((member) => (
-								<ListItem>
+								<ListItem key={member?._id}>
 									<Grid container alignItems='center' spacing={2}>
 										<Grid item>
 											<ColoredAvatar

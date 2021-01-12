@@ -28,15 +28,13 @@ const NotificationsDropdown: React.FC = () => {
 	return (
 		<Grid container direction='column' spacing={2}>
 			{projectInvitations.map((project, index) => (
-				<>
-					<Grid item>
-						<NotificationItem _id={project._id!} type='project' title={project.title!} />
-					</Grid>
+				<Grid item key={project._id}>
+					<NotificationItem _id={project._id!} type='project' title={project.title!} />
 					{index !== projectInvitations.length - 1 || newTasks.length !== 0 ? <Divider /> : null}
-				</>
+				</Grid>
 			))}
 			{newTasks.map((task, index) => (
-				<Grid item>
+				<Grid item key={task._id}>
 					<NotificationItem _id={task._id!} type='task' title={task.title!} color={task.color} />
 					{index !== newTasks.length - 1 ? <Divider /> : null}
 				</Grid>

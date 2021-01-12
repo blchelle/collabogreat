@@ -1,17 +1,25 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import { Card, Divider, List, MenuItem, Typography } from '@material-ui/core';
 
 import { ProjectSearchResult, TaskSearchResult } from '../CGAppBar/CGAppBar.component';
 import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
+import { closeModal } from '../../redux/modals/modals.actions';
+import { ModalNames } from '../../redux/modals/modals.reducer';
 import { RootState } from '../../redux/root.reducer';
 import theme from '../../theme';
 
 const SearchDropdown = () => {
+	// React Router
+	const history = useHistory();
+
+	// Redux
 	const results = useSelector((state: RootState) => state.modals.SEARCH_DROPDOWN.extra) as (
 		| ProjectSearchResult
 		| TaskSearchResult
 	)[];
+	const dispatch = useDispatch();
 
 	const projectResults = results.filter(({ type }) => type === 'project') as ProjectSearchResult[];
 	const taskResults = results.filter(({ type }) => type === 'task') as TaskSearchResult[];
@@ -24,7 +32,12 @@ const SearchDropdown = () => {
 						<Typography>Projects</Typography>
 						<Divider />
 						{projectResults.map((result) => (
-							<MenuItem>
+							<MenuItem
+								onClick={() => {
+									dispatch(closeModal(ModalNames.SEARCH_DROPDOWN));
+									history.push(`/projects/${result._id}`);
+								}}
+							>
 								<ColoredAvatar
 									id={result._id}
 									text={result.title}
@@ -46,7 +59,12 @@ const SearchDropdown = () => {
 						<Typography style={{ marginTop: theme.spacing(2) }}>Tasks</Typography>
 						<Divider />
 						{taskResults.map((result) => (
-							<MenuItem>
+							<MenuItem
+								onClick={() => {
+									dispatch(closeModal(ModalNames.SEARCH_DROPDOWN));
+									history.push(`/projects/${result.projectId}/board`);
+								}}
+							>
 								<Card
 									style={{
 										width: theme.spacing(3),

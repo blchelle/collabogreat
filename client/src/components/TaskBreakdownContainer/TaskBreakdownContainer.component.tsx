@@ -69,25 +69,30 @@ const TaskBreakdownContainer: React.FC<TaskBreakdownContainerProps> = ({
 				direction={isScreenSmall ? 'column' : 'row'}
 			>
 				{board.map((stage, index) => (
-					<>
-						<Grid item container spacing={2} style={{ width: 'auto' }} alignItems='center'>
-							<Grid item>
-								<Card
-									elevation={0}
-									style={{
-										backgroundColor: getColor(index),
-										width: theme.spacing(3),
-										height: theme.spacing(3),
-									}}
-								/>
-							</Grid>
-							<Grid item>
-								<Typography>
-									{`${stage} - ${tasks.filter((t) => t.status === stage).length}`}
-								</Typography>
-							</Grid>
+					<Grid
+						item
+						container
+						spacing={2}
+						style={{ width: 'auto' }}
+						alignItems='center'
+						key={stage}
+					>
+						<Grid item>
+							<Card
+								elevation={0}
+								style={{
+									backgroundColor: getColor(index),
+									width: theme.spacing(3),
+									height: theme.spacing(3),
+								}}
+							/>
 						</Grid>
-					</>
+						<Grid item>
+							<Typography>
+								{`${stage} - ${tasks.filter((t) => t.status === stage).length}`}
+							</Typography>
+						</Grid>
+					</Grid>
 				))}
 			</Grid>
 			<Grid item container>
@@ -102,7 +107,7 @@ const TaskBreakdownContainer: React.FC<TaskBreakdownContainerProps> = ({
 					}}
 				>
 					{board.map((stage, index) => (
-						<Tooltip title={stage}>
+						<Tooltip title={stage} key={stage}>
 							<div
 								style={{
 									width: `${
