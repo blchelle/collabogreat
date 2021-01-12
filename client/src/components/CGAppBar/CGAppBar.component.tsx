@@ -44,6 +44,7 @@ export interface TaskSearchResult {
 	type: 'task';
 	_id: string;
 	title: string;
+	projectId: string;
 	color: TaskColor;
 }
 
@@ -67,6 +68,7 @@ const CGAppBar: React.FC = () => {
 				type: 'task',
 				_id: task._id,
 				title: task.title,
+				projectId: task.project,
 				color: task.color,
 			};
 		}),
