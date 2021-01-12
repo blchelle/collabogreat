@@ -94,6 +94,8 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 			setShowInvitationSent(true);
 			setNewMemberEmail({ email: '', error: undefined, uid: undefined });
 		}
+
+		dispatch(stopLoading());
 	};
 
 	return (
