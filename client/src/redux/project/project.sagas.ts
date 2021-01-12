@@ -56,13 +56,23 @@ function* attemptCreateProject({ payload }: ProjectActionTypes) {
 
 function* attemptEditProject({ payload }: ProjectActionTypes) {
 	try {
+		if (Array.isArray(payload)) {
+			yield put(
+				openError(
+					'Unexpected Error',
+					'Please contact brocklchelle@gmail.com if the problem persists'
+				)
+			);
+			return;
+		}
+
 		// Assumes the write will be successful, can be undone later
-		yield put(editProjectSuccess(payload as Project));
+		yield put(editProjectSuccess(payload));
 
 		// Attempts to create a new project with the information provided
 		const res = yield axios('api/v0/projects', {
 			method: 'PATCH',
-			data: { project: payload },
+			data: { project: { ...payload, members: payload.members!.map((member) => member?._id) } },
 		});
 
 		// Throws if the action was unsuccessful
@@ -78,6 +88,7 @@ function* attemptEditProject({ payload }: ProjectActionTypes) {
 		// User documents should only contain references to the project
 		// The id will be extracted from each project
 		yield put(editProjectSuccess(project));
+		yield put(closeModal(ModalNames.CREATE_PROJECT_DIALOG));
 	} catch (err) {
 		yield put(openError('Error', 'Here is a solution'));
 	}

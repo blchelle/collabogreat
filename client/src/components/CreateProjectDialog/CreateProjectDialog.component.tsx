@@ -2,7 +2,6 @@ import React, { useState, SetStateAction, SyntheticEvent, useEffect } from 'reac
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	Button,
-	CircularProgress,
 	Dialog,
 	DialogContent,
 	Grid,
@@ -18,8 +17,9 @@ import LoadingButton from '../LoadingButton/LoadingButton.component';
 import { ReactComponent as UDScrumBoard } from '../../assets/scrum-board.undraw.svg';
 import { closeModal } from '../../redux/modals/modals.actions';
 import { Project } from '../../redux/project/project.types';
-import { createProjectStart } from '../../redux/project/project.actions';
+import { createProjectStart, editProjectStart } from '../../redux/project/project.actions';
 import { ModalNames } from '../../redux/modals/modals.reducer';
+import { User } from '../../redux/user/user.types';
 import { RootState } from '../../redux/root.reducer';
 import useStyles from './CreateProjectDialog.mui';
 import theme from '../../theme';
@@ -35,28 +35,42 @@ interface MemberInputState {
 	errorReason?: string;
 }
 
-// TODO Add a field to the form for selecting a project image, either from a library or the users computer
+interface CreateProjectDialogExtras {
+	id?: string; // Only applies in 'edit' mode
+	initialTitle: string;
+	initialDescription: string;
+	currentMembers: Partial<User>[];
+	currentBoard: string[];
+	mode: 'create' | 'edit';
+}
+
 const CreateProjectDialog: React.FC = () => {
 	// MUI Styles
 	const classes = useStyles();
 
 	// Redux
 	const dispatch = useDispatch();
-	const { open } = useSelector((state: RootState) => state.modals.CREATE_PROJECT_DIALOG);
+	const { open, extra } = useSelector((state: RootState) => state.modals.CREATE_PROJECT_DIALOG);
 	const currentUserEmail = useSelector((state: RootState) => state.user?.email);
+
+	const id = (extra as CreateProjectDialogExtras)?.id;
+	const initialTitle = (extra as CreateProjectDialogExtras)?.initialTitle;
+	const initialDescription = (extra as CreateProjectDialogExtras)?.initialDescription;
+	const currentBoard = (extra as CreateProjectDialogExtras)?.currentBoard;
+	const currentMembers = (extra as CreateProjectDialogExtras)?.currentMembers;
+	const mode = (extra as CreateProjectDialogExtras)?.mode ?? 'create';
 
 	// Form State
 	const initialInputState: FormInputState = { visited: false, value: '' };
 	const [title, setTitle] = useState<FormInputState>(initialInputState);
 	const [description, setDescription] = useState<FormInputState>(initialInputState);
 	const [otherMembers, setOtherMembers] = useState<MemberInputState[]>([{ email: '' }]);
-	const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
 	// Clears the inputs when the dialog opens/closes
 	useEffect(() => {
-		setTitle({ visited: false, value: '' });
-		setDescription({ visited: false, value: '' });
-	}, [open]);
+		setTitle({ visited: false, value: initialTitle ?? '' });
+		setDescription({ visited: false, value: initialDescription ?? '' });
+	}, [open, initialDescription, initialTitle]);
 
 	// Form Handlers
 	const onInputChange = (setterFn: React.Dispatch<SetStateAction<FormInputState>>) => (
@@ -128,6 +142,10 @@ const CreateProjectDialog: React.FC = () => {
 	const checkButtonDisabled = () => {
 		if (title.value === '') return true;
 
+		// In edit mode, we disable the ability to add/delete members, so return
+		// false to ensure that the button is enabled
+		if (mode === 'edit') return false;
+
 		return (
 			otherMembers.filter((member) => member.email === '' || (!member.errorReason && member.uid))
 				.length !== otherMembers.length
@@ -135,23 +153,25 @@ const CreateProjectDialog: React.FC = () => {
 	};
 
 	// Submits the users input as a response to the backend
-	const submitForm = async (event: React.FormEvent) => {
+	const submitForm = (event: React.FormEvent) => {
 		event.preventDefault();
-		setIsWaiting(true);
 
 		const newProject: Project = {
 			title: title.value,
 			description: description.value,
-			board: ['To Do', 'In Progress', 'Done'],
-			members: otherMembers
-				.filter((member) => member.email.trim() !== '')
-				.map((member) => {
-					return { _id: member.uid };
-				}),
+			board: mode === 'edit' ? currentBoard : ['To Do', 'In Progress', 'Done'],
+			members:
+				mode === 'edit'
+					? currentMembers
+					: otherMembers
+							.filter((member) => member.email.trim() !== '')
+							.map((member) => {
+								return { _id: member.uid };
+							}),
 		};
-		await dispatch(createProjectStart(newProject));
 
-		setIsWaiting(false);
+		if (mode === 'create') dispatch(createProjectStart(newProject));
+		else dispatch(editProjectStart({ ...newProject, _id: id }));
 	};
 
 	// Media Queries
@@ -177,7 +197,9 @@ const CreateProjectDialog: React.FC = () => {
 							<Grid container direction='column' spacing={2}>
 								<Grid item>
 									<Typography variant='h5' gutterBottom>
-										Let&apos;s Build Something Amazing!
+										{mode === 'edit'
+											? 'Edit Project Information'
+											: "Let's Build Something Amazing!"}
 									</Typography>
 								</Grid>
 								<Grid item>
@@ -213,63 +235,65 @@ const CreateProjectDialog: React.FC = () => {
 										helperText="Let your team know what they'll be building"
 									/>
 								</Grid>
-								<Grid item container>
-									<Typography variant='subtitle1'>Invite your Teammates</Typography>
-									{otherMembers.map((member, index) => (
-										<Grid
-											container
-											justify='space-between'
-											alignItems='center'
-											className={classes.otherMemberField}
-											spacing={1}
-											key={index.toString()}
-										>
-											<Grid item xs={11}>
-												<TextField
-													fullWidth
-													placeholder='Email Address'
-													value={member.email}
-													variant='outlined'
-													size='small'
-													onChange={(event: React.SyntheticEvent) => {
-														const updatedOtherMembers = [...otherMembers];
-														updatedOtherMembers[index] = {
-															...updatedOtherMembers[index],
-															email: (event.target as HTMLInputElement).value,
-															errorReason: undefined,
-															uid: undefined,
-														};
-														setOtherMembers(updatedOtherMembers);
-													}}
-													onBlur={checkForEmail(index)}
-													error={member.errorReason !== undefined && member.email !== ''}
-													helperText={member.errorReason ?? ''}
-												/>
+								{mode === 'create' ? (
+									<Grid item container>
+										<Typography variant='subtitle1'>Invite your Teammates</Typography>
+										{otherMembers.map((member, index) => (
+											<Grid
+												container
+												justify='space-between'
+												alignItems='center'
+												className={classes.otherMemberField}
+												spacing={1}
+												key={index.toString()}
+											>
+												<Grid item xs={11}>
+													<TextField
+														fullWidth
+														placeholder='Email Address'
+														value={member.email}
+														variant='outlined'
+														size='small'
+														onChange={(event: React.SyntheticEvent) => {
+															const updatedOtherMembers = [...otherMembers];
+															updatedOtherMembers[index] = {
+																...updatedOtherMembers[index],
+																email: (event.target as HTMLInputElement).value,
+																errorReason: undefined,
+																uid: undefined,
+															};
+															setOtherMembers(updatedOtherMembers);
+														}}
+														onBlur={checkForEmail(index)}
+														error={member.errorReason !== undefined && member.email !== ''}
+														helperText={member.errorReason ?? ''}
+													/>
+												</Grid>
+												{otherMembers.length > 1 ? (
+													<IconButton
+														size='small'
+														onClick={() => {
+															const updatedOtherMembers = [...otherMembers];
+															updatedOtherMembers.splice(index, 1);
+															setOtherMembers(updatedOtherMembers);
+														}}
+													>
+														<CloseIcon />
+													</IconButton>
+												) : null}
 											</Grid>
-											{otherMembers.length > 1 ? (
-												<IconButton
-													size='small'
-													onClick={() => {
-														const updatedOtherMembers = [...otherMembers];
-														updatedOtherMembers.splice(index, 1);
-														setOtherMembers(updatedOtherMembers);
-													}}
-												>
-													<CloseIcon />
-												</IconButton>
-											) : null}
+										))}
+										<Grid container justify='center'>
+											<Button
+												color='primary'
+												onClick={() => setOtherMembers([...otherMembers, { email: '' }])}
+												variant='contained'
+											>
+												<AddIcon />
+											</Button>
 										</Grid>
-									))}
-									<Grid container justify='center'>
-										<Button
-											color='primary'
-											onClick={() => setOtherMembers([...otherMembers, { email: '' }])}
-											variant='contained'
-										>
-											<AddIcon />
-										</Button>
 									</Grid>
-								</Grid>
+								) : null}
 								<Grid item>
 									<LoadingButton
 										id='create project'
@@ -279,7 +303,7 @@ const CreateProjectDialog: React.FC = () => {
 										disabled={checkButtonDisabled()}
 										onClick={submitForm}
 									>
-										Create Project
+										{mode === 'edit' ? 'Confirm Changes' : 'Create Project'}
 									</LoadingButton>
 								</Grid>
 							</Grid>
@@ -287,7 +311,6 @@ const CreateProjectDialog: React.FC = () => {
 					</Grid>
 				</Grid>
 			</Dialog>
-			{isWaiting ? <CircularProgress /> : null}
 		</>
 	);
 };

@@ -113,7 +113,7 @@ const CreateTaskDialog: React.FC = () => {
 		setAssignee({ visited: true, value: event.target.value as string });
 	};
 
-	const submitForm = async (event: React.FormEvent) => {
+	const submitForm = (event: React.FormEvent) => {
 		event.preventDefault();
 
 		const task: Task = {
