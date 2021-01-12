@@ -15,6 +15,10 @@ export const FETCH_CURRENT_USER = 'FETCH_CURRENT_USER';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const LOGOUT_START = 'LOGOUT_START';
 export const ADD_PROJECT_TO_USER = 'ADD_PROJECT_TO_USER';
+
+export const LEAVE_PROJECT_START = 'LEAVE_PROJECT_START';
+export const LEAVE_PROJECT_SUCCESS = 'LEAVE_PROJECT_SUCCESS';
+
 export const ACCEPT_INVITE_START = 'ACCEPT_INVITE_START';
 export const ACCEPT_INVITE_SUCCESS = 'ACCEPT_INVITE_SUCCESS';
 
@@ -40,6 +44,20 @@ interface LogoutStartAction {
 interface AddProjectToUserAction {
 	type: typeof ADD_PROJECT_TO_USER;
 	payload: string;
+}
+
+export interface LeaveProjectStartAction {
+	type: typeof LEAVE_PROJECT_START;
+	payload: {
+		projectId: string;
+	};
+}
+
+export interface LeaveProjectSuccessAction {
+	type: typeof LEAVE_PROJECT_SUCCESS;
+	payload: {
+		projectId: string;
+	};
 }
 
 export interface AcceptInviteStartAction {
@@ -99,4 +117,6 @@ export type UserActionTypes =
 	| RejectInviteStartAction
 	| RejectInviteSuccessAction
 	| DismissTaskStartAction
-	| DismissTaskSuccessAction;
+	| DismissTaskSuccessAction
+	| LeaveProjectStartAction
+	| LeaveProjectSuccessAction;
