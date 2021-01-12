@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Grid, Typography } from '@material-ui/core';
+import { Divider, Grid, Typography } from '@material-ui/core';
 
 import { RootState } from '../../redux/root.reducer';
 import NotificationItem from '../NotificationItem/NotificationItem.component';
@@ -27,14 +27,18 @@ const NotificationsDropdown: React.FC = () => {
 
 	return (
 		<Grid container direction='column' spacing={2}>
-			{projectInvitations.map((project) => (
-				<Grid item>
-					<NotificationItem _id={project._id!} type='project' title={project.title!} />
-				</Grid>
+			{projectInvitations.map((project, index) => (
+				<>
+					<Grid item>
+						<NotificationItem _id={project._id!} type='project' title={project.title!} />
+					</Grid>
+					{index !== projectInvitations.length - 1 || newTasks.length !== 0 ? <Divider /> : null}
+				</>
 			))}
-			{newTasks.map((task) => (
+			{newTasks.map((task, index) => (
 				<Grid item>
 					<NotificationItem _id={task._id!} type='task' title={task.title!} color={task.color} />
+					{index !== newTasks.length - 1 ? <Divider /> : null}
 				</Grid>
 			))}
 		</Grid>
