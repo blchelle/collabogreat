@@ -1,8 +1,9 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card, CardContent, Grid, Typography } from '@material-ui/core';
+import { Card, CardContent, Grid, Typography } from '@material-ui/core';
 
 import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
+import LoadingButton from '../LoadingButton/LoadingButton.component';
 import { RootState } from '../../redux/root.reducer';
 import {
 	acceptInviteStart,
@@ -40,7 +41,8 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ _id, type, title, c
 							</Grid>
 							<Grid item container spacing={2}>
 								<Grid item>
-									<Button
+									<LoadingButton
+										id={`notification accept ${_id}`}
 										color='primary'
 										variant='contained'
 										onClick={() => {
@@ -50,17 +52,18 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ _id, type, title, c
 										}}
 									>
 										Accept
-									</Button>
+									</LoadingButton>
 								</Grid>
 								<Grid item>
-									<Button
+									<LoadingButton
+										id={`notification reject ${_id}`}
 										color='default'
 										onClick={() => {
 											dispatch(rejectInviteStart(_id, user!.projectInvitations));
 										}}
 									>
 										Reject
-									</Button>
+									</LoadingButton>
 								</Grid>
 							</Grid>
 						</>
@@ -83,12 +86,13 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ _id, type, title, c
 							</Grid>
 							<Grid item container spacing={2}>
 								<Grid item>
-									<Button
+									<LoadingButton
+										id={`notification dismiss ${_id}`}
 										onClick={() => dispatch(dismissTaskStart(_id, user!.newTasks))}
 										color='primary'
 									>
 										Dismiss
-									</Button>
+									</LoadingButton>
 								</Grid>
 							</Grid>
 						</>

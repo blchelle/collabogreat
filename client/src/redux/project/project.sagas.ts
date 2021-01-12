@@ -6,6 +6,7 @@ import { createProjectSuccess, editProjectSuccess } from './project.actions';
 import { closeModal } from '../modals/modals.actions';
 import { ModalNames } from '../modals/modals.reducer';
 import { openError } from '../error/error.actions';
+import { stopLoading } from '../loading/loading.actions';
 import {
 	Project,
 	ProjectActionTypes,
@@ -49,6 +50,8 @@ function* attemptCreateProject({ payload }: ProjectActionTypes) {
 	} catch (err) {
 		yield put(openError('Error', 'Here is a solution'));
 	}
+
+	yield put(stopLoading());
 }
 
 function* attemptEditProject({ payload }: ProjectActionTypes) {
@@ -78,6 +81,8 @@ function* attemptEditProject({ payload }: ProjectActionTypes) {
 	} catch (err) {
 		yield put(openError('Error', 'Here is a solution'));
 	}
+
+	yield put(stopLoading());
 }
 
 function* onCreateProjectStart() {

@@ -5,6 +5,7 @@ import axios from '../../config/axios.config';
 import { closeModal } from '../modals/modals.actions';
 import { ModalNames } from '../modals/modals.reducer';
 import { openError } from '../error/error.actions';
+import { stopLoading } from '../loading/loading.actions';
 import {
 	CREATE_TASK_START,
 	TaskActionTypes,
@@ -57,6 +58,8 @@ function* attemptCreateTask({ payload }: TaskActionTypes) {
 	} catch (err) {
 		yield put(openError('Error', 'Here is a solution'));
 	}
+
+	yield put(stopLoading());
 }
 
 function* attemptFetchTasks({ payload }: TaskActionTypes) {

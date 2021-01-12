@@ -14,6 +14,7 @@ import {
 import { Add as AddIcon, Close as CloseIcon } from '@material-ui/icons';
 
 import axios from '../../config/axios.config';
+import LoadingButton from '../LoadingButton/LoadingButton.component';
 import { ReactComponent as UDScrumBoard } from '../../assets/scrum-board.undraw.svg';
 import { closeModal } from '../../redux/modals/modals.actions';
 import { Project } from '../../redux/project/project.types';
@@ -270,7 +271,8 @@ const CreateProjectDialog: React.FC = () => {
 									</Grid>
 								</Grid>
 								<Grid item>
-									<Button
+									<LoadingButton
+										id='create project'
 										variant='contained'
 										color='primary'
 										fullWidth
@@ -278,7 +280,7 @@ const CreateProjectDialog: React.FC = () => {
 										onClick={submitForm}
 									>
 										Create Project
-									</Button>
+									</LoadingButton>
 								</Grid>
 							</Grid>
 						</DialogContent>

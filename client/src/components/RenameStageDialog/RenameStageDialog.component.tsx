@@ -1,16 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	Button,
-	Dialog,
-	DialogContent,
-	Grid,
-	IconButton,
-	TextField,
-	Typography,
-} from '@material-ui/core';
+import { Dialog, DialogContent, Grid, IconButton, TextField, Typography } from '@material-ui/core';
 import { Close as CloseIcon } from '@material-ui/icons';
 
+import LoadingButton from '../LoadingButton/LoadingButton.component';
 import { RootState } from '../../redux/root.reducer';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 import { closeModal } from '../../redux/modals/modals.actions';
@@ -43,6 +36,11 @@ const RenameStageDialog: React.FC = () => {
 
 	// State
 	const [stageName, setStageName] = useState('');
+
+	// Use Effect Hook
+	useEffect(() => {
+		setStageName('');
+	}, [open]);
 
 	return (
 		<>
@@ -88,7 +86,8 @@ const RenameStageDialog: React.FC = () => {
 								/>
 							</Grid>
 							<Grid item xs={3}>
-								<Button
+								<LoadingButton
+									id='rename stage'
 									variant='contained'
 									color='primary'
 									disabled={stageName === ''}
@@ -112,7 +111,7 @@ const RenameStageDialog: React.FC = () => {
 									}}
 								>
 									Confirm
-								</Button>
+								</LoadingButton>
 							</Grid>
 						</Grid>
 					</Grid>
