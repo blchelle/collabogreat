@@ -31,7 +31,7 @@ const App: React.FC = () => {
 				contrastText: '#ffffff',
 			},
 			secondary: {
-				main: '#373FBF',
+				main: '#0995E3',
 				contrastText: '#ffffff',
 			},
 			warning: {

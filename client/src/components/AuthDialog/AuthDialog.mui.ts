@@ -32,6 +32,7 @@ export default makeStyles((theme) => {
 		},
 		googleButton: {
 			backgroundColor: '#e6e6e6',
+			color: '#1f1f1f',
 			'&:hover': {
 				backgroundColor: '#d6d6d6',
 			},
