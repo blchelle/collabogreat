@@ -6,6 +6,7 @@ export default makeStyles(() => {
 			width: '100vw',
 			height: '100vh',
 			display: 'flex',
+			borderRadius: 0,
 			flexDirection: 'column',
 			position: 'relative',
 			boxSizing: 'content-box',

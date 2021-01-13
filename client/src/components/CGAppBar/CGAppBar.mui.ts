@@ -1,4 +1,4 @@
-import { makeStyles, fade } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => {
 	return {
@@ -19,9 +19,9 @@ export default makeStyles((theme) => {
 			marginLeft: theme.spacing(5),
 
 			borderRadius: theme.shape.borderRadius,
-			backgroundColor: fade(theme.palette.background.default, 0.75),
+			backgroundColor: theme.palette.background.default,
 			'&:hover': {
-				backgroundColor: fade(theme.palette.background.default, 0.75),
+				backgroundColor: theme.palette.background.default,
 			},
 		},
 		searchBarMobile: {
