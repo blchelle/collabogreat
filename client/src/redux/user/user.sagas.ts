@@ -27,7 +27,7 @@ import {
 function* getUserInformation() {
 	try {
 		// Attempts to fetch an authenticated users information
-		const res = yield axios('api/v0/user/me', { method: 'GET' });
+		const res = yield axios('user/me', { method: 'GET' });
 
 		// Throws if the fetch was unsuccesful
 		if (res.status !== 200) throw new Error('Failed to authenticate user');
@@ -52,7 +52,7 @@ function* getUserInformation() {
 function* attemptLogout() {
 	try {
 		// Attempts to fetch an authenticated users information
-		const res = yield axios('api/v0/auth/logout', {
+		const res = yield axios('auth/logout', {
 			method: 'GET',
 		});
 
@@ -72,7 +72,7 @@ function* attemptLogout() {
 function* attemptLeaveProject({ payload: { projectId } }: LeaveProjectStartAction) {
 	try {
 		// Calls the api route to leave a project
-		const res = yield axios(`api/v0/user/me/leave/${projectId}`, { method: 'PATCH' });
+		const res = yield axios(`user/me/leave/${projectId}`, { method: 'PATCH' });
 
 		if (res.status !== 200) {
 			throw new Error(res.message);
@@ -97,7 +97,7 @@ function* attemptAcceptInvite({
 		);
 
 		// Performs an api call to update the user
-		const userRes = yield axios('api/v0/user/me', {
+		const userRes = yield axios('user/me', {
 			method: 'PATCH',
 			data: { projects, projectInvitations: updatedInvitations },
 		});
@@ -107,7 +107,7 @@ function* attemptAcceptInvite({
 		}
 
 		// Calls the API to get the existing project members
-		const { members } = (yield axios(`api/v0/projects/${acceptedInviteId}`, {
+		const { members } = (yield axios(`projects/${acceptedInviteId}`, {
 			method: 'GET',
 		})).data.project;
 
@@ -115,7 +115,7 @@ function* attemptAcceptInvite({
 		members.push(myId);
 
 		// Performs an api call to update the project
-		const projectRes = yield axios('api/v0/projects', {
+		const projectRes = yield axios('projects', {
 			method: 'PATCH',
 			data: { project: { _id: acceptedInviteId, members } },
 		});
@@ -145,7 +145,7 @@ function* attemptRejectInvite({
 		const updatedInvitations = projectInvitations.filter((invite) => invite?._id !== inviteId);
 
 		// Performs an api call to update the user
-		const userRes = yield axios('api/v0/user/me', {
+		const userRes = yield axios('user/me', {
 			method: 'PATCH',
 			data: { projectInvitations: updatedInvitations },
 		});
@@ -169,7 +169,7 @@ function* attemptDismissTask({ payload: { taskId, newTasks } }: DismissTaskStart
 		const updatedNewTasks = newTasks.filter((task) => task?._id !== taskId);
 
 		// Performs an api call to update the user
-		const userRes = yield axios('api/v0/user/me', {
+		const userRes = yield axios('user/me', {
 			method: 'PATCH',
 			data: { newTasks: updatedNewTasks.map((task) => task._id) },
 		});

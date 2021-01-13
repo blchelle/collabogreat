@@ -9,9 +9,8 @@ lerna-debug.log*
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
-# Secret keys & environment
+# Secret keys
 keys.config.ts
-environment.config.ts
 
 # Docs directory
 docs

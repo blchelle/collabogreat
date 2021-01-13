@@ -1,7 +1,10 @@
 import axios from 'axios';
+import environment from './environment.config';
 
 if (process.env.NODE_ENV === 'development') {
-	axios.defaults.baseURL = 'http://localhost:8000';
+	axios.defaults.baseURL = environment.development.apiBaseUrl;
+} else {
+	axios.defaults.baseURL = environment.production.apiBaseUrl;
 }
 
 axios.defaults.withCredentials = true;

@@ -36,7 +36,7 @@ function* attemptCreateTask({ payload }: TaskActionTypes) {
 		};
 
 		// Attempts to create a new project with the information provided
-		const res = yield axios('api/v0/tasks', {
+		const res = yield axios('tasks', {
 			method: 'POST',
 			data: reqTask,
 		});
@@ -68,7 +68,7 @@ function* attemptFetchTasks({ payload }: TaskActionTypes) {
 
 		if (Array.isArray(payload)) {
 			for (const projectId of payload) {
-				const res = yield axios(`api/v0/tasks/project/${projectId}`, { method: 'GET' });
+				const res = yield axios(`tasks/project/${projectId}`, { method: 'GET' });
 
 				// Throws if the action was unsuccessful
 				// TODO Read the error description and solution from the response into the error message.
@@ -106,7 +106,7 @@ function* attemptModifyTasks({ payload }: TaskActionTypes) {
 			return;
 		}
 
-		const res = yield axios(`api/v0/tasks`, {
+		const res = yield axios(`tasks`, {
 			method: 'PATCH',
 			data: {
 				tasks,
@@ -139,7 +139,7 @@ function* attemptDeleteTask({ payload }: TaskActionTypes) {
 		// Delete the task optimistically
 		yield put(deleteTaskSuccess(task._id));
 
-		const res = yield axios(`api/v0/tasks/${task._id}`, { method: 'DELETE' });
+		const res = yield axios(`tasks/${task._id}`, { method: 'DELETE' });
 
 		// Throws if the action was unsuccessful
 		// TODO Read the error description and solution from the response into the error message.

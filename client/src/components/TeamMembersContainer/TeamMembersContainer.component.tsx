@@ -71,7 +71,7 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 			return;
 		}
 
-		const res = await axios(`api/v0/user/${email}`, { method: 'GET' });
+		const res = await axios(`user/${email}`, { method: 'GET' });
 
 		if (!res.data.userId) {
 			setNewMemberEmail({
@@ -85,7 +85,7 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 
 		setNewMemberEmail({ ...newMemberEmail, error: undefined, uid: res.data.userId });
 
-		const res2 = await axios(`api/v0/user/invite`, {
+		const res2 = await axios(`user/invite`, {
 			method: 'PATCH',
 			data: { userId: res.data.userId, projectId },
 		});

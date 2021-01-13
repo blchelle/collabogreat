@@ -126,7 +126,7 @@ const CreateProjectDialog: React.FC = () => {
 			setOtherMembers(updatedOtherMembers);
 		}
 
-		const res = await axios(`api/v0/user/${email}`, { method: 'GET' });
+		const res = await axios(`user/${email}`, { method: 'GET' });
 
 		if (!res.data.userId) {
 			updatedOtherMembers[index].errorReason = 'We could not find a user with this Email Address';
