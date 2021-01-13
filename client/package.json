@@ -9,7 +9,7 @@
 		"test": "react-scripts test",
 		"lint": "eslint src --ext .ts"
 	},
-	"proxy": "http://localhost:8000",
+	"proxy": "http://138.197.170.147:8000",
 	"browserslist": {
 		"production": [
 			">0.2%",
