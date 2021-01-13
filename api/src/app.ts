@@ -1,8 +1,13 @@
+import express, { Application } from 'express';
+import mongoose from 'mongoose';
+
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import express, { Application } from 'express';
-import mongoose from 'mongoose';
+import mongoSanitize from 'express-mongo-sanitize';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+import hpp from 'hpp';
 import morgan from 'morgan';
 import passport from 'passport';
 import StatusCode from 'status-code-enum';
@@ -13,6 +18,9 @@ import Controller from './controllers/base.controller';
 import APIError from './errors/api.error';
 import errorMiddleware from './middleware/error.middleware';
 import logger from './utils/logger.utils';
+
+// Has to be done in a 'require' because there are no type declarations
+const xss = require('xss-clean');
 
 /**
  * Initializes middleware and controllers for the application
@@ -65,6 +73,28 @@ class App {
 		// Body Parser Middleware
 		this.app.use(bodyParser.json());
 		this.app.use(bodyParser.urlencoded({ extended: true }));
+
+		// Rate Limimts Requests from the same IP
+		this.app.use(
+			'/api',
+			rateLimit({
+				max: environment.development.rateLimit.maxRequests,
+				windowMs: environment.development.rateLimit.timeWindow * 1000 * 60,
+				message: 'Too many requests from this IP, please try again later',
+			})
+		);
+
+		// Sets Secure HTTP Headers
+		this.app.use(helmet());
+
+		// Prevents against http parameter pollution attacks
+		this.app.use(hpp());
+
+		// Sanitize the data to prevents NoSQL Query Injection
+		this.app.use(mongoSanitize());
+
+		// Sanitize the data against XSS
+		this.app.use(xss());
 
 		// Cookie Parser Middleware
 		this.app.use(cookieParser());
