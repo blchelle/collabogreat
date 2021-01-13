@@ -1,16 +1,18 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { Card, Divider, List, MenuItem, Typography } from '@material-ui/core';
+import { Card, Divider, List, MenuItem, Typography, useTheme } from '@material-ui/core';
 
 import { ProjectSearchResult, TaskSearchResult } from '../CGAppBar/CGAppBar.component';
 import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
 import { closeModal } from '../../redux/modals/modals.actions';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 import { RootState } from '../../redux/root.reducer';
-import theme from '../../theme';
 
 const SearchDropdown = () => {
+	// MUI
+	const theme = useTheme();
+
 	// React Router
 	const history = useHistory();
 

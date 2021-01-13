@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
-import { Breadcrumbs, Grid, Link, Typography, useMediaQuery } from '@material-ui/core';
+import { Breadcrumbs, Grid, Link, Typography, useMediaQuery, useTheme } from '@material-ui/core';
 
 import ColoredAvatar from '../../components/ColoredAvatar/ColoredAvatar.component';
 import ProjectSettings from '../../components/ProjectSettings/ProjectSettings.component';
@@ -10,12 +10,12 @@ import TeamMembersContainer from '../../components/TeamMembersContainer/TeamMemb
 import { RootState } from '../../redux/root.reducer';
 
 import useCommonStyles from '../common.mui';
-import theme from '../../theme';
 import TaskBreakdownContainer from '../../components/TaskBreakdownContainer/TaskBreakdownContainer.component';
 
 const ProjectHub = () => {
 	// MUI
 	const commonClasses = useCommonStyles();
+	const theme = useTheme();
 
 	// Hooks
 	const { id } = useParams<{ id: string }>();

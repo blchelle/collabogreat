@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, Grid, Typography } from '@material-ui/core';
+import { Card, Grid, Typography, useTheme } from '@material-ui/core';
 
 import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
 import LoadingButton from '../LoadingButton/LoadingButton.component';
@@ -11,7 +11,6 @@ import {
 	rejectInviteStart,
 } from '../../redux/user/user.actions';
 import { TaskColor } from '../../redux/tasks/tasks.types';
-import theme from '../../theme';
 
 interface NotificationItemProps {
 	_id: string;
@@ -21,6 +20,9 @@ interface NotificationItemProps {
 }
 
 const NotificationItem: React.FC<NotificationItemProps> = ({ _id, type, title, color }) => {
+	// MUI
+	const theme = useTheme();
+
 	// Redux
 	const user = useSelector((state: RootState) => state.user);
 	const dispatch = useDispatch();

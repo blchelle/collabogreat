@@ -12,6 +12,7 @@ import {
 	PopperProps,
 	Toolbar,
 	useMediaQuery,
+	useTheme,
 } from '@material-ui/core';
 import {
 	Add as AddIcon,
@@ -31,7 +32,6 @@ import { ModalNames } from '../../redux/modals/modals.reducer';
 import { TaskColor } from '../../redux/tasks/tasks.types';
 import { RootState } from '../../redux/root.reducer';
 import useStyles from './CGAppBar.mui';
-import theme from '../../theme';
 
 export interface ProjectSearchResult {
 	type: 'project';
@@ -51,6 +51,7 @@ export interface TaskSearchResult {
 const CGAppBar: React.FC = () => {
 	// MUI Classes
 	const classes = useStyles();
+	const theme = useTheme();
 
 	// Redux
 	const user = useSelector((state: RootState) => state.user);

@@ -19,7 +19,6 @@ import {
 import { ReactComponent as LogoText } from '../../assets/logo-text.svg';
 import { ReactComponent as GoogleLogo } from '../../assets/google-logo.svg';
 import useStyles from './AuthDialog.mui';
-import theme from '../../theme';
 
 interface AuthDialogProps {
 	open: boolean;
@@ -42,29 +41,11 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onCloseHandler, type }) =
 			onClose={onCloseHandler}
 			classes={{ paperWidthXs: classes.widthXS }}
 		>
-			<div
-				style={{
-					backgroundColor: theme.palette.primary.main,
-					height: theme.spacing(1),
-					width: '100%',
-				}}
-			/>
-			<IconButton
-				style={{
-					alignSelf: 'flex-end',
-					marginTop: theme.spacing(1),
-					marginRight: theme.spacing(1),
-				}}
-				onClick={onCloseHandler}
-			>
+			<div className={classes.topLine} />
+			<IconButton className={classes.closeIcon} onClick={onCloseHandler}>
 				<CloseIcon />
 			</IconButton>
-			<Grid
-				container
-				direction='column'
-				alignItems='center'
-				style={{ marginBottom: theme.spacing(2), marginTop: theme.spacing(-2) }}
-			>
+			<Grid container direction='column' alignItems='center' className={classes.headerContainer}>
 				<Typography variant='h5' classes={{ root: classes.dialogTitle }}>
 					{`${type === 'sign in' ? 'Sign in to' : 'Sign up for'}`}
 				</Typography>

@@ -1,12 +1,21 @@
 import React from 'react';
-import { Container, Grid, Link, Typography, useMediaQuery, Button } from '@material-ui/core';
+import {
+	Container,
+	Grid,
+	Link,
+	Typography,
+	useMediaQuery,
+	Button,
+	useTheme,
+} from '@material-ui/core';
 
 import { ReactComponent as UDNotFound } from '../../assets/404.undraw.svg';
 import useStyles from './NotFound.mui';
-import theme from '../../theme';
 
 const NotFound: React.FC = () => {
+	// MUI
 	const classes = useStyles();
+	const theme = useTheme();
 
 	// Figure out the current screen size
 	const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
