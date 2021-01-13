@@ -1,11 +1,12 @@
 import { makeStyles } from '@material-ui/core/styles';
-import theme from '../../theme';
 
-export default makeStyles({
-	addStageForm: {
-		padding: theme.spacing(1),
-		backgroundColor: theme.palette.background.paper,
-		height: 100,
-		width: 270,
-	},
+export default makeStyles((theme) => {
+	return {
+		addStageForm: {
+			padding: theme.spacing(1),
+			backgroundColor: theme.palette.background.paper,
+			height: 100,
+			width: 270,
+		},
+	};
 });

@@ -20,7 +20,6 @@ import { openModal } from '../../redux/modals/modals.actions';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 
 import useStyles from './BoardCard.mui';
-import theme from '../../theme';
 
 interface BoardCardProps {
 	task: Task;
@@ -36,10 +35,7 @@ const BoardCard: React.FC<BoardCardProps> = ({ task, assignedUser }) => {
 	): CSSProperties => ({
 		// Some basic styles to make the items look a bit nicer
 		userSelect: 'none',
-		marginBottom: theme.spacing(1),
-
-		// Change background colour if dragging
-		background: theme.palette.background.default,
+		marginBottom: 8,
 
 		// styles we need to apply on draggables
 		...draggableStyle,
@@ -62,7 +58,8 @@ const BoardCard: React.FC<BoardCardProps> = ({ task, assignedUser }) => {
 						container
 						justify='flex-end'
 						alignItems='center'
-						style={{ backgroundColor: task.color, height: theme.spacing(4) }}
+						style={{ backgroundColor: task.color }}
+						className={classes.cardHead}
 					>
 						<Grid item>
 							<IconButton
@@ -98,7 +95,7 @@ const BoardCard: React.FC<BoardCardProps> = ({ task, assignedUser }) => {
 							</IconButton>
 						</Grid>
 					</Grid>
-					<CardContent style={{ padding: theme.spacing(1) }}>
+					<CardContent style={{ padding: 8 }}>
 						<Typography variant='subtitle1'>{task.title}</Typography>
 						<Grid container alignItems='flex-end'>
 							<Grid item xs>
@@ -112,14 +109,7 @@ const BoardCard: React.FC<BoardCardProps> = ({ task, assignedUser }) => {
 							</Grid>
 							<Grid item>
 								<Tooltip title={assignedUser!.displayName!} placement='right'>
-									<Avatar
-										style={{
-											height: theme.spacing(3),
-											width: theme.spacing(3),
-											marginLeft: theme.spacing(1),
-										}}
-										src={assignedUser?.image}
-									>
+									<Avatar className={classes.avatar} src={assignedUser?.image}>
 										{assignedUser?.displayName}
 									</Avatar>
 								</Tooltip>

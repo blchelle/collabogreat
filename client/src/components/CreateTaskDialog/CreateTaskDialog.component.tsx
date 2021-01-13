@@ -14,6 +14,7 @@ import {
 	TextField,
 	Typography,
 	useMediaQuery,
+	useTheme,
 } from '@material-ui/core';
 
 import { ReactComponent as UDNewTask } from '../../assets/insert-task.undraw.svg';
@@ -24,7 +25,6 @@ import { ModalNames } from '../../redux/modals/modals.reducer';
 import { RootState } from '../../redux/root.reducer';
 import { Task, TaskColor } from '../../redux/tasks/tasks.types';
 import useStyles from './CreateTaskDialog.mui';
-import theme from '../../theme';
 import { createTaskStart, editTasksStart } from '../../redux/tasks/tasks.actions';
 
 interface FormInputState {
@@ -46,6 +46,7 @@ interface CreateTaskDialogExtras {
 const CreateTaskDialog: React.FC = () => {
 	// MUI Styles
 	const classes = useStyles();
+	const theme = useTheme();
 
 	// Redux
 	const dispatch = useDispatch();

@@ -9,6 +9,7 @@ import {
 	TextField,
 	Typography,
 	useMediaQuery,
+	useTheme,
 } from '@material-ui/core';
 import { Add as AddIcon, Close as CloseIcon } from '@material-ui/icons';
 
@@ -22,7 +23,6 @@ import { ModalNames } from '../../redux/modals/modals.reducer';
 import { User } from '../../redux/user/user.types';
 import { RootState } from '../../redux/root.reducer';
 import useStyles from './CreateProjectDialog.mui';
-import theme from '../../theme';
 
 interface FormInputState {
 	visited: boolean;
@@ -47,6 +47,7 @@ interface CreateProjectDialogExtras {
 const CreateProjectDialog: React.FC = () => {
 	// MUI Styles
 	const classes = useStyles();
+	const theme = useTheme();
 
 	// Redux
 	const dispatch = useDispatch();

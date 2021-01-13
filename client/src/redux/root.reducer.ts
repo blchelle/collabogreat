@@ -8,6 +8,7 @@ import { modalReducer } from './modals/modals.reducer';
 import { projectReducer } from './project/project.reducer';
 import { userReducer } from './user/user.reducer';
 import { loadingReducer } from './loading/loading.reducer';
+import { themeReducer } from './theme/theme.reducer';
 
 const persistConfig = {
 	key: 'root',
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
 	projects: projectReducer,
 	tasks: taskReducer,
 	user: userReducer,
+	theme: themeReducer,
 });
 
 export const persistedRootReducer = persistReducer(persistConfig, rootReducer);

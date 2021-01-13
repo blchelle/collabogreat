@@ -95,8 +95,8 @@ const BoardStage: React.FC<BoardStage> = ({ stageId, stageName, project, tasks }
 							<Button
 								disableElevation
 								className={classes.addTaskButton}
-								variant='contained'
 								fullWidth
+								color='default'
 								size='small'
 								startIcon={<AddIcon />}
 								onClick={() =>

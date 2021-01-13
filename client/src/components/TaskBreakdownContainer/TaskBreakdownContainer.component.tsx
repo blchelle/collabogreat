@@ -1,9 +1,17 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import { Button, Card, Divider, Grid, Tooltip, Typography, useMediaQuery } from '@material-ui/core';
+import {
+	Button,
+	Card,
+	Divider,
+	Grid,
+	Tooltip,
+	Typography,
+	useMediaQuery,
+	useTheme,
+} from '@material-ui/core';
 
 import { Task } from '../../redux/tasks/tasks.types';
-import theme from '../../theme';
 
 interface TaskBreakdownContainerProps {
 	tasks: Task[];
@@ -16,6 +24,8 @@ const TaskBreakdownContainer: React.FC<TaskBreakdownContainerProps> = ({
 	board,
 	projectId,
 }) => {
+	const theme = useTheme();
+
 	// React Router
 	const history = useHistory();
 

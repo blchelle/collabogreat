@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, CardContent, Grid, IconButton, Link, Typography } from '@material-ui/core';
+import { Card, CardContent, Grid, IconButton, Link, Typography, useTheme } from '@material-ui/core';
 import { MoreHoriz as MoreHorizIcon } from '@material-ui/icons';
 
 import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
@@ -12,7 +12,6 @@ import { openModal } from '../../redux/modals/modals.actions';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 
 import useStyles from './TaskCard.mui';
-import theme from '../../theme';
 
 interface TaskCardProps {
 	task: Task;
@@ -22,6 +21,7 @@ interface TaskCardProps {
 const TaskCard: React.FC<TaskCardProps> = ({ task, showAssignee }) => {
 	// MUI
 	const classes = useStyles();
+	const theme = useTheme();
 
 	// Redux
 	const project = useSelector(

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
-import { Breadcrumbs, Button, Grid, Link, Typography } from '@material-ui/core';
+import { Breadcrumbs, Button, Grid, Link, Typography, useTheme } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 
 import useStyles from './ProjectBoard.mui';
@@ -16,11 +16,12 @@ import { editTasksStart } from '../../redux/tasks/tasks.actions';
 import { reorderTasks, moveTasks } from '../../redux/tasks/tasks.util';
 import { editProjectStart } from '../../redux/project/project.actions';
 import { Project } from '../../redux/project/project.types';
-import theme from '../../theme';
 
 const ProjectBoard: React.FC = () => {
+	// MUI
 	const classes = useStyles();
 	const commonClasses = useCommonStyles();
+	const theme = useTheme();
 
 	// ProjectBoard State
 	const [showAddStageForm, setShowAddStageForm] = useState(false);
@@ -140,7 +141,8 @@ const ProjectBoard: React.FC = () => {
 								) : (
 									<Button
 										disableElevation
-										variant='contained'
+										variant='outlined'
+										color='default'
 										className={classes.addStageButton}
 										startIcon={<AddIcon />}
 										onClick={() => setShowAddStageForm(true)}

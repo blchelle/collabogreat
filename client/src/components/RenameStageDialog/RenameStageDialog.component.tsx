@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dialog, DialogContent, Grid, IconButton, TextField, Typography } from '@material-ui/core';
+import {
+	Dialog,
+	DialogContent,
+	Grid,
+	IconButton,
+	TextField,
+	Typography,
+	useTheme,
+} from '@material-ui/core';
 import { Close as CloseIcon } from '@material-ui/icons';
 
 import LoadingButton from '../LoadingButton/LoadingButton.component';
@@ -11,7 +19,6 @@ import { Project } from '../../redux/project/project.types';
 import { editProjectStart } from '../../redux/project/project.actions';
 import { Task } from '../../redux/tasks/tasks.types';
 import { editTasksStart } from '../../redux/tasks/tasks.actions';
-import theme from '../../theme';
 
 interface RenameStageDialogProps {
 	project: Project;
@@ -19,6 +26,9 @@ interface RenameStageDialogProps {
 }
 
 const RenameStageDialog: React.FC = () => {
+	// MUI
+	const theme = useTheme();
+
 	// Redux
 	const { open, extra } = useSelector((state: RootState) => state.modals.RENAME_STAGE_DIALOG);
 	const tasks = useSelector((state: RootState) => state.tasks);
