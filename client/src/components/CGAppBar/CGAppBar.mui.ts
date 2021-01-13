@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 export default makeStyles((theme) => {
 	return {
 		appBar: {
-			boxShadow: 'none',
 			flex: '0 1 auto',
 			backgroundColor: theme.palette.background.paper,
 		},
