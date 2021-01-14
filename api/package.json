@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "NODE_ENV=development ts-node-dev ./src/server.ts",
+		"prod": "NODE_ENV=production pm2 start ./dist/server.js --name api",
 		"lint": "eslint --ext .ts",
 		"compile": "tsc",
 		"docs": "typedoc --out docs src"
@@ -18,6 +19,7 @@
 		"helmet": "^4.3.1",
 		"hpp": "^0.2.3",
 		"jsonwebtoken": "^8.5.1",
+		"log-timestamp": "^0.3.0",
 		"mongoose": "^5.9.25",
 		"mongoose-unique-validator": "^2.0.3",
 		"morgan": "^1.10.0",
@@ -46,6 +48,7 @@
 		"@types/passport-google-oauth20": "^2.0.3",
 		"@types/validator": "^13.1.0",
 		"npm-run-all": "^4.1.5",
+		"pm2": "^4.5.1",
 		"ts-node-dev": "^1.1.1",
 		"typedoc": "^0.17.8",
 		"typescript": "^3.9.7"
