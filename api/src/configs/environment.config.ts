@@ -17,7 +17,7 @@ export default {
 		port: 8000,
 		clientBaseURL: 'https://collabogreat.brockchelle.com',
 		oauth: {
-			successRoute: 'https://collabogreat.brockchelle.com',
+			successRoute: 'https://collabogreat.brockchelle.com/dasboard',
 			failureRoute: 'https://collabogreat.brockchelle.com',
 		},
 		rateLimit: {

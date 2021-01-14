@@ -71,6 +71,7 @@ class AuthController extends Controller {
 
 		const cookieOptions: CookieOptions = {
 			maxAge: keys.jwt.cookieLifespan * 24 * 60 * 60 * 1000,
+			domain: environment[process.env.NODE_ENV as 'development' | 'production'].clientBaseURL,
 			httpOnly: true,
 			secure: process.env.NODE_ENV === 'production'
 		};
@@ -88,7 +89,9 @@ class AuthController extends Controller {
 	private logout(_req: Request, res: Response) {
 		res.cookie('Bearer', 'loggedout', {
 			maxAge: 10 * 1000, // 10 Seconds
+			domain: environment[process.env.NODE_ENV as 'development' | 'production'].clientBaseURL,
 			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production'
 		});
 
 		res.status(StatusCode.SuccessOK).json({ success: true });
