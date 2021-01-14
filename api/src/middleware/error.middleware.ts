@@ -29,8 +29,8 @@ function handleError(err: Error, req: Request, res: Response, _next: NextFunctio
 
 	logger('ErrorHandler', `${err.message} ❌`);
 
-	if (req.path.includes(`api/v${environment.development.version}/auth`)) {
-		res.redirect(environment.development.oauth.failureRoute);
+	if (req.path.includes(`api/v${environment[process.env.NODE_ENV as 'development' | 'production'].version}/auth`)) {
+		res.redirect(environment[process.env.NODE_ENV as 'development' | 'production'].oauth.failureRoute);
 		return;
 	}
 

@@ -8,6 +8,7 @@ import keys from '../configs/keys.config';
 import RegisteredOAuthProvider from '../configs/passport.config';
 import Controller from './base.controller';
 import User, { IUser } from '../models/user.model';
+import logger from '../utils/logger.utils';
 
 /**
  * Used to handle various authentication tasks such as logging in and signing up with
@@ -72,12 +73,12 @@ class AuthController extends Controller {
 		const cookieOptions: CookieOptions = {
 			maxAge: keys.jwt.cookieLifespan * 24 * 60 * 60 * 1000,
 			httpOnly: true,
-			secure: process.env.NODE_ENV === 'production',
+			secure: process.env.NODE_ENV === 'production'
 		};
 
 		// Sends the cookie and redirects the client to the dashboard
 		res.cookie('Bearer', token, cookieOptions);
-		res.redirect(environment.development.oauth.successRoute);
+		res.redirect(environment[process.env.NODE_ENV as 'development' | 'production'].oauth.successRoute);
 	}
 
 	/**
