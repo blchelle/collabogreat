@@ -81,7 +81,9 @@ function configureProviderStrategy(provider: RegisteredOAuthProvider) {
 	const config = {
 		clientID: keys[provider].clientId,
 		clientSecret: keys[provider].clientSecret,
-		callbackURL: `https://api.collabogreat.brockchelle.com/api/v${environment[process.env.NODE_ENV as 'development' | 'production'].version}/auth/${provider}/redirect`,
+		callbackURL: `${environment[process.env.NODE_ENV as 'development' | 'production'].baseURL}/v${
+			environment[process.env.NODE_ENV as 'development' | 'production'].version
+		}/auth/${provider}/redirect`,
 	};
 
 	// Initializes a new stategy corresponding for the provider that was passed in

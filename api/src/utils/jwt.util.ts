@@ -4,6 +4,7 @@ import { StatusCode } from 'status-code-enum';
 
 import keys from '../configs/keys.config';
 import APIError from '../errors/api.error';
+import logger from './logger.utils';
 
 function unauthorizedError() {
 	return new APIError(
@@ -20,6 +21,8 @@ function unauthorizedError() {
  * @return An array containing the UserId and Error
  */
 export function validateJwt(authorizationHeader: string | undefined) {
+	logger('JWT UTIL', `Cookie: ${authorizationHeader}`);
+
 	// Verify that the req had an authorization header
 	if (!authorizationHeader) return [null, unauthorizedError()];
 
