@@ -16,6 +16,7 @@ import {
 	Close as CloseIcon,
 } from '@material-ui/icons';
 
+import environment from '../../config/environment.config';
 import { ReactComponent as LogoText } from '../../assets/logo-text.svg';
 import { ReactComponent as GoogleLogo } from '../../assets/google-logo.svg';
 import useStyles from './AuthDialog.mui';
@@ -64,7 +65,9 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onCloseHandler, type }) =
 							variant='outlined'
 							fullWidth
 							startIcon={<FacebookLogo className={buttonIconClasses} />}
-							href='http://localhost:8000/api/v0/auth/facebook'
+							href={`${
+								environment[process.env.NODE_ENV as 'development' | 'production'].apiBaseUrl
+							}/auth/facebook`}
 						>
 							Facebook
 						</Button>
@@ -75,7 +78,9 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onCloseHandler, type }) =
 							variant='outlined'
 							fullWidth
 							startIcon={<SvgIcon component={GoogleLogo} className={buttonIconClasses} />}
-							href='http://localhost:8000/api/v0/auth/google'
+							href={`${
+								environment[process.env.NODE_ENV as 'development' | 'production'].apiBaseUrl
+							}/auth/google`}
 						>
 							Google
 						</Button>
@@ -86,7 +91,9 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onCloseHandler, type }) =
 							variant='outlined'
 							fullWidth
 							startIcon={<GitHubLogo className={buttonIconClasses} />}
-							href='http://localhost:8000/api/v0/auth/github'
+							href={`${
+								environment[process.env.NODE_ENV as 'development' | 'production'].apiBaseUrl
+							}/auth/github`}
 						>
 							Github
 						</Button>

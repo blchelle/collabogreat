@@ -27,7 +27,7 @@ function* attemptCreateProject({ payload }: ProjectActionTypes) {
 		}
 
 		// Attempts to create a new project with the information provided
-		const res = yield axios('api/v0/projects', {
+		const res = yield axios('projects', {
 			method: 'POST',
 			data: { ...payload, members: payload.members!.map((member) => member!._id) },
 		});
@@ -70,7 +70,7 @@ function* attemptEditProject({ payload }: ProjectActionTypes) {
 		yield put(editProjectSuccess(payload));
 
 		// Attempts to create a new project with the information provided
-		const res = yield axios('api/v0/projects', {
+		const res = yield axios('projects', {
 			method: 'PATCH',
 			data: { project: { ...payload, members: payload.members!.map((member) => member?._id) } },
 		});
