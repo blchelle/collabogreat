@@ -8,7 +8,6 @@ import keys from '../configs/keys.config';
 import RegisteredOAuthProvider from '../configs/passport.config';
 import Controller from './base.controller';
 import User, { IUser } from '../models/user.model';
-import logger from '../utils/logger.utils';
 
 /**
  * Used to handle various authentication tasks such as logging in and signing up with
