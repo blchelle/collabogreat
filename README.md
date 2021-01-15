@@ -1,2 +1,23 @@
-# collabogreat
-CollaboGreat is team collaboration software designed and configurable for projects of any any scale. Whether its a multimillion enterprise project or putting together a powerpoint for a school project, CollaboGreat will fit all of your needs
+# CollaboGreat
+CollaboGreat is team collaboration software designed and configurable for projects of any any scale.
+
+## 🚧 Currently Under Construction 🚧
+The estimated completion is January 2021. Take a look at my [Project Board](https://github.com/blchelle/collabogreat/projects/2) to see what I'm currently working on.
+
+## Technology Stack 💻
+Both the Front and Back End use [TypeScript](https://www.typescriptlang.org/)
+
+Front End
+* [React](https://reactjs.org/)
+* [Redux](https://redux.js.org/)
+* [Redux Saga](https://redux-saga.js.org/)
+* [React Router](https://reactrouter.com/)
+* [Material UI](https://material-ui.com/)
+* [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
+
+Back End
+* [NodeJS](https://nodejs.org/en/)
+* [Express](https://expressjs.com/)
+* [Mongoose](https://mongoosejs.com/)
+* [Passport](http://www.passportjs.org/)
+* [MongoDB](https://www.mongodb.com/)
