@@ -23,6 +23,8 @@ import {
 	RejectInviteStartAction,
 	REJECT_INVITE_START,
 } from './user.types';
+import { closeModal } from '../modals/modals.actions';
+import { ModalNames } from '../modals/modals.reducer';
 
 function* getUserInformation() {
 	try {
@@ -84,6 +86,9 @@ function* attemptLeaveProject({ payload: { projectId } }: LeaveProjectStartActio
 	} catch (err) {
 		console.log(err.message);
 	}
+
+	yield put(stopLoading());
+	yield put(closeModal(ModalNames.CONFIRM_DIALOG));
 }
 
 function* attemptAcceptInvite({

@@ -45,7 +45,20 @@ const TaskMenuDropdown = () => {
 			>
 				<Typography>Edit Task...</Typography>
 			</MenuItem>
-			<MenuItem onClick={() => dispatch(deleteTaskStart(task))}>
+			<MenuItem
+				onClick={() => {
+					dispatch(
+						openModal(ModalNames.CONFIRM_DIALOG, {
+							open: true,
+							children: null,
+							extra: {
+								confirmAction: () => dispatch(deleteTaskStart(task)),
+								message: `Are you sure you want to delete task '${task.title}'?`,
+							},
+						})
+					);
+				}}
+			>
 				<Typography>Delete Task...</Typography>
 			</MenuItem>
 		</Grid>

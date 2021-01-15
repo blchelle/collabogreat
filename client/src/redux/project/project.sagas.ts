@@ -94,6 +94,7 @@ function* attemptEditProject({ payload }: ProjectActionTypes) {
 	}
 
 	yield put(stopLoading());
+	yield put(closeModal(ModalNames.CONFIRM_DIALOG));
 }
 
 function* onCreateProjectStart() {

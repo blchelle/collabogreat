@@ -136,16 +136,11 @@ function* attemptDeleteTask({ payload }: TaskActionTypes) {
 	// Store the task preemptively, so that you can recover from a failed deletion
 	const task = payload as Task;
 	try {
-		// Delete the task optimistically
-		yield put(deleteTaskSuccess(task._id));
-
 		const res = yield axios(`tasks/${task._id}`, { method: 'DELETE' });
 
 		// Throws if the action was unsuccessful
 		// TODO Read the error description and solution from the response into the error message.
 		if (res.status !== 204) {
-			// Put the task back if the deletion failed
-			yield put(createTaskSuccess(task));
 			yield put(openError(res.message, res.solution));
 			return;
 		}
@@ -153,12 +148,13 @@ function* attemptDeleteTask({ payload }: TaskActionTypes) {
 		// The actual response is going to have all the project information embedded in it
 		// User documents should only contain references to the project
 		// The id will be extracted from each project
-		yield put(deleteTaskSuccess(payload as string));
+		yield put(deleteTaskSuccess(task._id));
 	} catch (err) {
-		// Put the task back if the deletion failed
-		yield put(createTaskSuccess(task));
 		yield put(openError('Error', 'Here is a solution'));
 	}
+
+	yield put(stopLoading());
+	yield put(closeModal(ModalNames.CONFIRM_DIALOG));
 }
 
 function* onCreateTaskStart() {
