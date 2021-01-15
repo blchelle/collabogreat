@@ -40,7 +40,10 @@ const Landing: React.FC = () => {
 				<Grid item>
 					<AppBar color='transparent' position='fixed' className={classes.appBar}>
 						<Toolbar>
-							<Grid container justify='flex-end' alignItems='center'>
+							<Grid container justify='space-between' alignItems='center'>
+								<Grid item>
+									<Typography variant='h5'>CollaboGreat</Typography>
+								</Grid>
 								<Grid item container spacing={2} style={{ width: 'auto' }}>
 									<Grid item>
 										<Button
@@ -93,7 +96,7 @@ const Landing: React.FC = () => {
 									<Grid item style={{ marginTop: 40 }}>
 										<Button
 											variant='contained'
-											color='secondary'
+											color='primary'
 											size='large'
 											onClick={() => {
 												setAuthType('sign up');
@@ -113,7 +116,7 @@ const Landing: React.FC = () => {
 									<Grid item style={{ marginTop: 40 }}>
 										<Button
 											variant='contained'
-											color='secondary'
+											color='primary'
 											onClick={() => {
 												setAuthType('sign up');
 												setShowAuthPopup(true);

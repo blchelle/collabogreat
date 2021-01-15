@@ -7,6 +7,7 @@ import Routes from './routes';
 import CGAppBar from './components/CGAppBar/CGAppBar.component';
 import CreateProjectDialog from './components/CreateProjectDialog/CreateProjectDialog.component';
 import CreateTaskDialog from './components/CreateTaskDialog/CreateTaskDialog.component';
+import ConfirmDialog from './components/ConfirmDialog/ConfirmDialog.component';
 import Error from './components/Error/Error.component';
 import Loading from './pages/Loading/Loading.page';
 import { fetchTasksStart } from './redux/tasks/tasks.actions';
@@ -70,6 +71,7 @@ const Authenticated = () => {
 			)}
 			<CreateProjectDialog />
 			<CreateTaskDialog />
+			<ConfirmDialog />
 			<Error />
 		</Suspense>
 	);

@@ -91,7 +91,18 @@ const BoardCard: React.FC<BoardCardProps> = ({ task, assignedUser }) => {
 						<Grid item>
 							<IconButton
 								className={classes.iconButton}
-								onClick={() => dispatch(deleteTaskStart(task))}
+								onClick={() =>
+									dispatch(
+										openModal(ModalNames.CONFIRM_DIALOG, {
+											open: true,
+											children: null,
+											extra: {
+												message: `Are you sure you want to delete task '${task.title}'?`,
+												confirmAction: () => dispatch(deleteTaskStart(task)),
+											},
+										})
+									)
+								}
 							>
 								<DeleteIcon className={classes.icon} />
 							</IconButton>

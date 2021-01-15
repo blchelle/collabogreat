@@ -2,6 +2,7 @@ import { ModalActionTypes, OPEN_MODAL, CLOSE_MODAL, PopperPropsExtra } from './m
 import { setModalOpen } from './modals.utils';
 
 export enum ModalNames {
+	CONFIRM_DIALOG = 'CONFIRM_DIALOG',
 	CREATE_PROJECT_DIALOG = 'CREATE_PROJECT_DIALOG',
 	CREATE_TASK_DIALOG = 'CREATE_TASK_DIALOG',
 	RENAME_STAGE_DIALOG = 'RENAME_STAGE_DIALOG',
@@ -23,6 +24,7 @@ const initialModalState: PopperPropsExtra = {
 };
 
 const initialState: ModalState = {
+	CONFIRM_DIALOG: initialModalState,
 	CREATE_PROJECT_DIALOG: initialModalState,
 	CREATE_TASK_DIALOG: initialModalState,
 	RENAME_STAGE_DIALOG: initialModalState,
