@@ -1,5 +1,4 @@
 <svg width="1122" height="1146" viewBox="0 0 1122 1146" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0)">
 <circle cx="708.5" cy="389.5" r="389.5" fill="#F4F4F4"/>
 <ellipse cx="614.842" cy="133.128" rx="49.3007" ry="49.3007" fill="#E81410"/>
 <ellipse cx="963.421" cy="295.812" rx="49.3007" ry="49.3007" fill="#FFD11F"/>
@@ -224,7 +223,6 @@
 </g>
 <path opacity="0.1" d="M145.61 1076.49C145.61 1076.49 131.81 1080.26 129.14 1074.34L145.61 1076.49Z" fill="black"/>
 <path opacity="0.1" d="M233.22 1073.66C233.22 1073.66 217.22 1077.79 213.52 1071.4L233.22 1073.66Z" fill="black"/>
-</g>
 <defs>
 <linearGradient id="paint0_linear" x1="361.63" y1="1029.31" x2="361.63" y2="438.22" gradientUnits="userSpaceOnUse">
 <stop stop-color="#808080" stop-opacity="0.25"/>
@@ -246,8 +244,5 @@
 <stop offset="0.54" stop-color="#808080" stop-opacity="0.12"/>
 <stop offset="1" stop-color="#808080" stop-opacity="0.1"/>
 </linearGradient>
-<clipPath id="clip0">
-<rect width="1122" height="1146" fill="white"/>
-</clipPath>
 </defs>
 </svg>

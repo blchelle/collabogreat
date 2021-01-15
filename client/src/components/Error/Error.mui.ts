@@ -4,7 +4,7 @@ export default makeStyles((theme) => {
 	return {
 		errorBanner: {
 			backgroundColor: theme.palette.error.main,
-			height: '2rem',
+			height: theme.spacing(3),
 		},
 		dismissButton: {
 			marginLeft: 'auto',
