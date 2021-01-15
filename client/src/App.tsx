@@ -8,6 +8,7 @@ import Loading from './pages/Loading/Loading.page';
 import Landing from './pages/Landing/Landing.page';
 import { fetchCurrentUser } from './redux/user/user.actions';
 import { RootState } from './redux/root.reducer';
+import baseTheme from './config/theme.config';
 
 import useStyles from './App.mui';
 
@@ -24,31 +25,10 @@ const App: React.FC = () => {
 
 	// Material UI
 	const theme = createMuiTheme({
+		...baseTheme,
 		palette: {
+			...baseTheme.palette,
 			type: colorTheme,
-			primary: {
-				main: '#21bf54',
-				contrastText: '#ffffff',
-			},
-			secondary: {
-				main: '#0995E3',
-				contrastText: '#ffffff',
-			},
-			warning: {
-				main: '#ffd11f',
-			},
-			error: {
-				main: '#e81410',
-			},
-		},
-		breakpoints: {
-			values: {
-				xs: 0,
-				sm: 480,
-				md: 700,
-				lg: 1000,
-				xl: 1200,
-			},
 		},
 	});
 
