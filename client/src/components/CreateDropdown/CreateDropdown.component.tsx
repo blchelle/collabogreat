@@ -1,6 +1,14 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Divider, Grid, MenuList, MenuItem, Typography } from '@material-ui/core';
+import {
+	Divider,
+	Grid,
+	MenuList,
+	MenuItem,
+	Typography,
+	useTheme,
+	useMediaQuery,
+} from '@material-ui/core';
 
 import { ReactComponent as NewTaskSVG } from '../../assets/new-task.svg';
 import { ReactComponent as NewProjectSVG } from '../../assets/new-project.svg';
@@ -12,6 +20,8 @@ import useStyles from './CreateDropdown.mui';
 const CreateDropdown: React.FC = () => {
 	// MUI Styles
 	const classes = useStyles();
+	const theme = useTheme();
+	const screenIsSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
 	// Redux
 	const dispatch = useDispatch();
@@ -27,9 +37,11 @@ const CreateDropdown: React.FC = () => {
 					}}
 				>
 					<Grid container spacing={4} alignItems='center'>
-						<Grid item>
-							<NewTaskSVG className={classes.listItemImage} />
-						</Grid>
+						{screenIsSmall ? null : (
+							<Grid item>
+								<NewTaskSVG className={classes.listItemImage} />
+							</Grid>
+						)}
 						<Grid item xs container direction='column'>
 							<Typography variant='subtitle1' gutterBottom>
 								Create a New Task
@@ -51,9 +63,11 @@ const CreateDropdown: React.FC = () => {
 				}}
 			>
 				<Grid container spacing={4} alignItems='center'>
-					<Grid item>
-						<NewProjectSVG className={classes.listItemImage} />
-					</Grid>
+					{screenIsSmall ? null : (
+						<Grid item>
+							<NewProjectSVG className={classes.listItemImage} />
+						</Grid>
+					)}
 					<Grid item xs container direction='column'>
 						<Typography variant='subtitle1' gutterBottom>
 							Create a New Project
