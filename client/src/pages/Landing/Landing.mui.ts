@@ -21,5 +21,9 @@ export default makeStyles((theme) => {
 			width: '100%',
 			height: 'auto',
 		},
+		teamSvgMobile: {
+			width: '100%',
+			height: '300px',
+		},
 	};
 });
