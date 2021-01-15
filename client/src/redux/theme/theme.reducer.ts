@@ -1,7 +1,7 @@
 import { ThemeActionTypes, TOGGLE_THEME } from './theme.types';
 
 export function themeReducer(
-	state: 'light' | 'dark' = 'dark',
+	state: 'light' | 'dark' = 'light',
 	action: ThemeActionTypes
 ): 'light' | 'dark' {
 	switch (action.type) {
