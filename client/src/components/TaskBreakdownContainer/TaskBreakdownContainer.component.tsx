@@ -136,6 +136,7 @@ const TaskBreakdownContainer: React.FC<TaskBreakdownContainerProps> = ({
 					variant='contained'
 					color='primary'
 					onClick={() => history.push(`/projects/${projectId}/board`)}
+					style={{ marginBottom: isScreenSmall ? theme.spacing(3) : 0 }}
 				>
 					See project board
 				</Button>

@@ -5,8 +5,14 @@ export default makeStyles((theme) => {
 		container: {
 			height: '100%',
 		},
+		cardHead: {
+			marginBottom: theme.spacing(1),
+		},
+		cardDescription: {
+			marginBottom: theme.spacing(2),
+		},
 		cardButtons: {
-			marginTop: theme.spacing(1),
+			marginTop: 'auto',
 			alignSelf: 'flex-end',
 		},
 	};

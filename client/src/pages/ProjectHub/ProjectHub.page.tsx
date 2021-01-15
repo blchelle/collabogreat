@@ -83,9 +83,9 @@ const ProjectHub = () => {
 						<TasksContainer type='project' tasks={tasks} />
 					</Grid>
 				</Grid>
-				<Grid item xs container direction='column' spacing={6}>
+				<Grid item xs={12} lg={4} container direction='column' spacing={isScreenSmall ? 0 : 4}>
 					{/* Team Members */}
-					<Grid item>
+					<Grid item style={{ marginBottom: theme.spacing(6) }}>
 						<TeamMembersContainer members={project.members!} tasks={tasks} projectId={id} />
 					</Grid>
 					<Grid item>

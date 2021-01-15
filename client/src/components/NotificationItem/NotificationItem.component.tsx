@@ -28,7 +28,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ _id, type, title, c
 	const dispatch = useDispatch();
 
 	return (
-		<Grid container direction='column' spacing={1} style={{ width: 400 }}>
+		<Grid container direction='column' alignItems='flex-start' spacing={1} style={{ width: 400 }}>
 			{type === 'project' ? (
 				<>
 					<Grid item xs={12} container alignItems='center' spacing={2}>

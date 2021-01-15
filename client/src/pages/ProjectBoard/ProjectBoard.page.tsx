@@ -99,18 +99,16 @@ const ProjectBoard: React.FC = () => {
 	};
 
 	return (
-		<Grid container style={{ height: '100%' }} direction='column'>
-			<Grid item container>
-				<Breadcrumbs aria-label='breadcrumb' className={commonClasses.breadCrumb}>
-					<Link color='inherit' href='/dashboard'>
-						Dashboard
-					</Link>
-					<Link color='inherit' href={`/projects/${projectId}`}>
-						{project.title}
-					</Link>
-					<Typography color='textPrimary'>Board</Typography>
-				</Breadcrumbs>
-			</Grid>
+		<Grid container direction='column' style={{ height: '100%' }}>
+			<Breadcrumbs aria-label='breadcrumb' className={commonClasses.breadCrumb}>
+				<Link color='inherit' href='/dashboard'>
+					Dashboard
+				</Link>
+				<Link color='inherit' href={`/projects/${projectId}`}>
+					{project.title}
+				</Link>
+				<Typography color='textPrimary'>Board</Typography>
+			</Breadcrumbs>
 			<DragDropContext onDragEnd={onDragEnd}>
 				<Droppable droppableId='board' type='STAGES' direction='horizontal'>
 					{(provided) => (

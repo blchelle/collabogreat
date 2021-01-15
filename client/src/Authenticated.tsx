@@ -1,6 +1,7 @@
 import React, { Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
+import { Grid, useMediaQuery, useTheme } from '@material-ui/core';
 
 import Routes from './routes';
 import CGAppBar from './components/CGAppBar/CGAppBar.component';
@@ -30,20 +31,35 @@ const Authenticated = () => {
 		}
 	}, [JSON.stringify(projectIds), dispatch]);
 
+	// MUI
+	const theme = useTheme();
+	const isScreenSmall = useMediaQuery(theme.breakpoints.down('sm'));
+
 	return (
 		<Suspense fallback={<Loading />}>
 			{Routes.some((regex) => regex.test(pathname)) ? (
 				<>
 					<CGAppBar />
-					<Switch>
-						<Route exact path='/'>
-							<Redirect to='/dashboard' />
-						</Route>
-						<Route exact path='/dashboard' component={Dashboard} />
-						<Route exact path='/loading' component={Loading} />
-						<Route exact path='/projects/:id' component={ProjectHub} />
-						<Route exact path='/projects/:id/board' component={ProjectBoard} />
-					</Switch>
+					<Grid
+						container
+						direction='column'
+						style={{
+							height: new RegExp(/^\/projects\/[\w]{24}\/board$/).test(pathname) ? '100vh' : 'auto',
+						}}
+					>
+						<Grid item style={{ height: isScreenSmall ? 120 : 64, width: '100vw' }} />
+						<Grid item xs style={{ width: '100vw' }}>
+							<Switch>
+								<Route exact path='/'>
+									<Redirect to='/dashboard' />
+								</Route>
+								<Route exact path='/dashboard' component={Dashboard} />
+								<Route exact path='/loading' component={Loading} />
+								<Route exact path='/projects/:id' component={ProjectHub} />
+								<Route exact path='/projects/:id/board' component={ProjectBoard} />
+							</Switch>
+						</Grid>
+					</Grid>
 				</>
 			) : (
 				<NotFound />

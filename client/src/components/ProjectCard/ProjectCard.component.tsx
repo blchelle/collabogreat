@@ -20,8 +20,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 	return (
 		<Card className={classes.container}>
 			<CardContent className={classes.container}>
-				<Grid container direction='column' justify='space-between' className={classes.container}>
-					<Grid item container alignItems='center'>
+				<Grid container direction='column' className={classes.container}>
+					<Grid item container alignItems='center' className={classes.cardHead}>
 						<Grid item xs>
 							<Typography variant='h5'>{project.title}</Typography>
 						</Grid>
@@ -35,7 +35,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 							/>
 						</Grid>
 					</Grid>
-					<Grid item>
+					<Grid item className={classes.cardDescription}>
 						<Typography variant='body1'>{project.description}</Typography>
 					</Grid>
 					<Grid item container className={classes.cardButtons}>

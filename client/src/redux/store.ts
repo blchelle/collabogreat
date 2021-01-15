@@ -8,7 +8,11 @@ import { rootSaga } from './root.sagas';
 
 // Setup the middlewares that will be use
 const sagaMiddleware = createSageMiddleware();
-const middlewares = [sagaMiddleware, logger];
+
+let middlewares;
+
+if (process.env.NODE_ENV === 'production') middlewares = [sagaMiddleware];
+else middlewares = [sagaMiddleware, logger];
 
 // Create the redux store
 export const store = createStore(persistedRootReducer, applyMiddleware(...middlewares));

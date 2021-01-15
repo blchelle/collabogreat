@@ -10,6 +10,7 @@ import {
 	IconButton,
 	Tooltip,
 	Typography,
+	useTheme,
 } from '@material-ui/core';
 import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
 
@@ -29,6 +30,7 @@ interface BoardCardProps {
 const BoardCard: React.FC<BoardCardProps> = ({ task, assignedUser }) => {
 	// MUI
 	const classes = useStyles();
+	const theme = useTheme();
 
 	const getItemStyle = (
 		draggableStyle: DraggingStyle | NotDraggingStyle | undefined
@@ -96,13 +98,18 @@ const BoardCard: React.FC<BoardCardProps> = ({ task, assignedUser }) => {
 						</Grid>
 					</Grid>
 					<CardContent style={{ padding: 8 }}>
-						<Typography variant='subtitle1'>{task.title}</Typography>
+						<Typography
+							variant='subtitle1'
+							style={{ lineHeight: 1.1, marginBottom: theme.spacing(1) }}
+						>
+							{task.title}
+						</Typography>
 						<Grid container alignItems='flex-end'>
 							<Grid item xs>
 								{task.description ? (
 									<Typography variant='body2'>
-										{`${task.description?.substr(0, 50)}${
-											task.description?.length > 50 ? '...' : ''
+										{`${task.description?.substr(0, 75)}${
+											task.description?.length > 75 ? '...' : ''
 										}`}
 									</Typography>
 								) : null}

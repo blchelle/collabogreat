@@ -103,7 +103,11 @@ const CGAppBar: React.FC = () => {
 
 	return (
 		<>
-			<AppBar className={classes.appBar} position='static'>
+			<AppBar
+				className={classes.appBar}
+				position='fixed'
+				style={{ paddingTop: useMediaQuery(theme.breakpoints.down('sm')) ? 16 : 0 }}
+			>
 				<Toolbar className={classes.toolBar}>
 					<Grid container alignItems='center' justify='space-between'>
 						<Grid item>

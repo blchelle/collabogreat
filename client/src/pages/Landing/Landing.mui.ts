@@ -8,6 +8,12 @@ export default makeStyles((theme) => {
 			width: '100%',
 			background: `linear-gradient(to right bottom, ${theme.palette.primary.light}, ${theme.palette.primary.dark})`,
 		},
+		container: {
+			position: 'fixed',
+			left: '50%',
+			top: '50%',
+			transform: 'translate(-50%, -50%)',
+		},
 		appBar: {
 			boxShadow: 'none',
 		},
