@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, Divider, Grid, Typography } from '@material-ui/core';
+import { Button, Divider, Grid, Typography, useMediaQuery, useTheme } from '@material-ui/core';
 
 import ProjectCard from '../ProjectCard/ProjectCard.component';
 import { ReactComponent as UDNoProjects } from '../../assets/no-projects.undraw.svg';
@@ -17,6 +17,8 @@ interface ProjectsContainerProps {
 const ProjectsContainer: React.FC<ProjectsContainerProps> = ({ projects }) => {
 	// MUI
 	const classes = useStyles();
+	const theme = useTheme();
+	const screenIsSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
 	// Redux Hooks
 	const dispatch = useDispatch();
@@ -32,7 +34,9 @@ const ProjectsContainer: React.FC<ProjectsContainerProps> = ({ projects }) => {
 			{projects.length === 0 ? (
 				<>
 					<Grid item container justify='center' xs>
-						<UDNoProjects className={classes.noProjectsSVG} />
+						<UDNoProjects
+							className={screenIsSmall ? classes.noProjectsSVGMobile : classes.noProjectsSVG}
+						/>
 					</Grid>
 					<Grid item>
 						<Typography variant='h6'>

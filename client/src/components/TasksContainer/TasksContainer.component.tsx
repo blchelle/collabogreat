@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, Divider, Grid, Typography } from '@material-ui/core';
+import { Button, Divider, Grid, Typography, useTheme, useMediaQuery } from '@material-ui/core';
 
 import TaskCard from '../TaskCard/TaskCard.component';
 import { ReactComponent as UDNoTasks } from '../../assets/no-tasks.undraw.svg';
@@ -18,6 +18,8 @@ interface TasksContainerProps {
 const TasksContainer: React.FC<TasksContainerProps> = ({ type, tasks }) => {
 	// MUI
 	const classes = useStyles();
+	const theme = useTheme();
+	const screenIsSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
 	// Redux Hooks
 	const dispatch = useDispatch();
@@ -32,7 +34,7 @@ const TasksContainer: React.FC<TasksContainerProps> = ({ type, tasks }) => {
 			</Grid>
 			{tasks.length === 0 ? (
 				<Grid item container direction='column' justify='center' alignItems='center' spacing={2}>
-					<UDNoTasks className={classes.noTasksSVG} />
+					<UDNoTasks className={screenIsSmall ? classes.noTasksSVGMobile : classes.noTasksSVG} />
 					<Grid item>
 						<Typography variant='h6'>
 							{type === 'user'
