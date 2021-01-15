@@ -8,4 +8,8 @@ export default makeStyles({
 		width: '60%',
 		height: 'auto',
 	},
+	noProjectsSVGMobile: {
+		width: '90%',
+		height: '200px',
+	},
 });
