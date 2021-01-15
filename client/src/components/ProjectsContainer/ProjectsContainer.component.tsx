@@ -24,7 +24,7 @@ const ProjectsContainer: React.FC<ProjectsContainerProps> = ({ projects }) => {
 	const dispatch = useDispatch();
 
 	return (
-		<Grid container direction='column' spacing={4} alignItems='center'>
+		<Grid container direction='column' spacing={2} alignItems='center'>
 			<Grid item xs className={classes.header}>
 				<Typography variant='h5' gutterBottom>
 					Your Projects
@@ -32,12 +32,10 @@ const ProjectsContainer: React.FC<ProjectsContainerProps> = ({ projects }) => {
 				<Divider />
 			</Grid>
 			{projects.length === 0 ? (
-				<>
-					<Grid item container justify='center' xs>
-						<UDNoProjects
-							className={screenIsSmall ? classes.noProjectsSVGMobile : classes.noProjectsSVG}
-						/>
-					</Grid>
+				<Grid item container direction='column' justify='center' alignItems='center' spacing={2}>
+					<UDNoProjects
+						className={screenIsSmall ? classes.noProjectsSVGMobile : classes.noProjectsSVG}
+					/>
 					<Grid item>
 						<Typography variant='h6'>
 							You don&apos;t belong to any projects yet, click the button below to create your first
@@ -57,7 +55,7 @@ const ProjectsContainer: React.FC<ProjectsContainerProps> = ({ projects }) => {
 							Create Your First Project
 						</Button>
 					</Grid>
-				</>
+				</Grid>
 			) : (
 				<Grid item container spacing={3}>
 					{projects.map((project) => (
