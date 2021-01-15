@@ -35,6 +35,10 @@ const Authenticated = () => {
 	const theme = useTheme();
 	const isScreenSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
+	const pageIsBoard = (path: string) => {
+		return new RegExp(/^\/projects\/[\w]{24}\/board$/).test(path);
+	};
+
 	return (
 		<Suspense fallback={<Loading />}>
 			{Routes.some((regex) => regex.test(pathname)) ? (
@@ -42,9 +46,15 @@ const Authenticated = () => {
 					<CGAppBar />
 					<Grid
 						container
+<<<<<<< HEAD
 						direction='column'
 						style={{
 							height: new RegExp(/^\/projects\/[\w]{24}\/board$/).test(pathname) ? '100vh' : 'auto',
+=======
+						direction={pageIsBoard(pathname) ? 'column' : 'row'}
+						style={{
+							height: pageIsBoard(pathname) ? '100vh' : 'auto',
+>>>>>>> release
 						}}
 					>
 						<Grid item style={{ height: isScreenSmall ? 120 : 64, width: '100vw' }} />

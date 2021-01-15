@@ -78,12 +78,14 @@ const Landing: React.FC = () => {
 									</Box>
 								</Typography>
 							</Grid>
-							<Grid item>
-								<Typography variant={screenIsSmall ? 'h6' : 'h5'}>
-									CollaboGreat is a lightweight team collaboration software that simplifies the
-									process of organizing the workload of any project.
-								</Typography>
-							</Grid>
+							{screenIsSmall ? null : (
+								<Grid item>
+									<Typography variant='h5'>
+										CollaboGreat is a lightweight team collaboration software that simplifies the
+										process of organizing the workload of any project.
+									</Typography>
+								</Grid>
+							)}
 							{screenIsSmall ? null : (
 								<Grid item style={{ marginTop: 40 }}>
 									<Button
@@ -103,7 +105,11 @@ const Landing: React.FC = () => {
 							)}
 						</Grid>
 						<Grid item container xs={8} md={6} justify='center'>
+<<<<<<< HEAD
 							<TeamUD className={classes.teamSvg} />
+=======
+							<TeamUD className={screenIsSmall ? classes.teamSvgMobile : classes.teamSvg} />
+>>>>>>> release
 							{screenIsSmall ? (
 								<Grid item style={{ marginTop: 40 }}>
 									<Button
