@@ -15,11 +15,12 @@ import {
 	MeetingRoom as LeaveIcon,
 } from '@material-ui/icons';
 
-import { openModal } from '../../redux/modals/modals.actions';
+import { closeModal, openModal } from '../../redux/modals/modals.actions';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 import { Project } from '../../redux/project/project.types';
 import { leaveProjectStart } from '../../redux/user/user.actions';
 import { openError } from '../../redux/error/error.actions';
+import { stopLoading } from '../../redux/loading/loading.actions';
 
 interface ProjectSettingsProps {
 	project: Project;
@@ -67,6 +68,8 @@ const ProjectSettings: React.FC<ProjectSettingsProps> = ({ project, numUserTasks
 					'You still have tasks assigned to you within the project, reassign or delete these tasks first'
 				)
 			);
+			dispatch(stopLoading());
+			dispatch(closeModal(ModalNames.CONFIRM_DIALOG));
 			return;
 		}
 
@@ -103,7 +106,20 @@ const ProjectSettings: React.FC<ProjectSettingsProps> = ({ project, numUserTasks
 									</Grid>
 								</Grid>
 							</MenuItem>
-							<MenuItem onClick={leaveProject}>
+							<MenuItem
+								onClick={() => {
+									dispatch(
+										openModal(ModalNames.CONFIRM_DIALOG, {
+											open: true,
+											children: null,
+											extra: {
+												confirmAction: leaveProject,
+												message: `Are you sure you want to leave '${project.title}'?`,
+											},
+										})
+									);
+								}}
+							>
 								<Grid container spacing={2} alignItems='center'>
 									<Grid item>
 										<LeaveIcon />

@@ -6,7 +6,7 @@ export default makeStyles((theme) => {
 			minHeight: '100vh',
 			height: 'auto',
 			width: '100%',
-			background: `linear-gradient(to right bottom, ${theme.palette.primary.light}, ${theme.palette.primary.dark})`,
+			background: `linear-gradient(to right bottom, ${theme.palette.secondary.main}, ${theme.palette.primary.main})`,
 		},
 		container: {
 			position: 'fixed',

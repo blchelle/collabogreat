@@ -2,12 +2,13 @@ import React from 'react';
 import { Grid, MenuItem, Typography } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { openModal } from '../../redux/modals/modals.actions';
+import { closeModal, openModal } from '../../redux/modals/modals.actions';
 import { ModalNames } from '../../redux/modals/modals.reducer';
 import { RootState } from '../../redux/root.reducer';
 import { editProjectStart } from '../../redux/project/project.actions';
 import { Project } from '../../redux/project/project.types';
 import { openError } from '../../redux/error/error.actions';
+import { stopLoading } from '../../redux/loading/loading.actions';
 
 interface ExtraProps {
 	projectId: string;
@@ -38,6 +39,8 @@ const BoardStageMenuDropdown = () => {
 					'The stage you are trying to delete currently has ongoing tasks, try moving these tasks or deleting them first'
 				)
 			);
+			dispatch(closeModal(ModalNames.CONFIRM_DIALOG));
+			dispatch(stopLoading());
 			return;
 		}
 
@@ -48,6 +51,8 @@ const BoardStageMenuDropdown = () => {
 					'This is the only remaining stage in the project, add another stage before deleting this one'
 				)
 			);
+			dispatch(closeModal(ModalNames.CONFIRM_DIALOG));
+			dispatch(stopLoading());
 			return;
 		}
 
@@ -87,7 +92,20 @@ const BoardStageMenuDropdown = () => {
 			>
 				<Typography>Rename Stage...</Typography>
 			</MenuItem>
-			<MenuItem onClick={deleteStage}>
+			<MenuItem
+				onClick={() =>
+					dispatch(
+						openModal(ModalNames.CONFIRM_DIALOG, {
+							open: true,
+							children: null,
+							extra: {
+								confirmAction: deleteStage,
+								message: `Are you sure you wan to delete the stage '${stageName}'`,
+							},
+						})
+					)
+				}
+			>
 				<Typography>Delete Stage...</Typography>
 			</MenuItem>
 		</Grid>

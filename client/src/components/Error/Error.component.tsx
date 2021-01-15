@@ -24,7 +24,7 @@ const Error = () => {
 							<Typography variant='h5'>{description}</Typography>
 						</Grid>
 						<Grid item xs={12}>
-							<Typography variant='body2'>{solution}</Typography>
+							<Typography variant='body1'>{solution}</Typography>
 						</Grid>
 						<DialogActions className={classes.dismissButton}>
 							<Button onClick={() => dispatch(closeError())}>Dismiss</Button>
