@@ -105,11 +105,7 @@ const Landing: React.FC = () => {
 							)}
 						</Grid>
 						<Grid item container xs={8} md={6} justify='center'>
-<<<<<<< HEAD
-							<TeamUD className={classes.teamSvg} />
-=======
 							<TeamUD className={screenIsSmall ? classes.teamSvgMobile : classes.teamSvg} />
->>>>>>> release
 							{screenIsSmall ? (
 								<Grid item style={{ marginTop: 40 }}>
 									<Button
