@@ -79,10 +79,11 @@ class AuthController extends Controller {
 		logger('AUTH CONTROLLER', `Sending token ${token}`);
 
 		// Sends the cookie and redirects the client to the dashboard
-		res.cookie('Bearer', token, cookieOptions);
-		res.redirect(
-			environment[process.env.NODE_ENV as 'development' | 'production'].oauth.successRoute
-		);
+		res
+			.cookie('Bearer', token, cookieOptions)
+			.redirect(
+				environment[process.env.NODE_ENV as 'development' | 'production'].oauth.successRoute
+			);
 	}
 
 	/**
