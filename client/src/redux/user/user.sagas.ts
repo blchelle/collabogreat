@@ -65,9 +65,9 @@ function* attemptLogout() {
 		// The actual response is going to have all the project information embedded in it
 		// User documents should only contain references to the project
 		// The id will be extracted from each project
+		yield put(setCurrentUser(null));
 		yield put(setAllProjects([]));
 		yield put(fetchTasksSuccess([]));
-		yield put(setCurrentUser(null));
 	} catch (err) {
 		console.log(err);
 	}
