@@ -1,8 +1,9 @@
 import App from './app';
 import AuthController from './controllers/auth.controller';
+import DemoController from './controllers/demo.controller';
 import ProjectController from './controllers/project.controller';
-import UserController from './controllers/user.controller';
 import TaskController from './controllers/task.controller';
+import UserController from './controllers/user.controller';
 import logger from './utils/logger.utils';
 
 // Initializes the OAuth strategies for each of the registered providers
@@ -24,6 +25,7 @@ const app = new App([
 	new UserController(),
 	new AuthController(),
 	new TaskController(),
+	new DemoController(),
 ]);
 
 // Starts the Server

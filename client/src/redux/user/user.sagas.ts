@@ -25,6 +25,7 @@ import {
 } from './user.types';
 import { closeModal } from '../modals/modals.actions';
 import { ModalNames } from '../modals/modals.reducer';
+import { fetchTasksSuccess } from '../tasks/tasks.actions';
 
 function* getUserInformation() {
 	try {
@@ -64,8 +65,9 @@ function* attemptLogout() {
 		// The actual response is going to have all the project information embedded in it
 		// User documents should only contain references to the project
 		// The id will be extracted from each project
-		yield put(setCurrentUser(null));
 		yield put(setAllProjects([]));
+		yield put(fetchTasksSuccess([]));
+		yield put(setCurrentUser(null));
 	} catch (err) {
 		console.log(err);
 	}

@@ -57,7 +57,9 @@ class App {
 	private initControllers(controllers: Controller[]) {
 		controllers.forEach((controller) => {
 			this.app.use(
-				`/api/v${environment[process.env.NODE_ENV as 'development' | 'production'].version}/${controller.path}`,
+				`/api/v${environment[process.env.NODE_ENV as 'development' | 'production'].version}/${
+					controller.path
+				}`,
 				controller.router
 			);
 		});
@@ -78,9 +80,21 @@ class App {
 		this.app.use(
 			'/api',
 			rateLimit({
-				max: environment[process.env.NODE_ENV as 'development' | 'production'].rateLimit.maxRequests,
-				windowMs: environment[process.env.NODE_ENV as 'development' | 'production'].rateLimit.timeWindow * 1000 * 60,
+				max:
+					environment[process.env.NODE_ENV as 'development' | 'production'].rateLimit.maxRequests,
+				windowMs:
+					environment[process.env.NODE_ENV as 'development' | 'production'].rateLimit.timeWindow *
+					1000 *
+					60,
 				message: 'Too many requests from this IP, please try again later',
+			})
+		);
+
+		this.app.use(
+			`/api/v${environment[process.env.NODE_ENV as 'development' | 'production'].version}/demo`,
+			rateLimit({
+				max: 5,
+				windowMs: 1000 * 60 * 60 * 24 * 7, // 1 Week
 			})
 		);
 

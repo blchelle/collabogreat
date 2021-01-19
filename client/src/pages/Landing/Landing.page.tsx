@@ -13,6 +13,7 @@ import {
 	useMediaQuery,
 } from '@material-ui/core';
 
+import environment from '../../config/environment.config';
 import baseTheme from '../../config/theme.config';
 import AuthDialog from '../../components/AuthDialog/AuthDialog.component';
 import { ReactComponent as TeamUD } from '../../assets/team.undraw.svg';
@@ -93,37 +94,68 @@ const Landing: React.FC = () => {
 									</Grid>
 								)}
 								{screenIsSmall ? null : (
-									<Grid item style={{ marginTop: 40 }}>
-										<Button
-											variant='contained'
-											color='primary'
-											size='large'
-											onClick={() => {
-												setAuthType('sign up');
-												setShowAuthPopup(true);
-											}}
-										>
-											<Box fontWeight='bold'>
-												<Typography>Get Started - It&apos;s Free!</Typography>
-											</Box>
-										</Button>
+									<Grid item container style={{ marginTop: 40 }} spacing={2}>
+										<Grid item>
+											<Button
+												variant='contained'
+												color='primary'
+												size='large'
+												onClick={() => {
+													setAuthType('sign up');
+													setShowAuthPopup(true);
+												}}
+											>
+												<Box fontWeight='bold'>
+													<Typography>Get Started - It&apos;s Free!</Typography>
+												</Box>
+											</Button>
+										</Grid>
+										<Grid item>
+											<Button
+												variant='contained'
+												color='default'
+												size='large'
+												href={`${
+													environment[process.env.NODE_ENV as 'development' | 'production']
+														.apiBaseUrl
+												}/demo`}
+											>
+												<Box fontWeight='bold'>
+													<Typography>Demo without account</Typography>
+												</Box>
+											</Button>
+										</Grid>
 									</Grid>
 								)}
 							</Grid>
 							<Grid item container xs={8} md={6} justify='center'>
 								<TeamUD className={screenIsSmall ? classes.teamSvgMobile : classes.teamSvg} />
 								{screenIsSmall ? (
-									<Grid item style={{ marginTop: 40 }}>
-										<Button
-											variant='contained'
-											color='primary'
-											onClick={() => {
-												setAuthType('sign up');
-												setShowAuthPopup(true);
-											}}
-										>
-											Get Started!
-										</Button>
+									<Grid item container style={{ marginTop: 40 }} spacing={2} justify='center'>
+										<Grid item>
+											<Button
+												variant='contained'
+												color='primary'
+												onClick={() => {
+													setAuthType('sign up');
+													setShowAuthPopup(true);
+												}}
+											>
+												Get Started!
+											</Button>
+										</Grid>
+										<Grid item>
+											<Button
+												variant='contained'
+												color='default'
+												href={`${
+													environment[process.env.NODE_ENV as 'development' | 'production']
+														.apiBaseUrl
+												}/demo`}
+											>
+												Demo
+											</Button>
+										</Grid>
 									</Grid>
 								) : null}
 							</Grid>
