@@ -23,6 +23,7 @@ import { ModalNames } from '../../redux/modals/modals.reducer';
 import { User } from '../../redux/user/user.types';
 import { RootState } from '../../redux/root.reducer';
 import useStyles from './CreateProjectDialog.mui';
+import { openError } from 'redux/error/error.actions';
 
 interface FormInputState {
 	visited: boolean;
@@ -126,18 +127,24 @@ const CreateProjectDialog: React.FC = () => {
 			setOtherMembers(updatedOtherMembers);
 		}
 
-		const res = await axios(`user/${email}`, { method: 'GET' });
+		try {
+			const res = await axios(`user/${email}`, { method: 'GET' });
 
-		if (!res.data.userId) {
-			updatedOtherMembers[index].errorReason = 'We could not find a user with this Email Address';
-			updatedOtherMembers[index].uid = undefined;
+			if (!res.data.userId) {
+				updatedOtherMembers[index].errorReason = 'We could not find a user with this Email Address';
+				updatedOtherMembers[index].uid = undefined;
+				setOtherMembers(updatedOtherMembers);
+				return;
+			}
+
+			updatedOtherMembers[index].errorReason = undefined;
+			updatedOtherMembers[index].uid = res.data.userId;
 			setOtherMembers(updatedOtherMembers);
-			return;
+		} catch (err) {
+			dispatch(
+				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue ')
+			);
 		}
-
-		updatedOtherMembers[index].errorReason = undefined;
-		updatedOtherMembers[index].uid = res.data.userId;
-		setOtherMembers(updatedOtherMembers);
 	};
 
 	const checkButtonDisabled = () => {

@@ -13,6 +13,7 @@ import {
 	CREATE_PROJECT_START,
 	EDIT_PROJECT_START,
 } from './project.types';
+import { extractMessageFromAPIError } from '../../util/helpers.util';
 
 function* attemptCreateProject({ payload }: ProjectActionTypes) {
 	try {
@@ -52,10 +53,7 @@ function* attemptCreateProject({ payload }: ProjectActionTypes) {
 		window.location.assign(`/projects/${project._id}`);
 	} catch (err) {
 		// Pulls the error off of the error response
-		const description = err?.response?.data?.error?.description ?? 'Unknown Error';
-		const solution =
-			err?.response?.data?.error?.solution ??
-			'Please contact brocklchelle@gmail.com to troubleshoot it';
+		const { description, solution } = extractMessageFromAPIError(err);
 		yield put(openError(description, solution));
 	}
 
@@ -86,7 +84,9 @@ function* attemptEditProject({ payload }: ProjectActionTypes) {
 		// Throws if the action was unsuccessful
 		// TODO Read the error description and solution from the response into the error message.
 		if (res.status !== 200) {
-			yield put(openError('Error', 'Here is a solution'));
+			yield put(
+				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
+			);
 			return;
 		}
 
@@ -98,7 +98,9 @@ function* attemptEditProject({ payload }: ProjectActionTypes) {
 		yield put(editProjectSuccess(project));
 		yield put(closeModal(ModalNames.CREATE_PROJECT_DIALOG));
 	} catch (err) {
-		yield put(openError('Error', 'Here is a solution'));
+		// Pulls the error off of the error response
+		const { description, solution } = extractMessageFromAPIError(err);
+		yield put(openError(description, solution));
 	}
 
 	yield put(stopLoading());
