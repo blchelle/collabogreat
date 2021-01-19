@@ -26,13 +26,14 @@ import {
 import { closeModal } from '../modals/modals.actions';
 import { ModalNames } from '../modals/modals.reducer';
 import { fetchTasksSuccess } from '../tasks/tasks.actions';
+import { openError } from '../error/error.actions';
 
 function* getUserInformation() {
 	try {
 		// Attempts to fetch an authenticated users information
 		const res = yield axios('user/me', { method: 'GET' });
 
-		// Throws if the fetch was unsuccesful
+		// Throws if the fetch was unsuccessful
 		if (res.status !== 200) throw new Error('Failed to authenticate user');
 
 		// The actual response is going to have all the project information embedded in it
@@ -84,9 +85,14 @@ function* attemptLeaveProject({ payload: { projectId } }: LeaveProjectStartActio
 
 		// Calls the success handlers
 		yield put(leaveProjectSuccess(projectId));
-		window.location.replace('/dashboard');
+		window.location.assign('/dashboard');
 	} catch (err) {
-		console.log(err.message);
+		// Pulls the error off of the error response
+		const description = err?.response?.data?.error?.description ?? 'Unknown Error';
+		const solution =
+			err?.response?.data?.error?.solution ??
+			'Please contact brocklchelle@gmail.com to troubleshoot it';
+		yield put(openError(description, solution));
 	}
 
 	yield put(stopLoading());
