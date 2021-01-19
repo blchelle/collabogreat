@@ -98,7 +98,31 @@ class UserController extends Controller {
 	}
 
 	protected inviteUserToProject() {
-		return catchAsync(async (req: Request, res: Response) => {
+		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+			// Ensures that the user is on the request object
+			// When a user creates a project, it should be added to their document
+			if (!req.user) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorUnauthorized,
+						'Attempted to create a Project without a User',
+						'Try adding yourself to the next Project you create'
+					)
+				);
+			}
+
+			const reqUser = req.user as IUser;
+
+			if (reqUser.isDemo) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorUnauthorized,
+						'Demo Users are not allowed to invite other users to a project',
+						'Sign up for CollaboGreat if you wish to try this out'
+					)
+				);
+			}
+
 			// Pulls the userId and projectId off of the body of the request
 			const { userId, projectId } = req.body;
 
@@ -125,7 +149,21 @@ class UserController extends Controller {
 				);
 			}
 
-			const userId = (req.user as IUser).id;
+			const reqUser = req.user as IUser;
+
+			// Demo users cannot leave project because it could lead to an impossible cleanup later
+			if (reqUser.isDemo) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorUnauthorized,
+						'Demo Users are not allowed to leave a project',
+						'Sign up for CollaboGreat if you wish to try this out'
+					)
+				);
+			}
+
+			// Pulls the id of the user
+			const userId = reqUser.id;
 
 			// Ensures that the user is trying to leave a rel project
 			const projectId = req.params.id;
@@ -155,7 +193,7 @@ class UserController extends Controller {
 			const session = await mongoose.startSession();
 			session.startTransaction();
 
-			// Removes the project from the users 'projects' atrribute
+			// Removes the project from the users 'projects' attribute
 			const user = await UserModel.findByIdAndUpdate(userId, { $pull: { projects: projectId } });
 
 			// Removes the user from the projects 'members' attribute

@@ -7,6 +7,7 @@ import APIError from '../errors/api.error';
 import Project from '../models/project.model';
 import UserModel, { IUser } from '../models/user.model';
 import catchAsync from '../utils/catchAsync.util';
+import logger from '../utils/logger.utils';
 
 /**
  * Used to perform operations relating to the Project Model
@@ -55,6 +56,17 @@ class ProjectController extends Controller {
 			// Gets the other members from the request
 			const reqMembers = reqProject.members;
 
+			// Only real users can invite members to a project
+			if (reqMembers.length > 0 && reqUser.isDemo) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorUnauthorized,
+						'Demo Users are not allowed to invite other users to a project',
+						'Sign up for CollaboGreat if you wish to try this out'
+					)
+				);
+			}
+
 			// User document references the project &
 			// Project document references the user
 			// Clears all members from the project, except the creating user
@@ -80,6 +92,12 @@ class ProjectController extends Controller {
 
 			await session.commitTransaction();
 			session.endSession();
+
+			// Logs the creation
+			logger(
+				'PROJECT CONTROLLER',
+				`Project '${reqProject.id}' is being created by user '${reqUser.displayName}' (${reqUser._id})`
+			);
 
 			res.status(StatusCode.SuccessCreated).json({ project });
 		});

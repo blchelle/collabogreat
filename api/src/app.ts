@@ -18,6 +18,7 @@ import Controller from './controllers/base.controller';
 import APIError from './errors/api.error';
 import errorMiddleware from './middleware/error.middleware';
 import logger from './utils/logger.utils';
+import { NodeEnv } from './utils/envTypes.util';
 
 // Has to be done in a 'require' because there are no type declarations
 const xss = require('xss-clean');
@@ -34,7 +35,7 @@ class App {
 	/**
 	 * The port number which the server will run on
 	 */
-	public port = environment[process.env.NODE_ENV as 'development' | 'production'].port;
+	public port = environment[process.env.NODE_ENV as NodeEnv].port;
 
 	constructor(controllers: Controller[]) {
 		this.app = express();
@@ -57,9 +58,7 @@ class App {
 	private initControllers(controllers: Controller[]) {
 		controllers.forEach((controller) => {
 			this.app.use(
-				`/api/v${environment[process.env.NODE_ENV as 'development' | 'production'].version}/${
-					controller.path
-				}`,
+				`/api/v${environment[process.env.NODE_ENV as NodeEnv].version}/${controller.path}`,
 				controller.router
 			);
 		});
@@ -76,22 +75,18 @@ class App {
 		this.app.use(bodyParser.json());
 		this.app.use(bodyParser.urlencoded({ extended: true }));
 
-		// Rate Limimts Requests from the same IP
+		// Rate Limits Requests from the same IP
 		this.app.use(
 			'/api',
 			rateLimit({
-				max:
-					environment[process.env.NODE_ENV as 'development' | 'production'].rateLimit.maxRequests,
-				windowMs:
-					environment[process.env.NODE_ENV as 'development' | 'production'].rateLimit.timeWindow *
-					1000 *
-					60,
+				max: environment[process.env.NODE_ENV as NodeEnv].rateLimit.maxRequests,
+				windowMs: environment[process.env.NODE_ENV as NodeEnv].rateLimit.timeWindow * 1000 * 60,
 				message: 'Too many requests from this IP, please try again later',
 			})
 		);
 
 		this.app.use(
-			`/api/v${environment[process.env.NODE_ENV as 'development' | 'production'].version}/demo`,
+			`/api/v${environment[process.env.NODE_ENV as NodeEnv].version}/demo`,
 			rateLimit({
 				max: 5,
 				windowMs: 1000 * 60 * 60 * 24 * 7, // 1 Week
@@ -117,7 +112,7 @@ class App {
 		this.app.use(
 			cors({
 				credentials: true,
-				origin: environment[process.env.NODE_ENV as 'development' | 'production'].clientBaseURL,
+				origin: environment[process.env.NODE_ENV as NodeEnv].clientBaseURL,
 			})
 		);
 
@@ -153,7 +148,8 @@ class App {
 		// Gets the credentials needed to access the database
 		const { database } = keys.mongoDB;
 		const { databasePassword } = keys.mongoDB;
-		const db = database.replace('<PASSWORD>', databasePassword);
+		const { databaseName } = keys.mongoDB[process.env.NODE_ENV as NodeEnv];
+		const db = database.replace('<PASSWORD>', databasePassword).replace('<DBNAME>', databaseName);
 
 		try {
 			await mongoose.connect(db, {
@@ -163,9 +159,9 @@ class App {
 				useUnifiedTopology: true,
 			});
 
-			logger('APP', 'Successfully connected to MongoDB ✅');
+			logger('APP', `Connected to database '${databaseName}' ✅`);
 		} catch (err) {
-			logger('APP', 'Failed to connect to MongoDB ❌');
+			logger('APP', `Failed to connect to database '${databaseName}' ❌`);
 		}
 	}
 

@@ -21,7 +21,7 @@ const Error = () => {
 				<DialogContent>
 					<Grid container spacing={1}>
 						<Grid item xs={12}>
-							<Typography variant='h5'>{description}</Typography>
+							<Typography variant='h6'>{description}</Typography>
 						</Grid>
 						<Grid item xs={12}>
 							<Typography variant='body1'>{solution}</Typography>

@@ -20,6 +20,7 @@ import LoadingButton from '../LoadingButton/LoadingButton.component';
 import { User } from '../../redux/user/user.types';
 import { Task } from '../../redux/tasks/tasks.types';
 import { stopLoading } from '../../redux/loading/loading.actions';
+import { openError } from '../../redux/error/error.actions';
 
 interface TeamMembersContainerProps {
 	members: Partial<User>[];
@@ -85,14 +86,25 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 
 		setNewMemberEmail({ ...newMemberEmail, error: undefined, uid: res.data.userId });
 
-		const res2 = await axios(`user/invite`, {
-			method: 'PATCH',
-			data: { userId: res.data.userId, projectId },
-		});
+		try {
+			const res2 = await axios(`user/invite`, {
+				method: 'PATCH',
+				data: { userId: res.data.userId, projectId },
+			});
 
-		if (res2.status === 200) {
-			setShowInvitationSent(true);
-			setNewMemberEmail({ email: '', error: undefined, uid: undefined });
+			if (res2.status === 200) {
+				setShowInvitationSent(true);
+				setNewMemberEmail({ email: '', error: undefined, uid: undefined });
+			} else {
+				dispatch(openError(res2.data.error.message, res2.data.error.solution));
+			}
+		} catch (err) {
+			// Pulls the error off of the error response
+			const description = err?.response?.data?.error?.description ?? 'Unknown Error';
+			const solution =
+				err?.response?.data?.error?.solution ??
+				'Please contact brocklchelle@gmail.com to troubleshoot it';
+			dispatch(openError(description, solution));
 		}
 
 		dispatch(stopLoading());

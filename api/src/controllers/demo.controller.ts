@@ -36,7 +36,7 @@ class DemoController extends Controller {
 	}
 
 	/**
-	 * Step 1. Create a user that the 'demoer' will use, choose randomly from a set of dummy names.
+	 * Step 1. Create a user that the 'demo' user will use, choose randomly from a set of dummy names.
 	 * Step 2. Create 5 Dummy Users, choose randomly from a set of dummy names
 	 * Step 3. Create 2 Projects, Namely "KeepIt - Item Tracker" and "Boromi - Book Exchange", Send invites to all the dummy users
 	 * Step 4. Create 10 Tasks for each project, allocate them as follows (3 to Main user, 1, 2, 2, 1, 1) for
@@ -62,7 +62,7 @@ class DemoController extends Controller {
 			const session = await mongoose.startSession();
 			session.startTransaction();
 
-			// Step 1 & 2. Create a user that the 'demoer' will use, choose randomly from a set of dummy names.
+			// Step 1 & 2. Create user's
 			const newUsers = await this.createDemoUsers(session);
 			const me = newUsers[0];
 
@@ -75,6 +75,8 @@ class DemoController extends Controller {
 			// Finalizes the transaction
 			await session.commitTransaction();
 			session.endSession();
+
+			logger('DEMO CONTROLLER', `Created demo for user '${me._id}'`);
 
 			// Step 6. Create, Sign and Send a token
 			// Signs a jwt with the users id
@@ -109,6 +111,7 @@ class DemoController extends Controller {
 			displayName: peopleCopy[0].displayName,
 			email: randomEmail({ domain: 'bigprojects.com' }),
 			image: peopleCopy[0].image,
+			isDemo: true,
 		}).save({ session });
 
 		// Shift out the first user
@@ -121,6 +124,7 @@ class DemoController extends Controller {
 					displayName: person.displayName,
 					email: randomEmail({ domain: 'bigprojects.com' }),
 					image: person.image,
+					isDemo: true,
 				}).save({ session })
 			)
 		);
@@ -187,10 +191,17 @@ class DemoController extends Controller {
 	) {
 		const copyTasks = [...tasks];
 
+		// Used to assign users tasks in a consistent manner
+		let assigneeIndex = 0;
+
 		await Promise.all(
 			copyTasks.map((task) => {
-				const projectId = task.project === 'KeepIt' ? newProjects[0].id : newProjects[1].id;
-				const userId = newUsers[Math.floor(Math.random() * newUsers.length)].id;
+				const projectId =
+					task.project === 'KeepIt - Item Tracker' ? newProjects[0].id : newProjects[1].id;
+				const userId = newUsers[assigneeIndex].id;
+
+				// Moves to the next user
+				assigneeIndex = (assigneeIndex + 1) % newUsers.length;
 
 				return new TaskModel({
 					...task,

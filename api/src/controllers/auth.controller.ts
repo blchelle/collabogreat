@@ -1,4 +1,5 @@
 import { Request, Response, CookieOptions } from 'express';
+import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import passport, { AuthenticateOptions } from 'passport';
 
@@ -7,8 +8,11 @@ import environment from '../configs/environment.config';
 import keys from '../configs/keys.config';
 import RegisteredOAuthProvider from '../configs/passport.config';
 import Controller from './base.controller';
-import User, { IUser } from '../models/user.model';
+import UserModel, { IUser } from '../models/user.model';
 import logger from '../utils/logger.utils';
+import TaskModel from '../models/task.model';
+import ProjectModel from '../models/project.model';
+import catchAsync from '../utils/catchAsync.util';
 
 /**
  * Used to handle various authentication tasks such as logging in and signing up with
@@ -17,7 +21,7 @@ import logger from '../utils/logger.utils';
 class AuthController extends Controller {
 	public path = 'auth';
 
-	public model = User;
+	public model = UserModel;
 
 	constructor() {
 		super();
@@ -36,7 +40,9 @@ class AuthController extends Controller {
 				.get(this.redirectProvider(provider), this.createAndSendToken);
 		});
 
-		this.router.route('/logout').get(this.logout);
+		// Protect the logout route
+		this.router.use(this.protectRoute());
+		this.router.route('/logout').get(this.logout());
 	}
 
 	/**
@@ -91,14 +97,47 @@ class AuthController extends Controller {
 	 * @param req Incoming request
 	 * @param res Outgoing response
 	 */
-	private logout(_req: Request, res: Response) {
-		res.cookie('Bearer', 'loggedout', {
-			maxAge: 10 * 1000, // 10 Seconds
-			httpOnly: true,
-			secure: process.env.NODE_ENV === 'production',
-		});
+	private logout() {
+		return catchAsync(async (req: Request, res: Response) => {
+			// Check if the user is demo
+			// Demo user's need to have their environment cleaned up
+			if ((req.user as IUser)?.isDemo) {
+				await this.cleanupDemo(req.user as IUser);
+			}
 
-		res.status(StatusCode.SuccessOK).json({ success: true });
+			res
+				.cookie('Bearer', 'loggedout', {
+					maxAge: 10 * 1000, // 10 Seconds
+					httpOnly: true,
+					secure: process.env.NODE_ENV === 'production',
+				})
+				.status(StatusCode.SuccessOK)
+				.json({ success: true });
+		});
+	}
+
+	private async cleanupDemo(user: IUser) {
+		// Gets all the projects associated with the user
+		const projectsToDelete = user.projects;
+
+		// Uses a transaction to ensure that all operations are successful
+		const session = await mongoose.startSession();
+		session.startTransaction();
+
+		// Delete all the Projects
+		await ProjectModel.deleteMany({ members: user.id }, { session });
+
+		// Deletes all the Tasks
+		await TaskModel.deleteMany({ project: { $in: projectsToDelete } }, { session });
+
+		// Deletes all the Users
+		await UserModel.deleteMany({ projects: { $in: projectsToDelete } }, { session });
+
+		// Finalizes the transaction
+		await session.commitTransaction();
+		session.endSession();
+
+		logger('AUTH CONTROLLER', `Cleaned up demo for '${user._id}'`);
 	}
 }
 
