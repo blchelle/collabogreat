@@ -2,15 +2,15 @@ import { TaskColor } from '../models/task.model';
 
 const tasks = [
 	{
-		project: 'KeepIt',
-		title: 'Facebook Authentication',
-		description: "Facebook is one of the world's largest auth providers",
+		project: 'KeepIt - Item Tracker',
+		title: 'Implement Facebook Authentication',
+		description: 'Setup authentication with Facebook, this includes the user interface and logic.',
 		status: 'Requested',
 		order: 0,
 		color: TaskColor.GREEN,
 	},
 	{
-		project: 'KeepIt',
+		project: 'KeepIt - Item Tracker',
 		title: 'Get Items from DB',
 		description: "Get all the user's items from the db on login",
 		status: 'Requested',
@@ -18,16 +18,16 @@ const tasks = [
 		color: TaskColor.ORANGE,
 	},
 	{
-		project: 'KeepIt',
+		project: 'KeepIt - Item Tracker',
 		title: 'Implement Forgot Password',
 		description:
-			'When a user forgeets their password, they will likely need some means of resetting in',
+			'When a user forgets their password, they will likely need some means of resetting in',
 		status: 'To Do',
 		order: 0,
 		color: TaskColor.GREEN,
 	},
 	{
-		project: 'KeepIt',
+		project: 'KeepIt - Item Tracker',
 		title: 'UI To Add/Edit Items',
 		description: 'Users will want to add items to their collection',
 		status: 'To Do',
@@ -35,14 +35,14 @@ const tasks = [
 		color: TaskColor.PURPLE,
 	},
 	{
-		project: 'KeepIt',
-		title: 'UI to Setup Geofences',
-		description: 'Geofence notifications will be a key feature',
+		project: 'KeepIt - Item Tracker',
+		title: 'UI to Setup GeoFences',
+		description: 'GeoFence notifications will be a key feature',
 		status: 'To Do',
 		order: 2,
 	},
 	{
-		project: 'KeepIt',
+		project: 'KeepIt - Item Tracker',
 		title: 'Anonymous Authentication',
 		description: 'Give users the ability to login anonymously',
 		status: 'In Progress',
@@ -50,7 +50,7 @@ const tasks = [
 		color: TaskColor.PURPLE,
 	},
 	{
-		project: 'KeepIt',
+		project: 'KeepIt - Item Tracker',
 		title: 'Firebase Functions for Notifications',
 		description: 'Implement a cloud function that notifies users when an item is found',
 		status: 'In Progress',
@@ -58,7 +58,7 @@ const tasks = [
 		color: TaskColor.ORANGE,
 	},
 	{
-		project: 'KeepIt',
+		project: 'KeepIt - Item Tracker',
 		title: 'Get User Info',
 		description: "Get the user's information when they login",
 		status: 'Done',
@@ -66,7 +66,7 @@ const tasks = [
 		color: TaskColor.ORANGE,
 	},
 	{
-		project: 'KeepIt',
+		project: 'KeepIt - Item Tracker',
 		title: 'Google Authentication',
 		description: 'Give users the ability to authenticate through their google accounts',
 		status: 'Done',
@@ -74,7 +74,7 @@ const tasks = [
 		color: TaskColor.GREEN,
 	},
 	{
-		project: 'KeepIt',
+		project: 'KeepIt - Item Tracker',
 		title: 'Email/Password Authentication',
 		description: 'Give users the ability to authenticate through their google accounts',
 		status: 'Done',
@@ -82,7 +82,7 @@ const tasks = [
 		color: TaskColor.GREEN,
 	},
 	{
-		project: 'Boromi',
+		project: 'Boromi - Book Trading',
 		title: 'Set up requesting logic',
 		description: "User's need to be able to request books from other user's",
 		status: 'To Do',
@@ -90,7 +90,7 @@ const tasks = [
 		color: TaskColor.GREY,
 	},
 	{
-		project: 'Boromi',
+		project: 'Boromi - Book Trading',
 		title: 'Set up returning logic',
 		description: "User's need to be able to return books to other user's",
 		status: 'To Do',
@@ -98,7 +98,7 @@ const tasks = [
 		color: TaskColor.GREY,
 	},
 	{
-		project: 'Boromi',
+		project: 'Boromi - Book Trading',
 		title: 'Initialize Google Maps',
 		description: "Create a tab that show's an interactive map from google maps",
 		status: 'In Progress',
@@ -106,7 +106,7 @@ const tasks = [
 		color: TaskColor.BLUE,
 	},
 	{
-		project: 'Boromi',
+		project: 'Boromi - Book Trading',
 		title: 'Implement Logout',
 		description: 'Create a logout button that logs out the current user and clears the app storage',
 		status: 'In Progress',
@@ -114,7 +114,7 @@ const tasks = [
 		color: TaskColor.YELLOW,
 	},
 	{
-		project: 'Boromi',
+		project: 'Boromi - Book Trading',
 		title: 'Show Books Tab',
 		description: "Create a tab that show's the user all of their owned books",
 		status: 'In Progress',
@@ -122,7 +122,7 @@ const tasks = [
 		color: TaskColor.BLUE,
 	},
 	{
-		project: 'Boromi',
+		project: 'Boromi - Book Trading',
 		title: 'Edit User Information',
 		description: 'Create a dialog that allows users to edit their contact information',
 		status: 'Completed',
@@ -130,7 +130,7 @@ const tasks = [
 		color: TaskColor.BLUE,
 	},
 	{
-		project: 'Boromi',
+		project: 'Boromi - Book Trading',
 		title: 'Search for books',
 		description: "Create a tab where user's can search for books to request from other users",
 		status: 'Completed',
@@ -138,7 +138,7 @@ const tasks = [
 		color: TaskColor.BLUE,
 	},
 	{
-		project: 'Boromi',
+		project: 'Boromi - Book Trading',
 		title: 'Create Account',
 		description:
 			"Implement an initial screen where user's can input an email, a password, and their name and create an account",
