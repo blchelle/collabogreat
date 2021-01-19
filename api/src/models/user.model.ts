@@ -11,7 +11,7 @@ export interface IUser extends Document {
 	projects: string[];
 	projectInvitations: string[];
 	newTasks: string[];
-
+	isDemo: boolean;
 	image?: string;
 	googleId?: string;
 	githubId?: string;
@@ -63,6 +63,11 @@ const UserSchema = new Schema({
 	image: {
 		type: String,
 		required: false,
+	},
+	isDemo: {
+		type: Boolean,
+		immutable: true,
+		default: false,
 	},
 	googleId: String,
 	githubId: String,
