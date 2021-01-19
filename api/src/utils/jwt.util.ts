@@ -4,7 +4,6 @@ import { StatusCode } from 'status-code-enum';
 
 import keys from '../configs/keys.config';
 import APIError from '../errors/api.error';
-import logger from './logger.utils';
 
 function unauthorizedError() {
 	return new APIError(
@@ -17,12 +16,10 @@ function unauthorizedError() {
 /**
  * Checks to see if the user JWT given in the request is valid.
  * If valid, the user id embedded in the token will be returned
- * @param authorizationHeader The authrization header passed in the request
+ * @param authorizationHeader The authorization header passed in the request
  * @return An array containing the UserId and Error
  */
 export function validateJwt(authorizationHeader: string | undefined) {
-	logger('JWT UTIL', `Cookie: ${authorizationHeader}`);
-
 	// Verify that the req had an authorization header
 	if (!authorizationHeader) return [null, unauthorizedError()];
 
