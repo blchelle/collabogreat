@@ -4,9 +4,10 @@ import StatusCode from 'status-code-enum';
 import APIError from '../errors/api.error';
 
 import DocumentNotFoundError from '../errors/documentNotFound.error';
-import User from '../models/user.model';
+import User, { IUser } from '../models/user.model';
 import catchAsync from '../utils/catchAsync.util';
 import { validateJwt } from '../utils/jwt.util';
+import logger from '../utils/logger.utils';
 
 /**
  * An abstract base controller class which provides implementation of common methods that
@@ -32,8 +33,16 @@ abstract class Controller {
 	 * Gets all the documents from a collection in the database and sends it in the response
 	 */
 	protected getAll() {
-		return catchAsync(async (_: Request, res: Response) => {
+		return catchAsync(async (req: Request, res: Response) => {
 			const docs = await this.model.find();
+
+			const reqUser = req.user as IUser;
+			logger(
+				'BASE CONTROLLER',
+				`User '${reqUser.displayName ?? 'unknown'}' (${reqUser.id}) is getting all ${
+					this.model.modelName
+				}s`
+			);
 
 			res.status(StatusCode.SuccessOK).json({
 				success: true,
@@ -48,6 +57,14 @@ abstract class Controller {
 	protected createOne() {
 		return catchAsync(async (req: Request, res: Response) => {
 			const doc = await this.model.create(req.body);
+
+			const reqUser = req.user as IUser;
+			logger(
+				'BASE CONTROLLER',
+				`User '${reqUser.displayName ?? 'unknown'}' (${reqUser.id}) created ${
+					this.model.modelName
+				} '${doc.id}'`
+			);
 
 			res.status(StatusCode.SuccessCreated).json({
 				success: true,
@@ -72,6 +89,14 @@ abstract class Controller {
 					)
 				);
 			}
+
+			const reqUser = req.user as IUser;
+			logger(
+				'BASE CONTROLLER',
+				`User '${reqUser.id ?? 'unknown'}' (${reqUser.id}) deleted ${this.model.modelName} '${
+					doc.id
+				}'`
+			);
 
 			// Sends an empty response to indicate it was deleted successfully
 			res.status(StatusCode.SuccessNoContent).json();
@@ -109,6 +134,13 @@ abstract class Controller {
 				runValidators: true,
 			});
 
+			logger(
+				'BASE CONTROLLER',
+				`User '${(req.user as IUser)?.id ?? 'unknown'}' patched ${this.model.modelName} '${
+					doc?.id ?? 'unknown'
+				}'`
+			);
+
 			res.status(StatusCode.SuccessOK).json({ [modelName]: doc });
 		});
 	}
@@ -131,6 +163,11 @@ abstract class Controller {
 					)
 				);
 			}
+
+			logger(
+				'BASE CONTROLLER',
+				`User '${(req.user as IUser)?.id ?? 'unknown'}' fetched ${this.model.modelName} '${doc.id}'`
+			);
 
 			// Sends the response with the document embedded
 			res.status(StatusCode.SuccessOK).json({

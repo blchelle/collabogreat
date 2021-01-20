@@ -51,6 +51,7 @@ class AuthController extends Controller {
 	 * @param options Options for the provider (Is it session based? What permissions?)
 	 */
 	private loginWithProvider(provider: RegisteredOAuthProvider, options: AuthenticateOptions) {
+		logger('AUTH CONTROLLER', `Attempting to authenticate with ${provider}`);
 		return passport.authenticate(provider, options);
 	}
 
@@ -59,6 +60,7 @@ class AuthController extends Controller {
 	 * @param provider The provider to authenticate with
 	 */
 	private redirectProvider(provider: RegisteredOAuthProvider) {
+		logger('AUTH CONTROLLER', `Redirecting to ${provider} OAuth`);
 		return passport.authenticate(provider);
 	}
 
@@ -82,7 +84,7 @@ class AuthController extends Controller {
 			secure: process.env.NODE_ENV === 'production',
 		};
 
-		logger('AUTH CONTROLLER', `Sending token ${token}`);
+		logger('AUTH CONTROLLER', `Sending token for user '${user.id}'`);
 
 		// Sends the cookie and redirects the client to the dashboard
 		res
@@ -99,11 +101,15 @@ class AuthController extends Controller {
 	 */
 	private logout() {
 		return catchAsync(async (req: Request, res: Response) => {
+			const reqUser = req.user as IUser;
+
 			// Check if the user is demo
 			// Demo user's need to have their environment cleaned up
-			if ((req.user as IUser)?.isDemo) {
+			if (reqUser.isDemo) {
 				await this.cleanupDemo(req.user as IUser);
 			}
+
+			logger('AUTH CONTROLLER', `Logging out user '${reqUser.id}'`);
 
 			res
 				.cookie('Bearer', 'loggedout', {
