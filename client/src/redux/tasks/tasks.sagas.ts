@@ -2,6 +2,7 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
 import axios from '../../config/axios.config';
+import { extractMessageFromAPIError } from '../../util/helpers.util';
 import { closeModal } from '../modals/modals.actions';
 import { ModalNames } from '../modals/modals.reducer';
 import { openError } from '../error/error.actions';
@@ -44,7 +45,9 @@ function* attemptCreateTask({ payload }: TaskActionTypes) {
 		// Throws if the action was unsuccessful
 		// TODO Read the error description and solution from the response into the error message.
 		if (res.status !== 201) {
-			yield put(openError('Error', 'Here is a solution'));
+			yield put(
+				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
+			);
 			return;
 		}
 
@@ -56,7 +59,9 @@ function* attemptCreateTask({ payload }: TaskActionTypes) {
 		yield put(createTaskSuccess(task));
 		yield put(closeModal(ModalNames.CREATE_TASK_DIALOG));
 	} catch (err) {
-		yield put(openError('Error', 'Here is a solution'));
+		// Pulls the error off of the error response
+		const { description, solution } = extractMessageFromAPIError(err);
+		yield put(openError(description, solution));
 	}
 
 	yield put(stopLoading());
@@ -71,9 +76,10 @@ function* attemptFetchTasks({ payload }: TaskActionTypes) {
 				const res = yield axios(`tasks/project/${projectId}`, { method: 'GET' });
 
 				// Throws if the action was unsuccessful
-				// TODO Read the error description and solution from the response into the error message.
 				if (res.status !== 200) {
-					yield put(openError('Error', 'Here is a solution'));
+					yield put(
+						openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
+					);
 					return;
 				}
 
@@ -86,7 +92,9 @@ function* attemptFetchTasks({ payload }: TaskActionTypes) {
 		// The id will be extracted from each project
 		yield put(fetchTasksSuccess(tasks));
 	} catch (err) {
-		yield put(openError('Error', 'Here is a solution'));
+		// Pulls the error off of the error response
+		const { description, solution } = extractMessageFromAPIError(err);
+		yield put(openError(description, solution));
 	}
 }
 
@@ -114,9 +122,10 @@ function* attemptModifyTasks({ payload }: TaskActionTypes) {
 		});
 
 		// Throws if the action was unsuccessful
-		// TODO Read the error description and solution from the response into the error message.
 		if (res.status !== 200) {
-			yield put(openError(res.message, res.solution));
+			yield put(
+				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
+			);
 			return;
 		}
 
@@ -128,7 +137,9 @@ function* attemptModifyTasks({ payload }: TaskActionTypes) {
 		yield put(editTasksSuccess(resTasks));
 		yield put(closeModal(ModalNames.CREATE_TASK_DIALOG));
 	} catch (err) {
-		yield put(openError('Error', 'Here is a solution'));
+		// Pulls the error off of the error response
+		const { description, solution } = extractMessageFromAPIError(err);
+		yield put(openError(description, solution));
 	}
 }
 
@@ -139,9 +150,10 @@ function* attemptDeleteTask({ payload }: TaskActionTypes) {
 		const res = yield axios(`tasks/${task._id}`, { method: 'DELETE' });
 
 		// Throws if the action was unsuccessful
-		// TODO Read the error description and solution from the response into the error message.
 		if (res.status !== 204) {
-			yield put(openError(res.message, res.solution));
+			yield put(
+				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
+			);
 			return;
 		}
 
@@ -150,7 +162,9 @@ function* attemptDeleteTask({ payload }: TaskActionTypes) {
 		// The id will be extracted from each project
 		yield put(deleteTaskSuccess(task._id));
 	} catch (err) {
-		yield put(openError('Error', 'Here is a solution'));
+		// Pulls the error off of the error response
+		const { description, solution } = extractMessageFromAPIError(err);
+		yield put(openError(description, solution));
 	}
 
 	yield put(stopLoading());

@@ -1,6 +1,7 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
 import axios from '../../config/axios.config';
+import { extractMessageFromAPIError } from '../../util/helpers.util';
 import { createProjectSuccess, setAllProjects } from '../project/project.actions';
 import { Project } from '../project/project.types';
 import { stopLoading } from '../loading/loading.actions';
@@ -49,19 +50,26 @@ function* getUserInformation() {
 
 		yield put(setCurrentUser(user));
 	} catch (err) {
-		console.log(err);
+		// Pulls the error off of the error response
+		const { description, solution } = extractMessageFromAPIError(err);
+		yield put(openError(description, solution));
 	}
 }
 
 function* attemptLogout() {
 	try {
-		// Attempts to fetch an authenticated users information
+		// Attempts to logout
 		const res = yield axios('auth/logout', {
 			method: 'GET',
 		});
 
-		// Throws if the fetch was unsuccesful
-		if (res.status !== 200 || !res.data.success) throw new Error('Failed to Logout');
+		// Throws if the logout was unsuccessful
+		if (res.status !== 200 || !res.data.success) {
+			yield put(
+				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
+			);
+			return;
+		}
 
 		// The actual response is going to have all the project information embedded in it
 		// User documents should only contain references to the project
@@ -70,7 +78,9 @@ function* attemptLogout() {
 		yield put(setAllProjects([]));
 		yield put(fetchTasksSuccess([]));
 	} catch (err) {
-		console.log(err);
+		// Pulls the error off of the error response
+		const { description, solution } = extractMessageFromAPIError(err);
+		yield put(openError(description, solution));
 	}
 }
 
@@ -80,7 +90,10 @@ function* attemptLeaveProject({ payload: { projectId } }: LeaveProjectStartActio
 		const res = yield axios(`user/me/leave/${projectId}`, { method: 'PATCH' });
 
 		if (res.status !== 200) {
-			throw new Error(res.message);
+			yield put(
+				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
+			);
+			return;
 		}
 
 		// Calls the success handlers
@@ -88,10 +101,7 @@ function* attemptLeaveProject({ payload: { projectId } }: LeaveProjectStartActio
 		window.location.assign('/dashboard');
 	} catch (err) {
 		// Pulls the error off of the error response
-		const description = err?.response?.data?.error?.description ?? 'Unknown Error';
-		const solution =
-			err?.response?.data?.error?.solution ??
-			'Please contact brocklchelle@gmail.com to troubleshoot it';
+		const { description, solution } = extractMessageFromAPIError(err);
 		yield put(openError(description, solution));
 	}
 
@@ -116,7 +126,10 @@ function* attemptAcceptInvite({
 		});
 
 		if (userRes.status !== 200) {
-			throw new Error('Request to update user failed');
+			yield put(
+				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
+			);
+			return;
 		}
 
 		// Calls the API to get the existing project members
@@ -134,7 +147,10 @@ function* attemptAcceptInvite({
 		});
 
 		if (projectRes.status !== 200) {
-			throw new Error('Request to update project failed');
+			yield put(
+				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
+			);
+			return;
 		}
 
 		// Pulls the user and project off of the requests
@@ -144,7 +160,9 @@ function* attemptAcceptInvite({
 		yield put(acceptInviteSuccess(acceptedInviteId));
 		yield put(createProjectSuccess(project));
 	} catch (err) {
-		console.log(err);
+		// Pulls the error off of the error response
+		const { description, solution } = extractMessageFromAPIError(err);
+		yield put(openError(description, solution));
 	}
 
 	yield put(stopLoading());
@@ -164,13 +182,18 @@ function* attemptRejectInvite({
 		});
 
 		if (userRes.status !== 200) {
-			throw new Error('Request to update user failed');
+			yield put(
+				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
+			);
+			return;
 		}
 
 		// Updates the user and project locally
 		yield put(rejectInviteSuccess(inviteId));
 	} catch (err) {
-		console.log(err);
+		// Pulls the error off of the error response
+		const { description, solution } = extractMessageFromAPIError(err);
+		yield put(openError(description, solution));
 	}
 
 	yield put(stopLoading());
@@ -188,13 +211,18 @@ function* attemptDismissTask({ payload: { taskId, newTasks } }: DismissTaskStart
 		});
 
 		if (userRes.status !== 200) {
-			throw new Error('Request to update user failed');
+			yield put(
+				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
+			);
+			return;
 		}
 
 		// Updates the user and project locally
 		yield put(dismissTaskSuccess(taskId));
 	} catch (err) {
-		console.log(err);
+		// Pulls the error off of the error response
+		const { description, solution } = extractMessageFromAPIError(err);
+		yield put(openError(description, solution));
 	}
 
 	yield put(stopLoading());
