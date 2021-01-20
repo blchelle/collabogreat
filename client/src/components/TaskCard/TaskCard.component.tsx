@@ -1,7 +1,16 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, CardContent, Grid, IconButton, Link, Typography, useTheme } from '@material-ui/core';
-import { MoreHoriz as MoreHorizIcon } from '@material-ui/icons';
+import {
+	Avatar,
+	Card,
+	CardContent,
+	Grid,
+	IconButton,
+	Link,
+	Typography,
+	useTheme,
+} from '@material-ui/core';
+import { MoreHoriz as MoreHorizIcon, Person as PersonIcon } from '@material-ui/icons';
 
 import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
 import Dropdown from '../Dropdown/Dropdown.component';
@@ -42,8 +51,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, showAssignee }) => {
 				/>
 
 				<CardContent className={classes.container}>
-					<Grid container className={classes.container}>
-						<Grid item container xs={12} alignItems='flex-start'>
+					<Grid container className={classes.container} direction='column'>
+						<Grid item container alignItems='flex-start'>
 							<Grid item xs>
 								<Typography variant='h6'>{task.title}</Typography>
 							</Grid>
@@ -68,7 +77,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, showAssignee }) => {
 								</IconButton>
 							</Grid>
 						</Grid>
-						<Grid item xs={12}>
+						<Grid item>
 							<Typography variant='body1' className={classes.cardDescription}>
 								{task.description}
 							</Typography>
@@ -86,25 +95,27 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, showAssignee }) => {
 								{`Status: ${task.status}`}
 							</Typography>
 						</Grid>
-						{assignee && showAssignee ? (
+						{showAssignee ? (
 							<Grid item container alignItems='center'>
-								<ColoredAvatar
-									id={assignee._id}
-									src={assignee.image}
-									text={assignee.displayName!}
-									style={{
-										marginRight: theme.spacing(2),
-										height: theme.spacing(4),
-										width: theme.spacing(4),
-									}}
-								/>
-								<Link
-									href={`/projects/${project._id}/board`}
-									color='textPrimary'
-									variant='subtitle1'
-								>
-									{assignee?.displayName}
-								</Link>
+								{assignee ? (
+									<ColoredAvatar
+										id={assignee._id}
+										src={assignee.image}
+										text={assignee.displayName!}
+										style={{
+											marginRight: theme.spacing(2),
+											height: theme.spacing(4),
+											width: theme.spacing(4),
+										}}
+									/>
+								) : (
+									<Avatar className={classes.assigneeAvatar}>
+										<PersonIcon />
+									</Avatar>
+								)}
+								<Typography color='textPrimary' variant='subtitle1'>
+									{assignee?.displayName ?? 'Unassigned'}
+								</Typography>
 							</Grid>
 						) : null}
 					</Grid>

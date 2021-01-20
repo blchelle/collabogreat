@@ -24,7 +24,7 @@ export interface ITask extends Document {
 	description: string;
 	status: string;
 	order: number;
-	user: string; // A User ID
+	user?: string; // A User ID
 	project: string; // A Project ID
 	color: TaskColor;
 }
@@ -45,7 +45,6 @@ const TaskSchema = new Schema({
 	},
 	user: {
 		type: Schema.Types.ObjectId,
-		required: [true, 'Please assign the task to a user'],
 		ref: 'User',
 	},
 	project: {

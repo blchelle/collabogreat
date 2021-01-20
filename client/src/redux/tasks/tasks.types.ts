@@ -19,13 +19,11 @@ export interface Task {
 	description?: string;
 	status: string;
 	order: number;
-	user: string;
+	user?: string;
 	project: string;
 	color: TaskColor;
 }
 
-// export const REORDER_TASKS = 'REORDER_TASKS';
-// export const MOVE_TASK = 'MOVE_TASK';
 export const CREATE_TASK_START = 'CREATE_TASK_START';
 export const CREATE_TASK_SUCCESS = 'CREATE_TASK_SUCCESS';
 export const FETCH_TASKS_START = 'FETCH_TASKS_START';
