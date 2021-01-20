@@ -69,7 +69,11 @@ const BoardStageMenuDropdown = () => {
 						openModal(ModalNames.CREATE_TASK_DIALOG, {
 							children: null,
 							open: true,
-							extra: { initialProjectId: projectId, initialStatus: stageName },
+							extra: {
+								initialProjectId: projectId,
+								initialAssignee: 'unassigned',
+								initialStatus: stageName,
+							},
 						})
 					)
 				}

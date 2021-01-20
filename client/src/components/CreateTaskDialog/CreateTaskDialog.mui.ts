@@ -31,7 +31,7 @@ export default makeStyles((theme) => {
 			},
 		},
 		selectedColor: {
-			border: '3px solid #333',
+			border: `3px solid ${theme.palette.getContrastText(theme.palette.background.default)}`,
 			padding: theme.spacing(1),
 		},
 	};

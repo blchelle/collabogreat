@@ -16,6 +16,7 @@ import {
 	useMediaQuery,
 	useTheme,
 } from '@material-ui/core';
+import { Person as PersonIcon } from '@material-ui/icons';
 
 import { ReactComponent as UDNewTask } from '../../assets/insert-task.undraw.svg';
 import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
@@ -102,8 +103,11 @@ const CreateTaskDialog: React.FC = () => {
 
 	const onSelectProjectChange = (event: React.ChangeEvent<{ value: unknown }>) => {
 		setProjectId({ visited: true, value: event.target.value as string });
-		setStatus(initialInputState);
-		setAssignee(initialInputState);
+		setStatus({
+			visited: false,
+			value: userProjects.find((p) => p._id === event.target.value)!.board[0],
+		});
+		setAssignee({ visited: false, value: 'unassigned' });
 	};
 
 	const onSelectStatusChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -117,16 +121,23 @@ const CreateTaskDialog: React.FC = () => {
 	const submitForm = (event: React.FormEvent) => {
 		event.preventDefault();
 
-		const task: Task = {
+		let task: Task = {
 			_id: mode === 'edit' ? id! : '', // This field should be generated on the server
 			order: -1, // This field should be generated on the server
 			project: projectId.value,
 			status: status.value,
 			title: title.value,
-			user: assignee.value,
 			description: description.value,
 			color: color.value as TaskColor,
 		};
+
+		// Adds the user onto the task if it is not unassigned
+		if (assignee.value !== 'unassigned') {
+			task = {
+				...task,
+				user: assignee.value,
+			};
+		}
 
 		if (mode === 'edit') {
 			dispatch(editTasksStart([task]));
@@ -233,6 +244,21 @@ const CreateTaskDialog: React.FC = () => {
 											onChange={onSelectAssigneeChange}
 											onBlur={() => setStatus({ ...status, visited: true })}
 										>
+											<MenuItem value='unassigned' key='unassigned'>
+												<Grid container alignItems='center'>
+													<Avatar
+														variant='rounded'
+														style={{
+															width: theme.spacing(4),
+															height: theme.spacing(4),
+															marginRight: theme.spacing(2),
+														}}
+													>
+														<PersonIcon />
+													</Avatar>
+													<Typography variant='subtitle1'>Unassigned</Typography>
+												</Grid>
+											</MenuItem>
 											{projectId.value !== ''
 												? userProjects
 														.filter((project) => project._id === projectId.value)[0]
@@ -277,7 +303,7 @@ const CreateTaskDialog: React.FC = () => {
 										>
 											{projectId.value !== ''
 												? userProjects
-														.filter((project) => project._id === projectId.value)[0]
+														.find((project) => project._id === projectId.value)!
 														.board.map((stageName) => (
 															<MenuItem value={stageName} key={stageName}>
 																<Typography variant='subtitle1'>{stageName}</Typography>
