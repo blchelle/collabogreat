@@ -76,8 +76,6 @@ class DemoController extends Controller {
 			await session.commitTransaction();
 			session.endSession();
 
-			logger('DEMO CONTROLLER', `Created demo for user '${me._id}'`);
-
 			// Step 6. Create, Sign and Send a token
 			// Signs a jwt with the users id
 			const token = jwt.sign({ id: me.id }, keys.jwt.secret, {
@@ -90,7 +88,7 @@ class DemoController extends Controller {
 				secure: process.env.NODE_ENV === 'production',
 			};
 
-			logger('AUTH CONTROLLER', `Sending token ${token}`);
+			logger('DEMO CONTROLLER', `Created demo for user '${me._id}'`);
 
 			// Sends the cookie and redirects the client to the dashboard
 			res.cookie('Bearer', token, cookieOptions);
@@ -150,12 +148,14 @@ class DemoController extends Controller {
 			// Invites the additional members
 			const members = users.map((u) => u.id);
 
+			// If the project is KeepIt, then make the person a member
+			// If the project is Boromi, then send them an invite so they get a notification
 			// Creates the project
 			const newProject = await new ProjectModel({
 				title: project.title,
 				description: project.description,
 				board: project.board,
-				members: [...members, me.id],
+				members: project.title === 'KeepIt - Item Tracker' ? [...members, me.id] : [...members],
 			}).save({ session });
 
 			newProjects.push(newProject);
@@ -173,8 +173,15 @@ class DemoController extends Controller {
 				})
 			);
 
+			// If the project is KeepIt, then make the person a member
+			// If the project is Boromi, then send them an invite so they get a notification
+			if (project.title === 'KeepIt - Item Tracker') {
+				me.projects.push(newProject.id);
+			} else {
+				me.projectInvitations.push(newProject.id);
+			}
+
 			// Adds the project to the current user
-			me.projects.push(newProject.id);
 			await me.save({ session });
 		}
 
@@ -194,8 +201,11 @@ class DemoController extends Controller {
 		// Used to assign users tasks in a consistent manner
 		let assigneeIndex = 0;
 
-		await Promise.all(
+		const newTasks = await Promise.all(
 			copyTasks.map((task) => {
+				// Skip over the main user if it's a task for Boromi
+				if (assigneeIndex === 0 && task.project === 'Boromi - Book Trading') assigneeIndex += 1;
+
 				const projectId =
 					task.project === 'KeepIt - Item Tracker' ? newProjects[0].id : newProjects[1].id;
 				const userId = newUsers[assigneeIndex].id;
@@ -208,6 +218,21 @@ class DemoController extends Controller {
 					project: projectId,
 					user: userId,
 				}).save({ session });
+			})
+		);
+
+		// Gets all the tasks assigned to the main user
+		// eslint-disable-next-line eqeqeq
+		const demoUserTasks = newTasks.filter((t) => t.user == newUsers[0].id);
+
+		// Add all the demo users tasks to their notifications
+		await Promise.all(
+			demoUserTasks.map(async (task) => {
+				await UserModel.findByIdAndUpdate(
+					newUsers[0].id,
+					{ $push: { newTasks: task.id } },
+					{ session }
+				);
 			})
 		);
 	}
