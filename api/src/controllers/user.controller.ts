@@ -8,6 +8,7 @@ import UserModel, { IUser } from '../models/user.model';
 import catchAsync from '../utils/catchAsync.util';
 import ProjectModel from '../models/project.model';
 import TaskModel from '../models/task.model';
+import logger from '../utils/logger.utils';
 
 /**
  * Used to perform operations relating to the Project Model
@@ -52,6 +53,10 @@ class UserController extends Controller {
 
 			// Gets the user and project from the request
 			const user = req.user as IUser;
+			logger(
+				'USER CONTROLLER',
+				`User '${user.displayName ?? 'unknown'}' (${user.id ?? 'unknown'}) fetched their account.`
+			);
 
 			res.status(StatusCode.SuccessOK).json({ user });
 		});
@@ -76,6 +81,10 @@ class UserController extends Controller {
 
 			// Gets the user and project from the request
 			const user = req.user as IUser;
+			logger(
+				'USER CONTROLLER',
+				`User '${user.displayName ?? 'unknown'}' (${user.id ?? 'unknown'}) patched their account.`
+			);
 
 			// Updates the user
 			const updatedUser = await this.model.findByIdAndUpdate(user._id, req.body, { new: true });
@@ -91,6 +100,14 @@ class UserController extends Controller {
 
 			// Searches for a user by their email address
 			const user = await this.model.findOne({ email });
+
+			const reqUser = req.user as IUser;
+			logger(
+				'USER CONTROLLER',
+				`User '${reqUser.displayName ?? 'unknown'}' (${
+					reqUser.id ?? 'unknown'
+				}) searched for user ${email} and found ${user?.id ?? 'nothing'} `
+			);
 
 			// Sends the users id back in the request
 			res.status(StatusCode.SuccessOK).json({ userId: user?.id });
@@ -130,6 +147,13 @@ class UserController extends Controller {
 			await this.model.findByIdAndUpdate(userId, {
 				$push: { projectInvitations: projectId },
 			});
+
+			logger(
+				'USER CONTROLLER',
+				`User '${reqUser.displayName ?? 'unknown'}' (${
+					reqUser.id ?? 'unknown'
+				}) invited user '${userId}' to project '${projectId}'`
+			);
 
 			// Sends the users id back in the request
 			res.status(StatusCode.SuccessOK).json();
@@ -201,6 +225,13 @@ class UserController extends Controller {
 
 			await session.commitTransaction();
 			session.endSession();
+
+			logger(
+				'USER CONTROLLER',
+				`User '${reqUser.displayName ?? 'unknown'}' (${
+					reqUser.id ?? 'unknown'
+				}) left project ${projectId}`
+			);
 
 			// Sends the users id back in the request
 			res.status(StatusCode.SuccessOK).json({ user });

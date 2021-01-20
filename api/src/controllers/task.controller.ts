@@ -7,6 +7,7 @@ import APIError from '../errors/api.error';
 import Task, { ITask } from '../models/task.model';
 import UserModel, { IUser } from '../models/user.model';
 import catchAsync from '../utils/catchAsync.util';
+import logger from '../utils/logger.utils';
 
 /**
  * Used to perform operations relating to the Project Model
@@ -54,7 +55,7 @@ class TaskController extends Controller {
 				// Gets all the tasks with the same project and status
 				const similarTasks = await this.model.find({ $and: [{ project }, { status }] });
 
-				// Pulls the maximun order from the list of tasks
+				// Pulls the maximum order from the list of tasks
 				taskOrder = Object.values(similarTasks).length;
 			} else {
 				return next(
@@ -69,10 +70,16 @@ class TaskController extends Controller {
 			const task = await this.model.create({ ...req.body, order: taskOrder });
 
 			// If the task was assigned to someone other than the creator, send that person a new task notification
-			if ((req.user as IUser).id !== user) {
+			const reqUser = req.user as IUser;
+			if (reqUser.id !== user) {
 				// Update the user
 				await UserModel.findByIdAndUpdate(user, { $push: { newTasks: task.id } });
 			}
+
+			logger(
+				'TASK CONTROLLER',
+				`User '${reqUser.displayName}' (${reqUser.id}) created task '${task.id}.'`
+			);
 
 			res.status(StatusCode.SuccessCreated).json({
 				success: true,
@@ -111,6 +118,14 @@ class TaskController extends Controller {
 			await session.commitTransaction();
 			session.endSession();
 
+			const reqUser = req.user as IUser;
+			logger(
+				'TASK CONTROLLER',
+				`User '${reqUser.displayName ?? 'unknown'}' (${
+					reqUser.id ?? 'unknown'
+				}) patched multiple tasks.`
+			);
+
 			res.status(StatusCode.SuccessOK).json({ tasks: resTasks });
 		});
 	}
@@ -132,6 +147,13 @@ class TaskController extends Controller {
 
 			const tasks = await this.model.find({ user: reqUser.id });
 
+			logger(
+				'TASK CONTROLLER',
+				`User '${reqUser.displayName ?? 'unknown'}' (${
+					reqUser.id ?? 'unknown'
+				} fetched all the tasks assigned to them.`
+			);
+
 			res.status(StatusCode.SuccessOK).json({
 				success: true,
 				tasks,
@@ -145,6 +167,14 @@ class TaskController extends Controller {
 
 			const tasks = await this.model.find({ project: reqProjectId });
 
+			const reqUser = req.user as IUser;
+			logger(
+				'TASK CONTROLLER',
+				`User '${reqUser.displayName ?? 'unknown'}' (${
+					reqUser.id ?? 'unknown'
+				} fetched all the tasks for project ${reqProjectId}.`
+			);
+
 			res.status(StatusCode.SuccessOK).json({
 				success: true,
 				tasks,
@@ -157,6 +187,14 @@ class TaskController extends Controller {
 			const reqUserId = req.params.id;
 
 			const tasks = await this.model.find({ user: reqUserId });
+
+			const reqUser = req.user as IUser;
+			logger(
+				'TASK CONTROLLER',
+				`User '${reqUser.displayName ?? 'unknown'}' (${
+					reqUser.id ?? 'unknown'
+				} fetched all the tasks for user ${reqUserId}.`
+			);
 
 			res.status(StatusCode.SuccessOK).json({
 				success: true,
