@@ -126,11 +126,13 @@ const BoardCard: React.FC<BoardCardProps> = ({ task, assignedUser }) => {
 								) : null}
 							</Grid>
 							<Grid item>
-								<Tooltip title={assignedUser!.displayName!} placement='right'>
-									<Avatar className={classes.avatar} src={assignedUser?.image}>
-										{assignedUser?.displayName}
-									</Avatar>
-								</Tooltip>
+								{assignedUser ? (
+									<Tooltip title={assignedUser.displayName!} placement='right'>
+										<Avatar className={classes.avatar} src={assignedUser.image}>
+											{assignedUser.displayName}
+										</Avatar>
+									</Tooltip>
+								) : null}
 							</Grid>
 						</Grid>
 					</CardContent>

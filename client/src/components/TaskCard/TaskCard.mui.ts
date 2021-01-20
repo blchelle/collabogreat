@@ -12,7 +12,12 @@ export default makeStyles((theme) => {
 			marginBottom: theme.spacing(2),
 		},
 		cardProject: {
-			justifySelf: 'flex-end',
+			marginTop: 'auto',
+		},
+		assigneeAvatar: {
+			marginRight: theme.spacing(2),
+			height: theme.spacing(4),
+			width: theme.spacing(4),
 		},
 	};
 });

@@ -50,9 +50,9 @@ function* getUserInformation() {
 
 		yield put(setCurrentUser(user));
 	} catch (err) {
-		// Pulls the error off of the error response
-		const { description, solution } = extractMessageFromAPIError(err);
-		yield put(openError(description, solution));
+		yield put(setCurrentUser(null));
+		yield put(setAllProjects([]));
+		yield put(fetchTasksSuccess([]));
 	}
 }
 

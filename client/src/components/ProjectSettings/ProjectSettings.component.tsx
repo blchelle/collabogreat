@@ -38,6 +38,8 @@ const ProjectSettings: React.FC<ProjectSettingsProps> = ({ project, numUserTasks
 				open: true,
 				extra: {
 					initialProjectId: project._id!,
+					initialAssignee: 'unassigned',
+					initialStatus: project.board[0],
 				},
 			})
 		);

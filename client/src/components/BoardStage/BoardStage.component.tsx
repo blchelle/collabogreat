@@ -104,7 +104,11 @@ const BoardStage: React.FC<BoardStage> = ({ stageId, stageName, project, tasks }
 										openModal(ModalNames.CREATE_TASK_DIALOG, {
 											children: null,
 											open: true,
-											extra: { initialProjectId: projectId, initialStatus: stageName },
+											extra: {
+												initialProjectId: projectId,
+												initialAssignee: 'unassigned',
+												initialStatus: stageName,
+											},
 										})
 									)
 								}
