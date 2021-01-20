@@ -43,7 +43,6 @@ function* attemptCreateTask({ payload }: TaskActionTypes) {
 		});
 
 		// Throws if the action was unsuccessful
-		// TODO Read the error description and solution from the response into the error message.
 		if (res.status !== 201) {
 			yield put(
 				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
@@ -141,6 +140,8 @@ function* attemptModifyTasks({ payload }: TaskActionTypes) {
 		const { description, solution } = extractMessageFromAPIError(err);
 		yield put(openError(description, solution));
 	}
+
+	yield put(stopLoading());
 }
 
 function* attemptDeleteTask({ payload }: TaskActionTypes) {
