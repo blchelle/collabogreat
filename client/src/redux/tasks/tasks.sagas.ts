@@ -14,6 +14,7 @@ import {
 	FETCH_TASKS_START,
 	EDIT_TASKS_START,
 	DELETE_TASK_START,
+	EditTasksStartAction,
 } from './tasks.types';
 import {
 	createTaskSuccess,
@@ -97,11 +98,11 @@ function* attemptFetchTasks({ payload }: TaskActionTypes) {
 	}
 }
 
-function* attemptModifyTasks({ payload }: TaskActionTypes) {
+function* attemptModifyTasks({ payload }: EditTasksStartAction) {
 	try {
 		// Tasks is an array of all the modified tasks
 		const tasks = payload;
-		yield put(editTasksSuccess(tasks as Task[]));
+		yield put(editTasksSuccess(tasks));
 
 		if (!Array.isArray(payload)) {
 			yield put(
@@ -113,7 +114,7 @@ function* attemptModifyTasks({ payload }: TaskActionTypes) {
 			return;
 		}
 
-		const res = yield axios(`tasks`, {
+		const res = yield axios(`tasks/project/${tasks[0].project}`, {
 			method: 'PATCH',
 			data: {
 				tasks,

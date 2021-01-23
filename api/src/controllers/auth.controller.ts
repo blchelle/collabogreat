@@ -51,7 +51,6 @@ class AuthController extends Controller {
 	 * @param options Options for the provider (Is it session based? What permissions?)
 	 */
 	private loginWithProvider(provider: RegisteredOAuthProvider, options: AuthenticateOptions) {
-		logger('AUTH CONTROLLER', `Attempting to authenticate with ${provider}`);
 		return passport.authenticate(provider, options);
 	}
 
@@ -60,7 +59,6 @@ class AuthController extends Controller {
 	 * @param provider The provider to authenticate with
 	 */
 	private redirectProvider(provider: RegisteredOAuthProvider) {
-		logger('AUTH CONTROLLER', `Redirecting to ${provider} OAuth`);
 		return passport.authenticate(provider);
 	}
 

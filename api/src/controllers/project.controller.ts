@@ -23,12 +23,18 @@ class ProjectController extends Controller {
 	}
 
 	protected initRoutes() {
-		// All routes above this are public
 		this.router.use(this.protectRoute());
-		// All routes below this are protected
+		// Users must be authenticated to access routes below this comment
 
-		this.router.route('/').get(this.getAll()).post(this.createProject()).patch(this.patchOne());
-		this.router.route('/:id').get(this.getOneById()).delete(this.deleteOneById());
+		this.router.route('/').get(this.getAll()).post(this.createProject());
+
+		// Users must be part of the project with the specified id to access these routes
+		this.router
+			.route('/:id')
+			.all(this.checkUserInProject())
+			.get(this.getOneById())
+			.delete(this.deleteOneById())
+			.patch(this.patchOneById());
 	}
 
 	/**
@@ -100,6 +106,35 @@ class ProjectController extends Controller {
 			);
 
 			res.status(StatusCode.SuccessCreated).json({ project });
+		});
+	}
+
+	private checkUserInProject() {
+		return catchAsync(async (req: Request, _res: Response, next: NextFunction) => {
+			// Checks if the user belongs to the project attempted to be patched
+			const userId = (req.user as IUser).id;
+			const projectId = req.params.id;
+
+			// Queries for the number of projects with the passed in id and has the requesting
+			// user listed as one of its members
+			//
+			// If there are no results for this query, that implies that the user is not
+			// a member of the project and should not be authorized to perform this action
+			const userInProject = (await this.model.find({ _id: projectId, members: userId })).length > 0;
+
+			// Error case if the user is not part of the project they're trying to edit
+			if (!userInProject) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorUnauthorized,
+						'You are not authorized to perform this operation.',
+						'To perform this operation, you must be a member of the project.'
+					)
+				);
+			}
+
+			// Everything was successful, Move to the next stage
+			next();
 		});
 	}
 }

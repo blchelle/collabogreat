@@ -30,6 +30,7 @@ const Authenticated = () => {
 		if (projectIds.length !== 0) {
 			dispatch(fetchTasksStart(projectIds));
 		}
+		// eslint-disable-next-line
 	}, [JSON.stringify(projectIds), dispatch]);
 
 	// MUI

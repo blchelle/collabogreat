@@ -103,44 +103,45 @@ abstract class Controller {
 		});
 	}
 
-	protected patchOne() {
+	protected patchOneById() {
 		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+			// Validates that the req has an id on its params
+			if (!req.params.id) {
+				return next(
+					new APIError(
+						StatusCode.ServerErrorInternal,
+						`Something went wrong`,
+						`Please contact brocklchelle@gmail.com to troubleshoot your issue`
+					)
+				);
+			}
+
+			// Gets the name of the model being used
 			const modelName = this.model.modelName.toLowerCase();
 
-			if (!req.body[modelName]) {
-				return next(
-					new APIError(
-						StatusCode.ClientErrorBadRequest,
-						`No field '${modelName}' was found in the body of the request`,
-						`Make sure the body of your request has a '${modelName}' field`
-					)
-				);
-			}
+			// Pulls the id and body off of the requests
+			const { id } = req.params;
+			const { body } = req;
 
-			const reqBody = req.body[modelName];
-
-			if (!reqBody._id) {
-				return next(
-					new APIError(
-						StatusCode.ClientErrorBadRequest,
-						"The body of the incoming request had no '_id' field",
-						'Please pass the _id of the document you want to modify'
-					)
-				);
-			}
-
-			const doc = await this.model.findByIdAndUpdate(reqBody._id, reqBody, {
+			// Sets some options for the query
+			const queryOptions = {
 				new: true,
 				runValidators: true,
-			});
+			};
 
+			// Performs the query & update
+			const doc = await this.model.findByIdAndUpdate(id, body, queryOptions);
+
+			// Gets the user making the request and logs the operation
+			const user = req.user as IUser;
 			logger(
 				'BASE CONTROLLER',
-				`User '${(req.user as IUser)?.id ?? 'unknown'}' patched ${this.model.modelName} '${
+				`User '${user.displayName}' (${user.id}) patched ${this.model.modelName} '${
 					doc?.id ?? 'unknown'
 				}'`
 			);
 
+			// Sends a response back to the client
 			res.status(StatusCode.SuccessOK).json({ [modelName]: doc });
 		});
 	}
