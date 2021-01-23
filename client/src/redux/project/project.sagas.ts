@@ -76,9 +76,9 @@ function* attemptEditProject({ payload }: ProjectActionTypes) {
 		yield put(editProjectSuccess(payload));
 
 		// Attempts to create a new project with the information provided
-		const res = yield axios('projects', {
+		const res = yield axios(`projects/${payload._id}`, {
 			method: 'PATCH',
-			data: { project: { ...payload, members: payload.members!.map((member) => member?._id) } },
+			data: { ...payload, members: payload.members!.map((member) => member?._id) },
 		});
 
 		// Throws if the action was unsuccessful
