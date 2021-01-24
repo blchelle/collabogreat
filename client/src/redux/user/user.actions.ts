@@ -58,15 +58,10 @@ export function leaveProjectSuccess(projectId: string): UserActionTypes {
 	};
 }
 
-export function acceptInviteStart(
-	projects: string[],
-	projectInvitations: Partial<User>[],
-	acceptedInviteId: string,
-	myId: string
-): UserActionTypes {
+export function acceptInviteStart(acceptedInviteId: string): UserActionTypes {
 	return {
 		type: ACCEPT_INVITE_START,
-		payload: { projects, projectInvitations, acceptedInviteId, myId },
+		payload: { acceptedInviteId },
 	};
 }
 

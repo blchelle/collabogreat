@@ -46,9 +46,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ _id, type, title, c
 								color='primary'
 								variant='contained'
 								onClick={() => {
-									dispatch(
-										acceptInviteStart(user!.projects, user!.projectInvitations, _id, user!._id)
-									);
+									dispatch(acceptInviteStart(_id));
 								}}
 							>
 								Accept

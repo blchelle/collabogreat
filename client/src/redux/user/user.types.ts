@@ -63,10 +63,7 @@ export interface LeaveProjectSuccessAction {
 export interface AcceptInviteStartAction {
 	type: typeof ACCEPT_INVITE_START;
 	payload: {
-		projects: string[];
-		projectInvitations: Partial<User>[];
 		acceptedInviteId: string;
-		myId: string;
 	};
 }
 
