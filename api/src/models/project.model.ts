@@ -63,6 +63,12 @@ const ProjectSchema = new Schema({
 			},
 		],
 	},
+	createdAt: {
+		type: Date,
+		required: true,
+		default: new Date(),
+		immutable: true,
+	},
 });
 
 /**
