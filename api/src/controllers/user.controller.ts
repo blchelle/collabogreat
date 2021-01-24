@@ -29,6 +29,7 @@ class UserController extends Controller {
 		// All routes below this are protected
 
 		this.router.route('/me').get(this.getMe()).patch(this.updateMe());
+		this.router.route('/me/accept/:id').patch(this.acceptProjectInvite());
 		this.router.route('/me/leave/:id').patch(this.leaveProject());
 		this.router.route('/:email').get(this.findUserByEmail());
 		this.router.route('/invite').patch(this.inviteUserToProject());
@@ -235,6 +236,72 @@ class UserController extends Controller {
 
 			// Sends the users id back in the request
 			res.status(StatusCode.SuccessOK).json({ user });
+		});
+	}
+
+	protected acceptProjectInvite() {
+		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+			// Pulls the id of the user and project off of the request
+			const user = req.user as IUser;
+			const projectId = req.params.id;
+
+			// Ensures that the user is trying to join a real project
+			if (!(await ProjectModel.findById(projectId))) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorBadRequest,
+						`Unable to find a project with id ${projectId}`,
+						'Ensure that the project you are trying to join has not been deleted'
+					)
+				);
+			}
+
+			// Ensures that the user has an invite
+			user.depopulate('projectInvitations');
+			if (!user.projectInvitations.includes(projectId)) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorUnauthorized,
+						'Unable to accept an invitation to a project you are not invited to',
+						'Try getting an invite from the project first'
+					)
+				);
+			}
+
+			// Uses a transaction to ensure that all operations are successful
+			const session = await mongoose.startSession();
+			session.startTransaction();
+
+			// Moves the project id from 'projectInvitations' to 'projects' on the user
+			const updatedUser = await UserModel.findByIdAndUpdate(
+				user.id,
+				{
+					$pull: { projectInvitations: projectId },
+					$push: { projects: projectId },
+				},
+				{ session, new: true }
+			);
+
+			// Adds the userId to the project members
+			const updatedProject = await ProjectModel.findByIdAndUpdate(
+				projectId,
+				{ $push: { members: user.id } },
+				{ session, new: true }
+			);
+
+			// Commits and finalizes the transaction
+			await session.commitTransaction();
+			session.endSession();
+
+			logger(
+				'USER CONTROLLER',
+				`User '${user.displayName ?? 'unknown'}' (${
+					user.id ?? 'unknown'
+				}) joined project ${projectId}`
+			);
+
+			// Sends the users id back in the request
+			res.status(StatusCode.SuccessOK).json({ user: updatedUser, project: updatedProject });
 		});
 	}
 }

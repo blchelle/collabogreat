@@ -48,9 +48,6 @@ function* attemptCreateProject({ payload }: ProjectActionTypes) {
 		if (project._id) yield put(addProjectToUser(project._id));
 		yield put(createProjectSuccess(project));
 		yield put(closeModal(ModalNames.CREATE_PROJECT_DIALOG));
-
-		// Redirect the user to the page for the project
-		window.location.assign(`/projects/${project._id}`);
 	} catch (err) {
 		// Pulls the error off of the error response
 		const { description, solution } = extractMessageFromAPIError(err);
