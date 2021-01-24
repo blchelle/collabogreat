@@ -189,44 +189,46 @@ const CreateTaskDialog: React.FC = () => {
 										}
 									/>
 								</Grid>
-								<Grid item>
-									<FormControl
-										variant='outlined'
-										fullWidth
-										size='small'
-										required
-										error={projectId.value === '' && projectId.visited}
-									>
-										<InputLabel id='project-label'>Project</InputLabel>
-										<Select
+								{mode === 'create' ? (
+									<Grid item>
+										<FormControl
+											variant='outlined'
 											fullWidth
-											value={projectId.value}
-											labelId='project-label'
-											label='Project'
-											onChange={onSelectProjectChange}
-											onBlur={() => setProjectId({ ...projectId, visited: true })}
+											size='small'
+											required
+											error={projectId.value === '' && projectId.visited}
 										>
-											{userProjects.map((project) => (
-												<MenuItem value={project._id} key={project._id}>
-													<Grid container alignItems='center'>
-														<ColoredAvatar
-															id={project._id}
-															text={project.title}
-															variant='rounded'
-															style={{
-																width: theme.spacing(4),
-																height: theme.spacing(4),
-																marginRight: theme.spacing(2),
-															}}
-														/>
-														<Typography variant='subtitle1'>{project.title}</Typography>
-													</Grid>
-												</MenuItem>
-											))}
-										</Select>
-										<FormHelperText>Which Project is this Task for?</FormHelperText>
-									</FormControl>
-								</Grid>
+											<InputLabel id='project-label'>Project</InputLabel>
+											<Select
+												fullWidth
+												value={projectId.value}
+												labelId='project-label'
+												label='Project'
+												onChange={onSelectProjectChange}
+												onBlur={() => setProjectId({ ...projectId, visited: true })}
+											>
+												{userProjects.map((project) => (
+													<MenuItem value={project._id} key={project._id}>
+														<Grid container alignItems='center'>
+															<ColoredAvatar
+																id={project._id}
+																text={project.title}
+																variant='rounded'
+																style={{
+																	width: theme.spacing(4),
+																	height: theme.spacing(4),
+																	marginRight: theme.spacing(2),
+																}}
+															/>
+															<Typography variant='subtitle1'>{project.title}</Typography>
+														</Grid>
+													</MenuItem>
+												))}
+											</Select>
+											<FormHelperText>Which Project is this Task for?</FormHelperText>
+										</FormControl>
+									</Grid>
+								) : null}
 								<Grid item>
 									<FormControl
 										variant='outlined'
@@ -283,37 +285,40 @@ const CreateTaskDialog: React.FC = () => {
 										<FormHelperText>Who will be working on this task?</FormHelperText>
 									</FormControl>
 								</Grid>
-								<Grid item>
-									<FormControl
-										variant='outlined'
-										fullWidth
-										required
-										size='small'
-										disabled={projectId.value === ''}
-										error={projectId.value === '' && projectId.visited}
-									>
-										<InputLabel id='status-label'>Status</InputLabel>
-										<Select
+								{mode === 'create' ? (
+									<Grid item>
+										<FormControl
+											variant='outlined'
 											fullWidth
-											labelId='status-label'
-											value={status.value}
-											label='Status'
-											onChange={onSelectStatusChange}
-											onBlur={() => setStatus({ ...status, visited: true })}
+											required
+											size='small'
+											disabled={projectId.value === ''}
+											error={projectId.value === '' && projectId.visited}
 										>
-											{projectId.value !== ''
-												? userProjects
-														.find((project) => project._id === projectId.value)!
-														.board.map((stageName) => (
-															<MenuItem value={stageName} key={stageName}>
-																<Typography variant='subtitle1'>{stageName}</Typography>
-															</MenuItem>
-														))
-												: null}
-										</Select>
-										<FormHelperText>Set the initial status of the task</FormHelperText>
-									</FormControl>
-								</Grid>
+											<InputLabel id='status-label'>Status</InputLabel>
+											<Select
+												fullWidth
+												labelId='status-label'
+												value={status.value}
+												label='Status'
+												onChange={onSelectStatusChange}
+												onBlur={() => setStatus({ ...status, visited: true })}
+											>
+												{projectId.value !== ''
+													? userProjects
+															.find((project) => project._id === projectId.value)!
+															.board.map((stageName) => (
+																<MenuItem value={stageName} key={stageName}>
+																	<Typography variant='subtitle1'>{stageName}</Typography>
+																</MenuItem>
+															))
+													: null}
+											</Select>
+											<FormHelperText>Set the initial status of the task</FormHelperText>
+										</FormControl>
+									</Grid>
+								) : null}
+
 								<Grid item>
 									<Card>
 										<Grid container>
