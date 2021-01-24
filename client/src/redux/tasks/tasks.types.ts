@@ -53,7 +53,7 @@ interface FetchTasksSuccessAction {
 	payload: Task[];
 }
 
-interface EditTasksStartAction {
+export interface EditTasksStartAction {
 	type: typeof EDIT_TASKS_START;
 	payload: Task[];
 }

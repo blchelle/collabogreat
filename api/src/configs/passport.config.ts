@@ -8,6 +8,7 @@ import environment from './environment.config';
 import keys from './keys.config';
 import UnregisteredProviderError from '../errors/unregisteredProvider.error';
 import User, { IUser } from '../models/user.model';
+import logger from '../utils/logger.utils';
 
 /**
  * Used to emulate a similar function used by the Google, Facebook, and github strategies.
@@ -49,8 +50,11 @@ async function StrategyCallback(
 	profile: Profile,
 	done: VerifyCallback
 ) {
-	// Checks if the user associated with the profile already exists
 	const { provider } = profile;
+
+	logger('PASSPORT CONFIG', `Authenticated with ${provider}`);
+
+	// Checks if the user associated with the profile already exists
 	const currentUser = await User.findOne({ [`${provider}Id`]: profile.id });
 
 	if (currentUser) {
@@ -86,7 +90,7 @@ function configureProviderStrategy(provider: RegisteredOAuthProvider) {
 		}/auth/${provider}/redirect`,
 	};
 
-	// Initializes a new stategy corresponding for the provider that was passed in
+	// Initializes a new strategy corresponding for the provider that was passed in
 	let strategy: Strategy;
 	switch (provider) {
 		case RegisteredOAuthProvider.FACEBOOK:

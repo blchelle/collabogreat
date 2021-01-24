@@ -51,7 +51,6 @@ class AuthController extends Controller {
 	 * @param options Options for the provider (Is it session based? What permissions?)
 	 */
 	private loginWithProvider(provider: RegisteredOAuthProvider, options: AuthenticateOptions) {
-		logger('AUTH CONTROLLER', `Attempting to authenticate with ${provider}`);
 		return passport.authenticate(provider, options);
 	}
 
@@ -60,7 +59,6 @@ class AuthController extends Controller {
 	 * @param provider The provider to authenticate with
 	 */
 	private redirectProvider(provider: RegisteredOAuthProvider) {
-		logger('AUTH CONTROLLER', `Redirecting to ${provider} OAuth`);
 		return passport.authenticate(provider);
 	}
 
@@ -126,18 +124,37 @@ class AuthController extends Controller {
 		// Gets all the projects associated with the user
 		const projectsToDelete = user.projects;
 
+		// Because the demo sends the user a project invitation which they may or my not accept
+		// We also need a way of deleting that project and all of its task if the demo user
+		// rejects the invite
+		//
+		// Gets the users of the project
+		const memberIds = (await ProjectModel.findById(projectsToDelete[0]))?.depopulate('members')
+			.members;
+		const memberIdWhoIsNotMe = memberIds?.find((id) => id !== user.id);
+
+		// Finds any additional projects that this user may have
+		const additionalProjects = (await UserModel.findById(memberIdWhoIsNotMe))?.depopulate(
+			'projects'
+		).projects;
+
+		// Joins the two project lists and filters out duplicates
+		const updatedProjects = Array.from(
+			new Set<string>([...projectsToDelete, ...additionalProjects!]).values()
+		);
+
 		// Uses a transaction to ensure that all operations are successful
 		const session = await mongoose.startSession();
 		session.startTransaction();
 
 		// Delete all the Projects
-		await ProjectModel.deleteMany({ members: user.id }, { session });
+		await ProjectModel.deleteMany({ _id: { $in: updatedProjects } }, { session });
 
 		// Deletes all the Tasks
-		await TaskModel.deleteMany({ project: { $in: projectsToDelete } }, { session });
+		await TaskModel.deleteMany({ project: { $in: updatedProjects } }, { session });
 
 		// Deletes all the Users
-		await UserModel.deleteMany({ projects: { $in: projectsToDelete } }, { session });
+		await UserModel.deleteMany({ projects: { $in: updatedProjects } }, { session });
 
 		// Finalizes the transaction
 		await session.commitTransaction();

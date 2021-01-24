@@ -27,6 +27,7 @@ export interface ITask extends Document {
 	user?: string; // A User ID
 	project: string; // A Project ID
 	color: TaskColor;
+	createdAt: Date;
 }
 
 /**
@@ -72,6 +73,12 @@ const TaskSchema = new Schema({
 				(color) => color
 			)})`,
 		},
+	},
+	createdAt: {
+		type: Date,
+		required: true,
+		default: new Date(),
+		immutable: true,
 	},
 });
 

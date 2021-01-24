@@ -1,10 +1,9 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Card, Grid, Typography, useTheme } from '@material-ui/core';
 
 import ColoredAvatar from '../ColoredAvatar/ColoredAvatar.component';
 import LoadingButton from '../LoadingButton/LoadingButton.component';
-import { RootState } from '../../redux/root.reducer';
 import {
 	acceptInviteStart,
 	dismissTaskStart,
@@ -24,7 +23,6 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ _id, type, title, c
 	const theme = useTheme();
 
 	// Redux
-	const user = useSelector((state: RootState) => state.user);
 	const dispatch = useDispatch();
 
 	return (
@@ -46,9 +44,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ _id, type, title, c
 								color='primary'
 								variant='contained'
 								onClick={() => {
-									dispatch(
-										acceptInviteStart(user!.projects, user!.projectInvitations, _id, user!._id)
-									);
+									dispatch(acceptInviteStart(_id));
 								}}
 							>
 								Accept
@@ -59,7 +55,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ _id, type, title, c
 								id={`notification reject ${_id}`}
 								color='default'
 								onClick={() => {
-									dispatch(rejectInviteStart(_id, user!.projectInvitations));
+									dispatch(rejectInviteStart(_id));
 								}}
 							>
 								Reject
@@ -87,7 +83,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ _id, type, title, c
 					<Grid item>
 						<LoadingButton
 							id={`notification dismiss ${_id}`}
-							onClick={() => dispatch(dismissTaskStart(_id, user!.newTasks))}
+							onClick={() => dispatch(dismissTaskStart(_id))}
 							color='primary'
 						>
 							Dismiss

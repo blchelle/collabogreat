@@ -109,52 +109,10 @@ function* attemptLeaveProject({ payload: { projectId } }: LeaveProjectStartActio
 	yield put(closeModal(ModalNames.CONFIRM_DIALOG));
 }
 
-function* attemptAcceptInvite({
-	payload: { projects, projectInvitations, acceptedInviteId, myId },
-}: AcceptInviteStartAction) {
+function* attemptAcceptInvite({ payload: { acceptedInviteId } }: AcceptInviteStartAction) {
 	try {
-		// Moves the id of the project invitation to the projects array
-		projects.push(acceptedInviteId);
-		const updatedInvitations = projectInvitations.filter(
-			(invite) => invite?._id !== acceptedInviteId
-		);
-
-		// Performs an api call to update the user
-		const userRes = yield axios('user/me', {
-			method: 'PATCH',
-			data: { projects, projectInvitations: updatedInvitations },
-		});
-
-		if (userRes.status !== 200) {
-			yield put(
-				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
-			);
-			return;
-		}
-
-		// Calls the API to get the existing project members
-		const { members } = (yield axios(`projects/${acceptedInviteId}`, {
-			method: 'GET',
-		})).data.project;
-
-		// Updates the projects members
-		members.push(myId);
-
-		// Performs an api call to update the project
-		const projectRes = yield axios('projects', {
-			method: 'PATCH',
-			data: { project: { _id: acceptedInviteId, members } },
-		});
-
-		if (projectRes.status !== 200) {
-			yield put(
-				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
-			);
-			return;
-		}
-
-		// Pulls the user and project off of the requests
-		const { project } = projectRes.data;
+		const res = yield axios(`user/me/accept/${acceptedInviteId}`, { method: 'PATCH' });
+		const { project } = res.data;
 
 		// Updates the user and project locally
 		yield put(acceptInviteSuccess(acceptedInviteId));
@@ -168,25 +126,10 @@ function* attemptAcceptInvite({
 	yield put(stopLoading());
 }
 
-function* attemptRejectInvite({
-	payload: { inviteId, projectInvitations },
-}: RejectInviteStartAction) {
+function* attemptRejectInvite({ payload: { inviteId } }: RejectInviteStartAction) {
 	try {
-		// Deletes the id of the project invitation
-		const updatedInvitations = projectInvitations.filter((invite) => invite?._id !== inviteId);
-
 		// Performs an api call to update the user
-		const userRes = yield axios('user/me', {
-			method: 'PATCH',
-			data: { projectInvitations: updatedInvitations },
-		});
-
-		if (userRes.status !== 200) {
-			yield put(
-				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
-			);
-			return;
-		}
+		yield axios(`user/me/reject/${inviteId}`, { method: 'PATCH' });
 
 		// Updates the user and project locally
 		yield put(rejectInviteSuccess(inviteId));
@@ -199,23 +142,10 @@ function* attemptRejectInvite({
 	yield put(stopLoading());
 }
 
-function* attemptDismissTask({ payload: { taskId, newTasks } }: DismissTaskStartAction) {
+function* attemptDismissTask({ payload: { taskId } }: DismissTaskStartAction) {
 	try {
-		// Deletes the id of the task from the newTasks
-		const updatedNewTasks = newTasks.filter((task) => task?._id !== taskId);
-
 		// Performs an api call to update the user
-		const userRes = yield axios('user/me', {
-			method: 'PATCH',
-			data: { newTasks: updatedNewTasks.map((task) => task._id) },
-		});
-
-		if (userRes.status !== 200) {
-			yield put(
-				openError('Unknown Error', 'Contact brocklchelle@gmail.com to troubleshoot the issue')
-			);
-			return;
-		}
+		yield axios(`user/me/dismiss/${taskId}`, { method: 'PATCH' });
 
 		// Updates the user and project locally
 		yield put(dismissTaskSuccess(taskId));

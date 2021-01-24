@@ -28,8 +28,11 @@ class UserController extends Controller {
 		this.router.use(this.protectRoute());
 		// All routes below this are protected
 
-		this.router.route('/me').get(this.getMe()).patch(this.updateMe());
+		this.router.route('/me').get(this.getMe());
+		this.router.route('/me/accept/:id').patch(this.acceptProjectInvite());
+		this.router.route('/me/reject/:id').patch(this.rejectProjectInvite());
 		this.router.route('/me/leave/:id').patch(this.leaveProject());
+		this.router.route('/me/dismiss/:id').patch(this.dismissNewTask());
 		this.router.route('/:email').get(this.findUserByEmail());
 		this.router.route('/invite').patch(this.inviteUserToProject());
 	}
@@ -59,37 +62,6 @@ class UserController extends Controller {
 			);
 
 			res.status(StatusCode.SuccessOK).json({ user });
-		});
-	}
-
-	/**
-	 * Gets the users information and sends it in the response
-	 */
-	protected updateMe() {
-		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-			// Ensures that the user is on the request object
-			// When a user creates a project, it should be added to their document
-			if (!req.user) {
-				return next(
-					new APIError(
-						StatusCode.ClientErrorUnauthorized,
-						'Unable to find your information',
-						'Try logging out and logging back in with the same provider'
-					)
-				);
-			}
-
-			// Gets the user and project from the request
-			const user = req.user as IUser;
-			logger(
-				'USER CONTROLLER',
-				`User '${user.displayName ?? 'unknown'}' (${user.id ?? 'unknown'}) patched their account.`
-			);
-
-			// Updates the user
-			const updatedUser = await this.model.findByIdAndUpdate(user._id, req.body, { new: true });
-
-			res.status(StatusCode.SuccessOK).json({ user: updatedUser });
 		});
 	}
 
@@ -235,6 +207,126 @@ class UserController extends Controller {
 
 			// Sends the users id back in the request
 			res.status(StatusCode.SuccessOK).json({ user });
+		});
+	}
+
+	protected acceptProjectInvite() {
+		return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+			// Pulls the id of the user and project off of the request
+			const user = req.user as IUser;
+			const projectId = req.params.id;
+
+			// Ensures that the user is trying to join a real project
+			if (!(await ProjectModel.findById(projectId))) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorBadRequest,
+						`Unable to find a project with id ${projectId}`,
+						'Ensure that the project you are trying to join has not been deleted'
+					)
+				);
+			}
+
+			// Ensures that the user has an invite
+			user.depopulate('projectInvitations');
+			if (!user.projectInvitations.includes(projectId)) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorUnauthorized,
+						'Unable to accept an invitation to a project you are not invited to',
+						'Try getting an invite from the project first'
+					)
+				);
+			}
+
+			// Uses a transaction to ensure that all operations are successful
+			const session = await mongoose.startSession();
+			session.startTransaction();
+
+			// Moves the project id from 'projectInvitations' to 'projects' on the user
+			const updatedUser = await UserModel.findByIdAndUpdate(
+				user.id,
+				{
+					$pull: { projectInvitations: projectId },
+					$push: { projects: projectId },
+				},
+				{ session, new: true }
+			);
+
+			// Adds the userId to the project members
+			const updatedProject = await ProjectModel.findByIdAndUpdate(
+				projectId,
+				{ $push: { members: user.id } },
+				{ session, new: true }
+			);
+
+			// Commits and finalizes the transaction
+			await session.commitTransaction();
+			session.endSession();
+
+			logger(
+				'USER CONTROLLER',
+				`User '${user.displayName ?? 'unknown'}' (${
+					user.id ?? 'unknown'
+				}) joined project ${projectId}`
+			);
+
+			// Sends the users id back in the request
+			res.status(StatusCode.SuccessOK).json({ user: updatedUser, project: updatedProject });
+		});
+	}
+
+	protected rejectProjectInvite() {
+		return catchAsync(async (req: Request, res: Response) => {
+			// Pulls the id of the user and project off of the request
+			const user = req.user as IUser;
+			const projectId = req.params.id;
+
+			// Removes the project id from 'projectInvitations'
+			const updatedUser = await UserModel.findByIdAndUpdate(
+				user.id,
+				{
+					$pull: { projectInvitations: projectId },
+				},
+				{ new: true }
+			);
+
+			logger(
+				'USER CONTROLLER',
+				`User '${user.displayName ?? 'unknown'}' (${
+					user.id ?? 'unknown'
+				}) rejected project invitation to ${projectId}`
+			);
+
+			// Sends the users id back in the request
+			res.status(StatusCode.SuccessOK).json({ user: updatedUser });
+		});
+	}
+
+	protected dismissNewTask() {
+		return catchAsync(async (req: Request, res: Response) => {
+			// Pulls the id of the user and project off of the request
+			const user = req.user as IUser;
+			const taskId = req.params.id;
+
+			// Removes the project id from 'newTasks'
+			const updatedUser = await UserModel.findByIdAndUpdate(
+				user.id,
+				{
+					$pull: { newTasks: taskId },
+				},
+				{ new: true }
+			);
+
+			logger(
+				'USER CONTROLLER',
+				`User '${user.displayName ?? 'unknown'}' (${
+					user.id ?? 'unknown'
+				}) dismissed notification for task '${taskId}'`
+			);
+
+			// Sends the users id back in the request
+			res.status(StatusCode.SuccessOK).json({ user: updatedUser });
 		});
 	}
 }
