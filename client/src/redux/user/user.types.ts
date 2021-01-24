@@ -78,7 +78,6 @@ export interface RejectInviteStartAction {
 	type: typeof REJECT_INVITE_START;
 	payload: {
 		inviteId: string;
-		projectInvitations: Partial<User>[];
 	};
 }
 
@@ -93,7 +92,6 @@ export interface DismissTaskStartAction {
 	type: typeof DISMISS_TASK_START;
 	payload: {
 		taskId: string;
-		newTasks: Partial<Task>[];
 	};
 }
 
