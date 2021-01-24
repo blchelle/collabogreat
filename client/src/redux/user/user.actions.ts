@@ -1,4 +1,3 @@
-import { Task } from '../tasks/tasks.types';
 import {
 	User,
 	UserActionTypes,
@@ -72,13 +71,10 @@ export function acceptInviteSuccess(projectId: string): UserActionTypes {
 	};
 }
 
-export function rejectInviteStart(
-	inviteId: string,
-	projectInvitations: Partial<User>[]
-): UserActionTypes {
+export function rejectInviteStart(inviteId: string): UserActionTypes {
 	return {
 		type: REJECT_INVITE_START,
-		payload: { inviteId, projectInvitations },
+		payload: { inviteId },
 	};
 }
 
@@ -89,10 +85,10 @@ export function rejectInviteSuccess(projectId: string): UserActionTypes {
 	};
 }
 
-export function dismissTaskStart(taskId: string, newTasks: Partial<Task>[]): UserActionTypes {
+export function dismissTaskStart(taskId: string): UserActionTypes {
 	return {
 		type: DISMISS_TASK_START,
-		payload: { taskId, newTasks },
+		payload: { taskId },
 	};
 }
 
