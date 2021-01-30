@@ -5,7 +5,6 @@ import { StatusCode } from 'status-code-enum';
 
 import APIError from '../errors/api.error';
 import logger from '../utils/logger.utils';
-import environment from '../configs/environment.config';
 
 /**
  * The format of the error in the http response
@@ -22,17 +21,12 @@ type ErrorResponse = string | { [prop: string]: string }[];
  * @param res Outgoing Response
  * @param _next Calls the next middleware, UNUSED
  */
-function handleError(err: Error, req: Request, res: Response, _next: NextFunction) {
+function handleError(err: Error, _: Request, res: Response, _next: NextFunction) {
 	let statusCode;
 	let responseError: ErrorResponse;
 	let responseSolution: string | null = null;
 
 	logger('ErrorHandler', `${err.message} ❌`);
-
-	if (req.path.includes(`api/v${environment[process.env.NODE_ENV as 'development' | 'production'].version}/auth`)) {
-		res.redirect(environment[process.env.NODE_ENV as 'development' | 'production'].oauth.failureRoute);
-		return;
-	}
 
 	// Handles the error based on what kind of error is received
 	if (err instanceof APIError) {
