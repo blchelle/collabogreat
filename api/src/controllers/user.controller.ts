@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import StatusCode from 'status-code-enum';
@@ -114,6 +115,42 @@ class UserController extends Controller {
 
 			// Pulls the userId and projectId off of the body of the request
 			const { userId, projectId } = req.body;
+
+			if (reqUser._id == userId) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorUnauthorized,
+						'Nice try bucko...',
+						'You cannot invite yourself to a project'
+					)
+				);
+			}
+
+			// Ensures that the user doesn't have an existing invitation to the project
+			const userHasInviteToProject =
+				(await this.model.findOne({ _id: userId, projectInvitations: projectId })) !== null;
+			if (userHasInviteToProject) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorUnauthorized,
+						'This user already has an invitation to the project',
+						'Wait for them to accept or decline their current invitation'
+					)
+				);
+			}
+
+			// Ensures that the user doesn't have an existing invitation to the project
+			const userIsAlreadyMember =
+				(await this.model.findOne({ _id: userId, projects: projectId })) !== null;
+			if (userIsAlreadyMember) {
+				return next(
+					new APIError(
+						StatusCode.ClientErrorUnauthorized,
+						'This user is already a member of the project',
+						''
+					)
+				);
+			}
 
 			// Pushes the project id onto the users projectInvitations
 			await this.model.findByIdAndUpdate(userId, {
