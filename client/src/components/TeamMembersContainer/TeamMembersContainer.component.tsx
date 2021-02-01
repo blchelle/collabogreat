@@ -52,7 +52,7 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 		// Validates the email address first to prevent any useless requests
 		const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-		if (email.trim() === '') return; // Ignore empty inputs
+		if (email === '') return; // Ignore empty inputs
 
 		if (members.map((member) => member?.email).includes(email)) {
 			// Set the field to an invalid state
@@ -189,7 +189,7 @@ const TeamMembersContainer: React.FC<TeamMembersContainerProps> = ({
 													color='primary'
 													variant='contained'
 													onClick={() => {
-														validateEmailAddress(newMemberEmail.email);
+														validateEmailAddress(newMemberEmail.email.trim());
 													}}
 													disabled={newMemberEmail.email.trim() === ''}
 													endIcon={<SendIcon />}
