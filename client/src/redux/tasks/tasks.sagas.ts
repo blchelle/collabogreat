@@ -102,6 +102,12 @@ function* attemptModifyTasks({ payload }: EditTasksStartAction) {
 	try {
 		// Tasks is an array of all the modified tasks
 		const tasks = payload;
+
+		// If the payload is empty, do nothing
+		if (tasks.length === 0) {
+			return;
+		}
+
 		yield put(editTasksSuccess(tasks));
 
 		if (!Array.isArray(payload)) {
