@@ -3,6 +3,7 @@
 import { CookieOptions, Request, Response } from 'express';
 import mongoose, { ClientSession } from 'mongoose';
 import jwt from 'jsonwebtoken';
+import randomString from 'randomstring';
 
 import keys from '../configs/keys.config';
 import environment from '../configs/environment.config';
@@ -15,8 +16,6 @@ import tasks from '../data/tasks.data';
 import ProjectModel, { IProject } from '../models/project.model';
 import UserModel, { IUser } from '../models/user.model';
 import TaskModel from '../models/task.model';
-
-const randomEmail = require('random-email');
 
 /**
  * Used to perform operations relating to the Project Model
@@ -107,7 +106,7 @@ class DemoController extends Controller {
 		// Creates the demo user
 		const me = await new UserModel({
 			displayName: peopleCopy[0].displayName,
-			email: randomEmail({ domain: 'bigprojects.com' }),
+			email: `${randomString.generate(12)}@bigprojects.com`,
 			image: peopleCopy[0].image,
 			isDemo: true,
 		}).save({ session });
@@ -120,7 +119,7 @@ class DemoController extends Controller {
 			peopleCopy.map(async (person) =>
 				new UserModel({
 					displayName: person.displayName,
-					email: randomEmail({ domain: 'bigprojects.com' }),
+					email: `${randomString.generate(12)}@bigprojects.com`,
 					image: person.image,
 					isDemo: true,
 				}).save({ session })
