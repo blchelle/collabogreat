@@ -1,4 +1,4 @@
-import express, { Application } from 'express';
+import express, { Application, Request, Response } from 'express';
 import mongoose from 'mongoose';
 
 import bodyParser from 'body-parser';
@@ -6,7 +6,6 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import mongoSanitize from 'express-mongo-sanitize';
 import rateLimit from 'express-rate-limit';
-import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
 import passport from 'passport';
@@ -19,6 +18,7 @@ import APIError from './errors/api.error';
 import errorMiddleware from './middleware/error.middleware';
 import logger from './utils/logger.utils';
 import { NodeEnv } from './utils/envTypes.util';
+import path from 'path';
 
 // Has to be done in a 'require' because there are no type declarations
 const xss = require('xss-clean');
@@ -48,6 +48,12 @@ class App {
 		// the controllers so that they appear first in the middleware stack
 		this.initMiddlewares();
 		this.initControllers(controllers);
+
+		this.app.use(express.static(path.join(__dirname, '../..', 'client', 'build')));
+		this.app.use((_: Request, res: Response) => {
+			res.sendFile(path.join(__dirname, '../..', 'client', 'build', 'index.html'));
+		});
+
 		this.initErrorHandling();
 	}
 
@@ -94,7 +100,7 @@ class App {
 		);
 
 		// Sets Secure HTTP Headers
-		this.app.use(helmet());
+		// this.app.use(helmet());
 
 		// Prevents against http parameter pollution attacks
 		this.app.use(hpp());
